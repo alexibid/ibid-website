@@ -1,0 +1,36 @@
+[
+  {
+    "id": 11,
+    "location": "about",
+    "slug": "contactos",
+    "title": "Contactos",
+    "content": [
+      "O meu trabalho é um convite à colaboração, quer procure uma solução técnica de engenharia web de alta performance ou uma visão arquitetónica para o seu espaço físico.",
+      "O ibid. opera a partir de Vila Nova de Gaia e Porto, mas a nossa natureza é global. Estamos disponíveis para discutir projetos que desafiem as convenções e que procurem uma abordagem integrada entre o design, a tecnologia e a arquitetura.",
+      "Email: alex.ibid@gmail.com",
+      "LinkedIn: linkedin.com/in/alexandresantos",
+      "Web: www.ibid.pt",
+      "Vamos construir em cima do que já existe, criando algo inteiramente novo e único. Ibidem No mesmo lugar, mas numa nova página."
+    ]
+  },
+  {
+    "id": 12,
+    "location": "contact-form",
+    "slug": "formulario-de-contacto",
+    "title": "Formulário de Contacto",
+    "content": [
+      "Envie-nos uma mensagem para iniciarmos uma conversa sobre o seu projeto.",
+      "Seja para uma reabilitação física ou digital, estamos prontos para ouvir o seu desafio."
+    ]
+  },
+  {
+    "id": 13,
+    "location": "back-cover",
+    "slug": "obrigado",
+    "title": "Obrigado!",
+    "content": [
+      "Obrigado por explorar este portfólio.",
+      "O design não é apenas o que se parece e se sente. O design é como funciona. - Steve Jobs"
+    ]
+  }
+]

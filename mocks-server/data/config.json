@@ -1,0 +1,13 @@
+{
+  "languages": [
+    { "code": "pt", "name": "portuguese" },
+    { "code": "en", "name": "english" },
+    { "code": "es", "name": "spanish" },
+    { "code": "fr", "name": "french" }
+  ],
+  "types": [
+    { "code": "home", "name": "Home Page" },
+    { "code": "chapter", "name": "Chapter" },
+    { "code": "exit", "name": "Exit Page" }
+  ]
+}

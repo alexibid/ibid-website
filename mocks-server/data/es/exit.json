@@ -1,0 +1,22 @@
+[
+  {
+    "id": 37,
+    "location": "about",
+    "slug": "contacto",
+    "title": "Contacto",
+    "content": [
+      "Mi trabajo es una invitación a la colaboración...",
+      "Construyamos sobre lo que ya existe, creando algo enteramente nuevo y único. Ibidem En el mismo lugar, pero en una nueva página."
+    ]
+  },
+  {
+    "id": 39,
+    "location": "back-cover",
+    "slug": "gracias",
+    "title": "¡Gracias!",
+    "content": [
+      "Gracias por explorar este portafolio.",
+      "El diseño no es solo lo que parece y se siente. El diseño es cómo funciona. - Steve Jobs"
+    ]
+  }
+]

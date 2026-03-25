@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "location": "front-cover",
+    "slug": "inicio",
+    "title": "Design e implementação web, ferramentas digitais (web e apps), manutenção web, remodelação de escritórios, reabilitação de habitações,... arquitectura.",
+    "content": [
+      "O nome ibid. (do latim ibidem) é mais do que uma referência bibliográfica; é a nossa filosofia de intervenção. Na escrita, indica que voltamos à mesma obra, mas talvez numa página diferente. Na vida e no espaço, reflete a nossa recusa da tabula rasa.",
+      "Não acreditamos em espaços ou sistemas isolados. As cidades, tal como o código, são palimpsestos — construções sobre reconstruções. O ibid. nasce para dar continuidade à autoria partilhada do conhecimento, ligando o \"espaço existencial\" físico à \"sociedade em rede\" digital.",
+      "Criamos para o homem total: aquele que habita um corpo físico, mas cuja mente e comunicação se expandem pela rede."
+    ]
+  },
+  {
+    "id": 2,
+    "location": "index",
+    "slug": "indice",
+    "title": "Índice",
+    "content": [
+      "{\"title\": \"I. Web Design e Apps\", \"slug\": \"web-design-e-apps\"}",
+      "{\"title\": \"II. Ferramentas Digitais (Web e Apps)\", \"slug\": \"ferramentas-digitais\"}",
+      "{\"title\": \"III. Manutenção de Websites e Apps\", \"slug\": \"manutencao-de-websites-e-apps\"}",
+      "{\"title\": \"IV. Remodelação de Escritórios\", \"slug\": \"remodelacao-de-escritorios\"}",
+      "{\"title\": \"V. Reabilitação de Habitações\", \"slug\": \"reabilitacao-de-habitacoes\"}",
+      "{\"title\": \"VI. Projeto de Habitação\", \"slug\": \"projeto-de-habitacao\"}",
+      "{\"title\": \"VII. Outros Equipamentos\", \"slug\": \"outros-equipamentos\"}",
+      "{\"title\": \"VIII. Contactos\", \"slug\": \"contactos\"}"
+    ]
+  },
+  {
+    "id": 3,
+    "location": "preface",
+    "slug": "prefacio",
+    "title": "Prefácio",
+    "content": [
+      "O projeto ibid. nasce no ponto de convergência entre o desenho da estrutura física e a arquitetura de sistemas de informação. A proposta fundamental desta marca é a aplicação do rigor do planeamento estrutural e da elegância do design arquitetónico ao desenvolvimento de plataformas digitais e à reabilitação de espaços físicos. Sob o conceito latim de ibidem — no mesmo lugar —, recusamos a ideia de tabula rasa. Acreditamos que toda a produção de valor é uma camada adicional construída sobre o saber acumulado, garantindo continuidade, raiz e identidade num mundo fragmentado pela tecnologia. Para quem procura um serviço que una a precisão da engenharia à sensibilidade fenomenológica, o ibid. oferece uma visão integrada onde a matéria e o código atuam como meios comunicativos. O percurso profissional detalhado e as etapas de formação podem ser consultados no currículo disponível, mas o que define esta prática é a capacidade de transpor uma experiência técnica consolidada para soluções personalizadas que respeitam o homem total — o ser que habita simultaneamente um corpo físico, uma mente reflexiva e uma rede de comunicação alargada."
+    ]
+  }
+]

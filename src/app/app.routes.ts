@@ -11,7 +11,7 @@ export const routes: Routes = [
         path: '', component: Home,
     },
     {
-        path: 'contactos', component: Contacts,
+        path: 'contactos', component: Contacts
     },
     {
         path: ':slug', component: Chapter

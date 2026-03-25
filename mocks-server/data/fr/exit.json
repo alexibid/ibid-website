@@ -1,0 +1,22 @@
+[
+  {
+    "id": 50,
+    "location": "about",
+    "slug": "contactez-nous",
+    "title": "Contactez-nous",
+    "content": [
+      "Mon travail est une invitation à la collaboration...",
+      "Construisons sur ce qui existe déjà, en créant quelque chose d'entièrement nouveau et unique. Ibidem Au même endroit, mais sur une nouvelle page."
+    ]
+  },
+  {
+    "id": 52,
+    "location": "back-cover",
+    "slug": "merci",
+    "title": "Merci !",
+    "content": [
+      "Merci d'avoir exploré ce portfolio.",
+      "Le design n'est pas seulement ce à quoi il ressemble et ce qu'on ressent. Le design est la façon dont il fonctionne. - Steve Jobs"
+    ]
+  }
+]

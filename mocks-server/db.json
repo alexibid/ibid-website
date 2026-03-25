@@ -1,0 +1,591 @@
+{
+  "config": {
+    "languages": [
+      { "code": "pt", "name": "portuguese" },
+      { "code": "en", "name": "english" },
+      { "code": "es", "name": "spanish" },
+      { "code": "fr", "name": "french" }
+    ],
+    "types": [
+      { "code": "home", "name": "Home Page" },
+      { "code": "exit", "name": "Exit Page" },
+      { "code": "chapter", "name": "Chapter" }
+    ]
+  },
+  "content": {
+    "pt": {
+      "home": [
+        {
+          "id": 1,
+          "location": "front-cover",
+          "slug": "inicio",
+          "title": "Design e implementação web, ferramentas digitais (web e apps), manutenção web, remodelação de escritórios, reabilitação de habitações,... arquitectura.",
+          "content": [
+            "O nome ibid. (do latim ibidem) é mais do que uma referência bibliográfica; é a nossa filosofia de intervenção. Na escrita, indica que voltamos à mesma obra, mas talvez numa página diferente. Na vida e no espaço, reflete a nossa recusa da tabula rasa.",
+            "Não acreditamos em espaços ou sistemas isolados. As cidades, tal como o código, são palimpsestos — construções sobre reconstruções. O ibid. nasce para dar continuidade à autoria partilhada do conhecimento, ligando o \"espaço existencial\" físico à \"sociedade em rede\" digital.",
+            "Criamos para o homem total: aquele que habita um corpo físico, mas cuja mente e comunicação se expandem pela rede."
+          ]
+        },
+        {
+          "id": 2,
+          "location": "index",
+          "slug": "indice",
+          "title": "Índice",
+          "content": [
+            "{\"title\": \"I. Web Design e Apps\", \"slug\": \"web-design-e-apps\"}",
+            "{\"title\": \"II. Ferramentas Digitais (Web e Apps)\", \"slug\": \"ferramentas-digitais\"}",
+            "{\"title\": \"III. Manutenção de Websites e Apps\", \"slug\": \"manutencao-de-websites-e-apps\"}",
+            "{\"title\": \"IV. Remodelação de Escritórios\", \"slug\": \"remodelacao-de-escritorios\"}",
+            "{\"title\": \"V. Reabilitação de Habitações\", \"slug\": \"reabilitacao-de-habitacoes\"}",
+            "{\"title\": \"VI. Projeto de Habitação\", \"slug\": \"projeto-de-habitacao\"}",
+            "{\"title\": \"VII. Outros Equipamentos\", \"slug\": \"outros-equipamentos\"}",
+            "{\"title\": \"VIII. Contactos\", \"slug\": \"contactos\"}"
+          ]
+        },
+        {
+          "id": 3,
+          "location": "preface",
+          "slug": "prefacio",
+          "title": "Prefácio",
+          "content": [
+            "O projeto ibid. nasce no ponto de convergência entre o desenho da estrutura física e a arquitetura de sistemas de informação. A proposta fundamental desta marca é a aplicação do rigor do planeamento estrutural e da elegância do design arquitetónico ao desenvolvimento de plataformas digitais e à reabilitação de espaços físicos. Sob o conceito latim de ibidem — no mesmo lugar —, recusamos a ideia de tabula rasa. Acreditamos que toda a produção de valor é uma camada adicional construída sobre o saber acumulado, garantindo continuidade, raiz e identidade num mundo fragmentado pela tecnologia. Para quem procura um serviço que una a precisão da engenharia à sensibilidade fenomenológica, o ibid. oferece uma visão integrada onde a matéria e o código atuam como meios comunicativos. O percurso profissional detalhado e as etapas de formação podem ser consultados no currículo disponível, mas o que define esta prática é a capacidade de transpor uma experiência técnica consolidada para soluções personalizadas que respeitam o homem total — o ser que habita simultaneamente um corpo físico, uma mente reflexiva e uma rede de comunicação alargada."
+          ]
+        }
+      ],
+      "chapter": [
+        {
+          "id": 4,
+          "location": "I",
+          "slug": "web-design-e-apps",
+          "title": "Web Design e Apps",
+          "content": [
+            "A construção de uma presença digital contemporânea exige um pensamento estrutural que transcende a estética superficial da interface. No ibid., o desenvolvimento web é abordado como a edificação de infraestruturas habitáveis que devem ser simultaneamente elegantes e resilientes sob pressão.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", "alt": "Web design planning" },
+            "Esta competência assenta numa experiência consolidada na gestão e evolução de produtos digitais de escala massiva, onde a responsabilidade técnica obriga a uma precisão cirúrgica. Lidar com sistemas de alto tráfego ensina que a performance não é apenas uma métrica de velocidade, mas a própria física do espaço virtual.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800", "alt": "Clean code implementation" },
+            "Um website que apresenta latência ou uma arquitetura de informação confusa é o equivalente funcional a um edifício com barreiras arquitetónicas intransponíveis; ele segrega o utilizador e degrada o seu espaço existencial na rede. Oferecemos um serviço fullstack que compreende a totalidade do ecossistema digital, desde a fundação na base de dados e no servidor até à camada visível da interface do utilizador.",
+            "A aplicação do rigor do Clean Code é aqui fundamental. O código deve explicar-se a si próprio através de uma estrutura lógica impecável e identificadores que respeitem a clareza de uma planta técnica, permitindo que a base de software seja sustentável e legível ao longo do tempo. Utilizamos tecnologias de vanguarda, como Web Components e a biblioteca Lit, para criar sistemas de design modulares e agnósticos.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200", "alt": "Interface reflection" },
+            "Estes componentes funcionam como blocos de construção inteligentes, capazes de ser escalados sem comprometer a estabilidade do sistema. O processo de deployment é o momento da materialização, onde a lógica teórica se confronta com a realidade da infraestrutura global, exigindo uma atenção absoluta à segurança, à estabilidade e à rapidez. No ibid., a arquitetura de interfaces é o desenho dos limites onde a mente humana se expande para o mundo em rede, garantindo que a tecnologia desaparece na sua própria eficiência para deixar brilhar a comunicação e a produtividade.",
+            "A otimização para motores de busca e a integração de sistemas de performance são geridas com a mesma visão que um urbanista aplica aos fluxos de um centro urbano denso. Cada decisão de design e cada linha de código têm como objetivo assegurar que o valor é gerado de forma fluida, sem fricção, combatendo a tendência de criar \"não-lugares\" digitais efémeros. Criamos espaços com alma, onde o utilizador se sente orientado e capacitado, transformando a presença online numa extensão fiel da identidade e dos objetivos de cada projeto. Esta visão técnica assegura que cada aplicação é resiliente ao tempo, preparada para crescer sobre as suas próprias fundações sem necessidade de demolição, honrando a autoria partilhada do conhecimento que sustenta a internet moderna."
+          ]
+        },
+        {
+          "id": 5,
+          "location": "II",
+          "slug": "ferramentas-digitais",
+          "title": "Ferramentas Digitais (Web e Apps)",
+          "content": [
+            "A criação de ferramentas customizadas para a web e para dispositivos móveis é um exercício de engenharia que visa estender a capacidade de ação humana sobre o mundo. No ibid., especializamo-nos no desenvolvimento de ferramentas por medida que resolvem lacunas operacionais onde as soluções genéricas falham. Esta vertente foca-se na produtividade absoluta e na clareza na gestão de dados, transformando processos de negócio complexos em interfaces intuitivas e potentes.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=1200", "alt": "Data analysis tool" },
+            "Desenvolvemos ecossistemas que abrangem desde sistemas de gestão de agenda e controlo de inventário até ferramentas avançadas de visualização de dados espaciais e técnicos. A nossa visão híbrida permite a implementação de soluções de ponta, como visualizadores BIM integrados no navegador e ferramentas de realidade aumentada para o setor da construção civil.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800", "alt": "Application interface" },
+            "Estas ferramentas permitem que a informação técnica de um projeto seja acessível em qualquer lugar, tornando a matéria — o edifício — um objeto comunicativo e interativo muito antes da sua conclusão física. A experiência em manipular grandes volumes de informação e criar lógicas de negócio robustas permite-nos entregar ferramentas que funcionam como próteses da inteligência humana.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200", "alt": "Structural precision" },
+            "Desenvolvidas para o homem total que opera num ambiente de rede constante. Cada ferramenta é pensada para se integrar de forma orgânica no fluxo de trabalho já existente, respeitando a continuidade do saber da organização e adicionando uma camada de eficiência tecnológica que liberta o utilizador para tarefas de maior valor criativo.",
+            "A engenharia de ferramentas customizadas exige uma compreensão profunda do \"sítio\" de trabalho do utilizador. Não entregamos apenas software; entregamos novos métodos de eficácia que eliminam a redundância e o erro humano. No ibid., acreditamos que a tecnologia deve ser um facilitador silencioso. Quer se trate de uma aplicação de logística complexa ou de um sistema de monitorização em tempo real, o foco permanece na experiência do utilizador e na integridade dos dados. Construímos pontes tecnológicas que permitem transformar o invisível em algo tangível e útil, garantindo que a ferramenta web é uma extensão natural das capacidades da equipa, potenciando a ação sobre o mundo físico e digital de forma unificada e sustentável."
+          ]
+        },
+        {
+          "id": 6,
+          "location": "III",
+          "slug": "manutencao-de-websites-e-apps",
+          "title": "Manutenção de Websites e Apps",
+          "content": [
+            "A manutenção técnica é o capítulo da sustentabilidade e do respeito profundo pelo investimento tecnológico realizado. No ibid., encaramos a manutenção não como um fardo corretivo, mas como o restauro contínuo da arquitetura digital de um projeto. Um sistema de software que não evolui torna-se rapidamente uma ruína digital, acumulando dívida técnica que compromete a segurança e a performance.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200", "alt": "System maintenance" },
+            "A nossa experiência consolidada permite-nos realizar auditorias técnicas profundas, identificando vulnerabilidades e gargalos de processamento que podem afetar a experiência do utilizador e a visibilidade nos motores de busca.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800", "alt": "Server monitoring" },
+            "Tratamos a infraestrutura digital como um património vivo que deve ser preservado e melhorado. O serviço de manutenção do ibid. garante a atualização constante de dependências, a refatoração de código obsoleto e a otimização de bases de dados, assegurando que o sistema cresce de forma orgânica e resiliente. Aplicando o conceito de ibidem, trabalhamos sobre o que já existe.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200", "alt": "Circuitry of service" },
+            "Honrando a estrutura original mas dotando-a das camadas de segurança necessárias para enfrentar os desafios da rede global. Este cuidado constante previne a obsolescência precoce e garante que a plataforma permanece rápida, segura e funcional perante a evolução constante dos navegadores e dispositivos.",
+            "A manutenção é também um ato de vigilância sobre a performance e a acessibilidade. No mundo digital, a rapidez de resposta é o que mantém o habitante ligado ao espaço. Através de monitorização contínua, asseguramos que o \"lugar digital\" do cliente nunca se degrade, oferecendo suporte técnico especializado que entende a complexidade total da stack tecnológica. Este compromisso com a longevidade permite que o investimento inicial em software se mantenha rentável e eficaz, garantindo que a arquitetura digital continua a servir o homem total com a mesma eficácia e clareza do dia do seu lançamento oficial."
+          ]
+        },
+        {
+          "id": 7,
+          "location": "IV",
+          "slug": "remodelacao-de-escritorios",
+          "title": "Remodelação de Escritórios",
+          "content": [
+            "A intervenção no espaço de trabalho exige uma compreensão profunda da dualidade entre o corpo físico do trabalhador e a sua onipresença digital na sociedade em rede. No ibid., a remodelação de escritórios é vista como a criação de nós estratégicos onde o design deve facilitar o encontro real e a produtividade virtual.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200", "alt": "Modern office interior" },
+            "A nossa experiência é sustentada pela participação direta na reabilitação e design de interiores para grandes corporações internacionais de prestígio, abrangendo setores que vão das telecomunicações à banca e consultoria global.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800", "alt": "Collaborative space" },
+            "Intervir em espaços para entidades como a Unitel, o BESI, a Conoco Philips, a Vodacom ou a Ernst & Young exigiu o desenvolvimento de uma metodologia de design que funde o prestígio institucional com a flexibilidade tecnológica extrema.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200", "alt": "Minimalist workstation" },
+            "Nestes contextos, a arquitetura de interiores deixa de ser uma questão de cosmética para se tornar uma gestão rigorosa da comunicação alargada e do bem-estar existencial. O escritório contemporâneo deve ser um facilitador da transição fluida entre o trabalho focado individual e a colaboração global distribuída. Projetamos espaços que integram infraestruturas de dados e tecnologia de forma invisível, tratando a acústica controlada e a iluminação dinâmica como elementos tão estruturais como as próprias divisórias.",
+            "O trabalhador habita um espaço físico desenhado para proteger a sua saúde e ergonomia, mas a sua mente opera em rede; o nosso design garante que estas duas dimensões coexistem sem fricção. A remodelação de um escritório corporativo para estas grandes entidades é um exercício de engenharia social e técnica onde o cronograma, o orçamento e a continuidade da operação são fundamentais.",
+            "O espaço deve atuar como um meio comunicativo que reforça a cultura organizacional, evitando a criação de \"não-lugares\" estéreis e desumanos. Ao utilizar materiais de alta qualidade e soluções espaciais inteligentes, transformamos o local de trabalho num ambiente que respeita o homem total, proporcionando um sentido de pertença e um conforto que a internet, por si só, não consegue oferecer. É a materialização da eficiência digital num espaço físico que convida à permanência, à criatividade e à conexão humana real."
+          ]
+        },
+        {
+          "id": 8,
+          "location": "V",
+          "slug": "reabilitacao-de-habitacoes",
+          "title": "Reabilitação de Habitações",
+          "content": [
+            "O domínio absoluto da técnica construtiva é o que diferencia uma simples decoração de interiores de uma verdadeira reabilitação arquitetónica com significado. No ibid., o detalhe técnico é elevado à categoria de linguagem fundamental, fruto de uma expertise consolidada no desenvolvimento de sistemas de caixalharias e vidro de alta gama.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200", "alt": "Architectural renovation" },
+            "Este percurso técnico foi essencial para entender a \"pele\" do edifício — o limite físico, térmico e sensorial entre o conforto do interior e o ambiente exterior. O vidro e as caixalharias de alumínio não são apenas elements de fecho; são os reguladores que definem a relação do habitante com a luz solar, a temperatura e o silêncio necessário ao espaço existencial doméstico.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800", "alt": "Contemporary dwelling" },
+            "Na reabilitação de habitações, aplicamos este saber especializado para garantir que a transparência e a luz não comprometem a inércia térmica ou o isolamento acústico. Entender a física dos materiais, a transmitância térmica dos perfis e a performance dos vidros laminados permite-nos projetar remodelações onde o bem-estar é quantificável e absoluto.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=1200", "alt": "Serene interior" },
+            "A casa moderna tornou-se um lugar de densidade funcional extrema, servindo simultaneamente de refúgio, escritório e centro de lazer. Por isso, a reabilitação do ibid. é cirúrgica: trabalhamos sobre o palimpsesto das memórias e estruturas existentes — ibidem — para integrar as novas exigências da vida conectada sem destruir a alma e a identidade do lar.",
+            "Através do domínio técnico do vidro e do alumínio, abrimos as habitações à paisagem e ao contexto urbano sem perder a proteção essencial do abrigo. Esta atenção ao detalhe milimétrico, herdada da indústria técnica de caixilharia, é o que garante a qualidade macro de uma casa reabilitada. Criamos espaços onde a luz é moldada para gerar serenidade e onde cada material é escolhido pela sua durabilidade e capacidade de envelhecer com dignidade. A habitação continua a ser uma extension fiel da identidade de quem nela reside, ligando as raízes históricas do lugar às infinitas possibilidades de um futuro em rede, onde a casa é o porto seguro e o ponto de ancoragem do homem total."
+          ]
+        },
+        {
+          "id": 9,
+          "location": "VI",
+          "slug": "projeto-de-habitacao",
+          "title": "Projeto de Habitação",
+          "content": [
+            "Projetar uma casa de raiz é o ato máximo de materialização de uma visão sobre o habitar humano na contemporaneidade. No ibid., o desenho residencial não começa numa folha em branco, mas no diálogo profundo com o lugar, a sua topografia, o seu clima e a sua cultura material.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1518005020451-eba89a046045?auto=format&fit=crop&q=80&w=1200", "alt": "House project from scratch" },
+            "Acreditamos que a arquitetura deve potenciar o encontro entre o ser e o seu meio ambiente, criando estruturas que são simultaneamente filtros protetores e pontes comunicativas para o mundo exterior. Uma casa deve permitir a desconexão necessária para o repouso e a conexão total exigida pela vida profissional e social moderna.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=crop&q=80&w=800", "alt": "Architectural volumes" },
+            "Desenhamos arquiteturas onde a matéria comunica através da textura da pedra, da sombra projetada e da manipulação do vazio. A nossa abordagem técnica garante que cada projeto é pensado para a longevidade absoluta e para a sustentabilidade passiva.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1513584684374-8bdb7489feef?auto=format&fit=crop&q=80&w=1200", "alt": "Light and shadow" },
+            "Utilizamos o conhecimento da física dos materiais para otimizar a climatização natural, reduzindo a dependência de sistemas artificiais e aumentando a harmonia do edifício com o seu contexto geográfico. O objetivo primordial é criar uma identidade única para cada habitação, combatendo a homogeneização global e garantindo que o habitante encontra no seu lar uma extensão fiel da sua forma de estar no mundo.",
+            "Cada decisão de projeto, da orientação solar à escolha dos pavimentos, é fundamentada na necessidade de proporcionar um espaço existencial digno e inspirador. Projetar com o ibid. significa possuir uma habitação onde a engenharia de precisão e a poética do espaço se fundem sem costuras.",
+            "Cada detalhe, desde as fundações até aos remates finais de acabamento, é pensado para elevar a experiência quotidiana da vida. Acreditamos que a casa é o lugar onde o homem total se regenera; por isso, desenhamos espaços que celebram a luz, o silêncio e o conforto, proporcionando uma base sólida para a vida em rede. O resultado é um objeto arquitetónico que honra a tradição da construção enquanto se projeta para o futuro, oferecendo um verdadeiro sentido de pertença num mundo em constante mutação."
+          ]
+        },
+        {
+          "id": 10,
+          "location": "VII",
+          "slug": "outros-equipamentos",
+          "title": "Outros Equipamentos",
+          "content": [
+            "A arquitetura estende-se muito além do habitar privado para alcançar a escala do lazer coletivo e do corpo em movimento. O projeto da ATA (Academia de Ténis e Padel) é a materialização perfeita da nossa filosofia aplicada ao desporto e à interação social comunitária.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1542279151-c06db16f9f31?auto=format&fit=crop&q=80&w=1200", "alt": "Sports facility" },
+            "Projetar equipamentos desportivos exige um rigor geométrico e técnico absoluto, onde as dimensões, as inclinações de drenagem e a resposta tátil das superfícies não admitem qualquer margem para erro. O desafio arquitetónico é integrar esta rigidez regulamentar numa paisagem que convide ao encontro social.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1563299201-90a6f4a8d46a?auto=format&fit=crop&q=80&w=800", "alt": "Padel court detail" },
+            "O desporto é uma das formas mais puras de o homem experienciar o seu corpo no espaço existencial, e a arquitetura deve ser o palco silencioso mas tecnicamente impecável que potencia essa performance.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200", "alt": "Athletic space" },
+            "Na ATA, a intervenção focou-se na criação de um equipamento que funciona como um suporte orgânico à atividade humana, onde cada court é tratado como uma interface de alta fidelidade entre o atleta e o solo. A matéria define a velocidade do jogo, a segurança física do praticante e a qualidade do convívio social pós-partida.",
+            "Não construímos apenas recintos desportivos; desenhamos o limite onde o esforço humano se encontra com a precisão do planeamento urbano. Cada projeto nesta área é uma referência ao saber acumulado da engenharia civil e da fenomenologia do espaço público.",
+            "Através do desenho de balneários, áreas de lazer e campos de jogo, promovemos o encontro real e a superação pessoal como pilares fundamentais da saúde social, garantindo que o espaço comum continua a ser um lugar de descoberta, vitalidade e ligação humana autêntica."
+          ]
+        }
+      ],
+      "exit": [
+        {
+          "id": 11,
+          "location": "about",
+          "slug": "contactos",
+          "title": "Contactos",
+          "content": [
+            "O meu trabalho é um convite à colaboração, quer procure uma solução técnica de engenharia web de alta performance ou uma visão arquitetónica para o seu espaço físico.",
+            "O ibid. opera a partir de Vila Nova de Gaia e Porto, mas a nossa natureza é global. Estamos disponíveis para discutir projetos que desafiem as convenções e que procurem uma abordagem integrada entre o design, a tecnologia e a arquitetura.",
+            "Email: alex.ibid@gmail.com",
+            "LinkedIn: linkedin.com/in/alexandresantos",
+            "Web: www.ibid.pt",
+            "Vamos construir em cima do que já existe, criando algo inteiramente novo e único. Ibidem No mesmo lugar, mas numa nova página."
+          ]
+        },
+        {
+          "id": 12,
+          "location": "contact-form",
+          "slug": "formulario-de-contacto",
+          "title": "Formulário de Contacto",
+          "content": ["Envie-nos uma mensagem..."]
+        },
+        {
+          "id": 13,
+          "location": "back-cover",
+          "slug": "obrigado",
+          "title": "Obrigado!",
+          "content": [
+            "Obrigado por explorar este portfólio.",
+            "O design não é apenas o que se parece e se sente. O design é como funciona. - Steve Jobs"
+          ]
+        }
+      ]
+    },
+    "en": {
+      "home": [
+        {
+          "id": 14,
+          "location": "front-cover",
+          "slug": "home",
+          "title": "Web design and implementation, digital tools (web and apps), web maintenance, office remodeling, housing rehabilitation,... architecture.",
+          "content": [
+            "The name ibid. (from Latin ibidem) is more than a bibliographic reference; it is our philosophy of intervention. In writing, it indicates that we return to the same work, but perhaps on a different page. In life and space, it reflects our refusal of the tabula rasa.",
+            "We do not believe in isolated spaces or systems. Cities, like code, are palimpsests — constructions upon reconstructions. ibid. was born to give continuity to the shared authorship of knowledge, connecting the physical 'existential space' to the digital 'network society'.",
+            "We create for the total man: the one who inhabits a physical body, but whose mind and communication expand through the network."
+          ]
+        },
+        {
+          "id": 15,
+          "location": "index",
+          "slug": "index",
+          "title": "Index",
+          "content": [
+            "{\"title\": \"I. Web Design and Apps\", \"slug\": \"web-design-and-apps\"}",
+            "{\"title\": \"II. Digital Tools (Web and Apps)\", \"slug\": \"digital-tools\"}",
+            "{\"title\": \"III. Website and App Maintenance\", \"slug\": \"website-and-app-maintenance\"}",
+            "{\"title\": \"IV. Office Remodeling\", \"slug\": \"office-remodeling\"}",
+            "{\"title\": \"V. Housing Rehabilitation\", \"slug\": \"housing-rehabilitation\"}",
+            "{\"title\": \"VI. Housing Project\", \"slug\": \"housing-project\"}",
+            "{\"title\": \"VII. Other Facilities\", \"slug\": \"other-facilities\"}",
+            "{\"title\": \"VIII. Contacts\", \"slug\": \"contacts\"}"
+          ]
+        },
+        {
+          "id": 16,
+          "location": "preface",
+          "slug": "preface",
+          "title": "Preface",
+          "content": [
+            "The ibid. project is born at the point of convergence between the design of physical structures and the architecture of information systems. The fundamental proposal of this brand is the application of the rigor of structural planning and the elegance of architectural design to the development of digital platforms and the rehabilitation of physical spaces. Under the Latin concept of ibidem — in the same place — we refuse the idea of tabula rasa. We believe that all value production is an additional layer built upon accumulated knowledge, ensuring continuity, root and identity in a world fragmented by technology. For those seeking a service that combines engineering precision with phenomenological sensitivity, ibid. offers an integrated vision where matter and code act as communicative media. The detailed professional path and training stages can be consulted in the available curriculum, but what defines this practice is the ability to transpose consolidated technical experience into personalized solutions that respect the total man — the being who simultaneously inhabits a physical body, a reflective mind, and an extended communication network."
+          ]
+        }
+      ],
+      "chapter": [
+        {
+          "id": 17,
+          "location": "I",
+          "slug": "web-design-and-apps",
+          "title": "Web Design and Apps",
+          "content": [
+            "Building a contemporary digital presence requires structural thinking that transcends the superficial aesthetics of the interface. At ibid., web development is approached as building livable infrastructures that must be simultaneously elegant and resilient under pressure.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", "alt": "Web design planning" },
+            "This competence is based on consolidated experience in managing and evolving massive-scale digital products, where technical responsibility demands surgical precision. Dealing with high-traffic systems teaches that performance is not just a speed metric, but the very physics of virtual space.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800", "alt": "Clean code implementation" },
+            "A website that presents latency or a confusing information architecture is the functional equivalent of a building with insurmountable architectural barriers; it segregates the user and degrades their existential space in the network. We offer a fullstack service that understands the entire digital ecosystem, from the database foundation and server to the visible user interface layer.",
+            "The application of Clean Code rigor is fundamental here. The code must explain itself through an impeccable logical structure and identifiers that respect the clarity of a technical plan, allowing the software base to be sustainable and readable over time. We use cutting-edge technologies, such as Web Components and the Lit library, to create modular and agnostic design systems.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200", "alt": "Interface reflection" },
+            "These components function as intelligent building blocks, capable of being scaled without compromising system stability. The deployment process is the moment of materialization, where theoretical logic confronts the reality of global infrastructure, requiring absolute attention to security, stability, and speed. In ibid., interface architecture is the design of the boundaries where the human mind expands into the networked world, ensuring that technology disappears in its own efficiency to let communication and productivity shine.",
+            "Search engine optimization and performance system integration are managed with the same vision that an urban planner applies to the flows of a dense urban center. Each design decision and each line of code aim to ensure that value is generated fluidly, without friction, combatting the tendency to create ephemeral digital \"non-places\". We create spaces with soul, where the user feels oriented and empowered, transforming the online presence into a faithful extension of each project's identity and goals. This technical vision ensures that each application is resilient over time, prepared to grow upon its own foundations without the need for demolition, honoring the shared authorship of knowledge that sustains the modern internet."
+          ]
+        },
+        {
+          "id": 18,
+          "location": "II",
+          "slug": "digital-tools",
+          "title": "Digital Tools (Web and Apps)",
+          "content": [
+            "Creating customized tools for web and mobile devices is an engineering exercise that aims to extend human capacity for action upon the world. At ibid., we specialize in developing tailor-made tools that solve operational gaps where generic solutions fail. This area focuses on absolute productivity and clarity in data management, transforming complex business processes into intuitive and powerful interfaces.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=1200", "alt": "Data analysis tool" },
+            "We develop ecosystems that range from schedule management and inventory control systems to advanced spatial and technical data visualization tools. Our hybrid vision allows for the implementation of cutting-edge solutions, such as BIM viewers integrated in the browser and augmented reality tools for the construction sector.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800", "alt": "Application interface" },
+            "These tools allow a project's technical information to be accessible anywhere, making the matter — the building — a communicative and interactive object long before its physical completion. Experience in manipulating large volumes of information and creating robust business logic allows us to deliver tools that function as prostheses of human intelligence.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200", "alt": "Structural precision" },
+            "Developed for the total man who operates in a constant network environment. Each tool is designed to integrate organically into the existing workflow, respecting the organization's continuity of knowledge and adding a layer of technological efficiency that frees the user for higher creative value tasks.",
+            "The engineering of customized tools requires a deep understanding of the user's \"site\" of work. We do not just deliver software; we deliver new methods of effectiveness that eliminate redundancy and human error. At ibid., we believe technology should be a silent facilitator. Whether it's a complex logistics application or a real-time monitoring system, the focus remains on user experience and data integrity. We build technological bridges that allow transforming the invisible into something tangible and useful, ensuring the web tool is a natural extension of the team's capabilities, boosting action on the physical and digital world in a unified and sustainable way."
+          ]
+        },
+        {
+          "id": 19,
+          "location": "III",
+          "slug": "website-and-app-maintenance",
+          "title": "Website and App Maintenance",
+          "content": [
+            "Technical maintenance is the chapter of sustainability and deep respect for the technological investment made. At ibid., we view maintenance not as a corrective burden, but as the continuous restoration of a project's digital architecture. A software system that does not evolve quickly becomes a digital ruin, accumulating technical debt that compromises security and performance.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200", "alt": "System maintenance" },
+            "Our consolidated experience allows us to carry out deep technical audits, identifying vulnerabilities and processing bottlenecks that can affect user experience and search engine visibility.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800", "alt": "Server monitoring" },
+            "We treat digital infrastructure as a living heritage that must be preserved and improved. ibid.'s maintenance service ensures constant updates of dependencies, refactoring of obsolete code, and database optimization, ensuring the system grows organically and resiliently. Applying the concept of ibidem, we work on what already exists.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200", "alt": "Circuitry of service" },
+            "Honoring the original structure while providing it with the security layers necessary to face global network challenges. This constant care prevents premature obsolescence and ensures the platform remains fast, secure, and functional amidst constant browser and device evolution.",
+            "Maintenance is also an act of vigilance over performance and accessibility. In the digital world, response speed is what keeps the inhabitant connected to the space. Through continuous monitoring, we ensure the client's \"digital place\" never degrades, offering specialized technical support that understands the entire technological stack's complexity. This commitment to longevity allows initial software investment to remain profitable and effective, ensuring the digital architecture continues to serve the total man with the same efficiency and clarity as on its launch day."
+          ]
+        },
+        {
+          "id": 20,
+          "location": "IV",
+          "slug": "office-remodeling",
+          "title": "Office Remodeling",
+          "content": [
+            "Workplace intervention requires a deep understanding of the duality between the worker's physical body and their digital omnipresence in the network society. At ibid., office remodeling is seen as the creation of strategic nodes where design must facilitate real encounter and virtual productivity.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200", "alt": "Modern office interior" },
+            "Our experience is sustained by direct participation in the rehabilitation and interior design for major prestigious international corporations, ranging from telecommunications to banking and global consulting.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800", "alt": "Collaborative space" },
+            "Intervening in spaces for entities such as Unitel, BESI, Conoco Philips, Vodacom or Ernst & Young required the development of a design methodology that merges institutional prestige with extreme technological flexibility.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200", "alt": "Minimalist workstation" },
+            "In these contexts, interior architecture ceases to be a matter of cosmetics to become a rigorous management of extended communication and existential well-being. The contemporary office must be a facilitator of the fluid transition between individual focused work and distributed global collaboration. We design spaces that integrate data and technology infrastructures invisibly, treating controlled acoustics and dynamic lighting as elements as structural as the partitions themselves.",
+            "The worker inhabits a physical space designed to protect their health and ergonomics, but their mind operates in a network; our design ensures these two dimensions coexist without friction. Remodeling a corporate office for these large entities is an exercise in social and technical engineering where schedule, budget, and operational continuity are paramount.",
+            "The space must act as a communicative medium that reinforces organizational culture, avoiding the creation of sterile and dehumanized \"non-places\". By using high-quality materials and intelligent spatial solutions, we transform the workplace into an environment that respects the total man, providing a sense of belonging and comfort that the internet alone cannot offer. It is the materialization of digital efficiency in a physical space that invites permanence, creativity, and real human connection."
+          ]
+        },
+        {
+          "id": 21,
+          "location": "V",
+          "slug": "housing-rehabilitation",
+          "title": "Housing Rehabilitation",
+          "content": [
+            "Absolute mastery of construction technique is what distinguishes simple interior decoration from true architectural rehabilitation with meaning. At ibid., technical detail is elevated to the category of fundamental language, fruit of consolidated expertise in high-end window and glass systems.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200", "alt": "Architectural renovation" },
+            "This technical journey was essential to understand the 'skin' of the building — the physical, thermal, and sensory boundary between interior comfort and the exterior environment. Glass and aluminum frames are not just closing elements; they are the regulators that define the inhabitant's relationship with sunlight, temperature, and the silence necessary for domestic existential space.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800", "alt": "Contemporary dwelling" },
+            "In housing rehabilitation, we apply this specialized knowledge to ensure that transparency and light do not compromise thermal inertia or acoustic insulation. Understanding material physics, thermal transmittance of profiles, and laminated glass performance allows us to design renovations where well-being is quantifiable and absolute.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=1200", "alt": "Serene interior" },
+            "The modern house has become a place of extreme functional density, serving simultaneously as a refuge, office, and leisure center. Therefore, ibid.'s rehabilitation is surgical: we work on the palimpsest of existing memories and structures — ibidem — to integrate the new requirements of connected life without destroying the home's soul and identity.",
+            "Through the technical mastery of glass and aluminum, we open homes to the landscape and urban context without losing the essential protection of shelter. This attention to millimetric detail, inherited from the technical framing industry, is what guarantees the macro quality of a rehabilitated house. We create spaces where light is shaped to generate serenity and where each material is chosen for its durability and ability to age with dignity. Habitation remains a faithful extension of the identity of those who reside in it, linking the historical roots of the place to the infinite possibilities of a network future, where the home is the safe harbor and the anchoring point of the total man."
+          ]
+        },
+        {
+          "id": 22,
+          "location": "VI",
+          "slug": "housing-project",
+          "title": "Housing Project",
+          "content": [
+            "Designing a house from scratch is the ultimate act of materializing a vision of human habitation in contemporary times. At ibid., residential design does not begin on a blank sheet, but in deep dialogue with the place, its topography, its climate, and its material culture.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1518005020451-eba89a046045?auto=format&fit=crop&q=80&w=1200", "alt": "House project from scratch" },
+            "We believe that architecture should enhance the encounter between the being and their environment, creating structures that are simultaneously protective filters and communicative bridges to the outside world. A house must allow for the disconnection necessary for rest and the total connection required by modern professional and social life.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=crop&q=80&w=800", "alt": "Architectural volumes" },
+            { "type": "image", "path": "https://images.unsplash.com/photo-1513584684374-8bdb7489feef?auto=format&fit=crop&q=80&w=1200", "alt": "Light and shadow" },
+            "We use knowledge of material physics to optimize natural climate control, reducing dependence on artificial systems and increasing the building's harmony with its geographic context. The primary goal is to create a unique identity for each home, combatting global homogenization and ensuring the inhabitant finds in their home a faithful extension of their way of being in the world.",
+            "Each design decision, from solar orientation to the choice of floorings, is grounded in the need to provide a dignified and inspiring existential space. Projecting with ibid. means possessing a home where precision engineering and space poetics merge seamlessly.",
+            "Every detail, from foundations to final finishing touches, is thought to elevate the daily experience of life. We believe the home is where the total man regenerates; therefore, we design spaces that celebrate light, silence, and comfort, providing a solid base for network life. The result is an architectural object that honors construction tradition while projecting towards the future, offering a true sense of belonging in a constantly changing world."
+          ]
+        },
+        {
+          "id": 23,
+          "location": "VII",
+          "slug": "other-facilities",
+          "title": "Other Facilities",
+          "content": [
+            "Architecture extends far beyond private living to reach the scale of collective leisure and the body in motion. The ATA (Tennis and Padel Academy) project is the perfect materialization of our philosophy applied to sports and community social interaction.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1542279151-c06db16f9f31?auto=format&fit=crop&q=80&w=1200", "alt": "Sports facility" },
+            "Designing sports facilities requires absolute geometric and technical rigor, where dimensions, drainage slopes, and the tactile response of surfaces admit no margin for error. The architectural challenge is to integrate this regulatory rigidity into a landscape that invites social encounter.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1563299201-90a6f4a8d46a?auto=format&fit=crop&q=80&w=800", "alt": "Padel court detail" },
+            "Sport is one of the purest ways for man to experience his body in existential space, and architecture must be the silent but technically impeccable stage that enhances that performance.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200", "alt": "Athletic space" },
+            "At ATA, the intervention focused on creating equipment that works as an organic support to human activity, where each court is treated as a high-fidelity interface between the athlete and the ground. Matter defines game speed, the practitioner's physical safety, and the quality of post-match social interaction.",
+            "We don't just build sports venues; we design the limit where human effort meets urban planning precision. Each project in this area is a reference to the accumulated knowledge of civil engineering and the phenomenology of public space.",
+            "Through the design of locker rooms, leisure areas, and play fields, we promote real encounter and personal overcoming as fundamental pillars of social health, ensuring common space remains a place of discovery, vitality, and authentic human connection."
+          ]
+        }
+      ],
+      "exit": [
+        {
+          "id": 24,
+          "location": "about",
+          "slug": "contacts",
+          "title": "Contacts",
+          "content": [
+            "My work is an invitation to collaboration, whether you are looking for a high-performance web engineering technical solution or an architectural vision for your physical space.",
+            "Email: alex.ibid@gmail.com",
+            "LinkedIn: linkedin.com/in/alexandresantos",
+            "Web: www.ibid.pt",
+            "Let's build on what already exists, creating something entirely new and unique. Ibidem In the same place, but on a new page."
+          ]
+        },
+        {
+          "id": 25,
+          "location": "contact-form",
+          "slug": "contact-form",
+          "title": "Contact Form",
+          "content": ["Send us a message..."]
+        },
+        {
+          "id": 26,
+          "location": "back-cover",
+          "slug": "thank-you",
+          "title": "Thank you!",
+          "content": [
+            "Thank you for exploring this portfolio.",
+            "Design is not just what it looks like and feels like. Design is how it works. - Steve Jobs"
+          ]
+        }
+      ]
+    },
+    "es": {
+      "home": [
+        {
+          "id": 27,
+          "location": "front-cover",
+          "slug": "portada",
+          "title": "Diseño e implementación web, herramientas digitales (web y apps), mantenimiento web, remodelación de oficinas, rehabilitación de viviendas,... arquitectura.",
+          "content": [
+            "El nombre ibid. (del latín ibidem) es más que una referencia bibliográfica; es nuestra filosofía de intervención. En la escritura, indica que volvemos a la misma obra, pero quizás en una página diferente. En la vida y el espacio, refleja nuestra negativa a la tabula rasa.",
+            "No creemos en espacios o sistemas aislados. Las ciudades, al igual que el código, son palimpsestos: construcciones sobre reconstrucciones. ibid. nace para dar continuidad a la autoría compartida del conocimiento, vinculando el 'espacio existencial' físico con la 'sociedad en red' digital.",
+            "Creamos para el hombre total: aquel que habita un cuerpo físico, pero cuya mente y comunicación se expanden por la red."
+          ]
+        },
+        {
+          "id": 28,
+          "location": "index",
+          "slug": "indice-es",
+          "title": "Índice",
+          "content": [
+            "{\"title\": \"I. Diseño Web y Apps\", \"slug\": \"diseno-web-y-apps\"}",
+            "{\"title\": \"II. Herramientas Digitales (Web y Apps)\", \"slug\": \"herramientas-digitales-es\"}",
+            "{\"title\": \"III. Mantenimiento de Sitios Web y Apps\", \"slug\": \"mantenimiento-de-sitios-web-y-apps\"}",
+            "{\"title\": \"IV. Remodelación de Oficinas\", \"slug\": \"remodelacion-de-oficinas\"}",
+            "{\"title\": \"V. Rehabilitación de Viviendas\", \"slug\": \"rehabilitacion-de-viviendas\"}",
+            "{\"title\": \"VI. Proyecto de Vivienda\", \"slug\": \"proyecto-de-vivienda\"}",
+            "{\"title\": \"VII. Otros Equipamientos\", \"slug\": \"otros-equipamientos-es\"}",
+            "{\"title\": \"VIII. Contactos\", \"slug\": \"contactos-es\"}"
+          ]
+        },
+        {
+          "id": 29,
+          "location": "preface",
+          "slug": "prefacio-es",
+          "title": "Prefacio",
+          "content": [
+            "El proyecto ibid. nace en el punto de convergencia entre el diseño de la estructura física y la arquitectura de sistemas de información. La propuesta fundamental de esta marca es la aplicación del rigor de la planificación estructural y la elegancia del diseño arquitectónico al desarrollo de plataformas digitales y a la rehabilitación de espacios físicos. Bajo el concepto latino de ibidem —en el mismo lugar—, rechazamos la idea de tabula rasa. Creemos que toda producción de valor es una capa adicional construida sobre el saber acumulado, garantizando continuidad, raíz e identidad en un mundo fragmentado por la tecnología. Para quienes buscan un servicio que una la precisión de la ingeniería con la sensibilidad fenomenológica, ibid. ofrece una visión integrada donde la materia y el código actúan como medios comunicativos."
+          ]
+        }
+      ],
+      "chapter": [
+        {
+          "id": 30,
+          "location": "I",
+          "slug": "diseno-web-y-apps",
+          "title": "Diseño Web y Apps",
+          "content": [
+            "La construcción de una presencia digital contemporánea exige un pensamiento estructural que trasciende la estética superficial de la interfaz. En ibid., el desarrollo web se aborda como la edificación de infraestructuras habitables que deben ser simultáneamente elegantes e resilientes bajo presión.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", "alt": "Planificación de diseño web" },
+            "Esta competencia se basa en una experiencia consolidada en la gestión y evolución de productos digitales de escala masiva, donde la responsabilidad técnica obliga a una precisión quirúrgica. Manejar sistemas de alto tráfico enseña que el rendimiento no es solo una métrica de velocidad, sino la propia física del espacio virtual.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800", "alt": "Implementación de Clean Code" },
+            "Un sitio web que presenta latencia o una arquitectura de información confusa es el equivalente funcional a un edificio con barreras arquitectónicas infranqueables; segrega al usuario y degrada su espacio existencial en la red. Oferecemos un servicio fullstack que comprende la totalidad del ecosistema digital, desde los cimientos en la base de datos y el servidor hasta la capa visible de la interfaz de usuario.",
+            "La aplicación del rigor del Clean Code es aquí fundamental. El código debe explicarse a sí mismo a través de una estructura lógica impecable e identificadores que respeten la claridad de un plano técnico, permitiendo que la base de software sea sostenible y legible a lo largo del tiempo. Utilizamos tecnologías de vanguardia, como Web Components y la biblioteca Lit, para crear sistemas de diseño modulares y agnósticos.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200", "alt": "Reflexión de interfaz" },
+            "Estos componentes funcionan como bloques de construcción inteligentes, capaces de escalarse sin comprometer la estabilidad del sistema. El proceso de despliegue es el momento de la materialización, donde la lógica teórica se enfrenta a la realidad de la infraestructura global, exigiendo una atención absoluta a la seguridad, la estabilidad y la rapidez. En ibid., la arquitectura de interfaces es el diseño de los límites donde la mente humana se expande hacia el mundo en red."
+          ]
+        },
+        {
+          "id": 31,
+          "location": "II",
+          "slug": "herramientas-digitales-es",
+          "title": "Herramientas Digitais (Web y Apps)",
+          "content": [
+            "La creación de herramientas personalizadas para la web y para dispositivos móviles es un ejercicio de ingeniería que busca extender la capacidad de acción humana sobre el mundo. En ibid., nos especializamos en el desarrollo de herramientas a medida que resuelven lagunas operativas donde las soluciones genéricas fallan. Esta vertiente se centra en la productividad absoluta y la claridad en la gestión de datos.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=1200", "alt": "Herramienta de análisis de datos" },
+            "Desarrollamos ecosistemas que abarcan desde sistemas de gestión de agenda y control de inventario hasta herramientas avanzadas de visualización de datos espaciais y técnicos. Nuestra visión híbrida permite la implementación de soluciones de vanguardia, como visores BIM integrados en el navegador y herramientas de realidade aumentada para el sector de la construcción.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800", "alt": "Interfaz de aplicación" },
+            "Estas herramientas permiten que la información técnica de un proyecto sea accesible en cualquier lugar, convirtiendo la materia — el edificio — en un objeto comunicativo e interactivo mucho antes de su conclusión física.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200", "alt": "Precisión estructural" }
+          ]
+        }
+      ],
+      "exit": [
+        {
+          "id": 32,
+          "location": "about",
+          "slug": "contactos-es",
+          "title": "Contactos",
+          "content": [
+            "Mi trabajo es una invitación a la colaboración, ya sea que busque una solución técnica de ingeniería web de alto rendimiento o una visión arquitectónica para su espacio físico.",
+            "Email: alex.ibid@gmail.com",
+            "LinkedIn: linkedin.com/in/alexandresantos",
+            "Web: www.ibid.pt",
+            "Construyamos sobre lo que ya existe, creando algo enteramente nuevo y único. Ibidem En el mismo lugar, pero en una nueva página."
+          ]
+        },
+        {
+          "id": 33,
+          "location": "back-cover",
+          "slug": "gracias",
+          "title": "¡Gracias!",
+          "content": [
+            "Gracias por explorar este portafolio.",
+            "El diseño no es solo lo que parece y se siente. El diseño es cómo funciona. - Steve Jobs"
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "home": [
+        {
+          "id": 34,
+          "location": "front-cover",
+          "slug": "couverture",
+          "title": "Conception et implémentation web, outils numériques (web et apps), maintenance web, rénovation de bureaux, réhabilitation de logements,... architecture.",
+          "content": [
+            "Le nom ibid. (du latin ibidem) est plus qu'une référence bibliographique ; c'est notre philosophie d'intervention. Dans l'écriture, il indique que nous revenons au même ouvrage, mais peut-être à une page différente. Dans la vie et l'espace, il reflète notre refus de la tabula rasa.",
+            "Nous ne croyons pas aux espaces ou systèmes isolés. Les villes, tout comme le code, sont des palimpsestes — des constructions sur des reconstructions. ibid. est né pour assurer la continuité de la paternité partagée de la connaissance, reliant l'\"espace existentiel\" physique à la \"société en réseau\" numérique.",
+            "Nous créons pour l'homme total : celui qui habite un corps physique, mais dont l'esprit et la communication s'étendent à travers le réseau."
+          ]
+        },
+        {
+          "id": 35,
+          "location": "index",
+          "slug": "sommaire",
+          "title": "Sommaire",
+          "content": [
+            "{\"title\": \"I. Conception Web et Apps\", \"slug\": \"conception-web-et-apps\"}",
+            "{\"title\": \"II. Outils Numériques (Web et Apps)\", \"slug\": \"outils-numeriques\"}",
+            "{\"title\": \"III. Maintenance de Sites Web et Apps\", \"slug\": \"maintenance-de-sites-web-et-apps\"}",
+            "{\"title\": \"IV. Rénovation de Bureaux\", \"slug\": \"renovation-de-bureaux\"}",
+            "{\"title\": \"V. Réhabilitation de Logements\", \"slug\": \"rehabilitation-de-logements\"}",
+            "{\"title\": \"VI. Projet d'Habitation\", \"slug\": \"projet-d-habitation\"}",
+            "{\"title\": \"VII. Autres Équipements\", \"slug\": \"autres-equipements-fr\"}",
+            "{\"title\": \"VIII. Contacts\", \"slug\": \"contacts-fr\"}"
+          ]
+        },
+        {
+          "id": 36,
+          "location": "preface",
+          "slug": "avant-propos",
+          "title": "Avant-propos",
+          "content": [
+            "Le projet ibid. est né au point de convergence entre la conception de structures physiques et l'architecture des systèmes d'information. La proposition fondamentale de cette marque est l'application de la rigueur de la planification structurelle et de l'élégance du design architectural au développement de plateformes numériques et à la réhabilitation d'espaces physiques. Sous le concept latin d'ibidem — au même endroit — nous refusons l'idée de tabula rasa. Nous pensons que toute production de valeur est une couche supplémentaire construite sur le savoir accumulé, garantissant continuité, racine et identité dans un monde fragmenté par la technologie."
+          ]
+        }
+      ],
+      "chapter": [
+        {
+          "id": 37,
+          "location": "I",
+          "slug": "conception-web-et-apps",
+          "title": "Conception Web et Apps",
+          "content": [
+            "La construction d'une présence numérique contemporaine exige une réflexion structurelle qui transcende l'esthétique superficielle de l'interface. Chez ibid., le développement web est abordé comme la construction d'infrastructures habitables qui doivent être à la fois élégantes et résilientes sous pression.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", "alt": "Planification de conception web" },
+            "Cette compétence repose sur une expérience consolidée dans la gestion et l'évolution de produits numériques à grande échelle, où la responsabilité technique exige une précision chirurgicale. Travailler avec des systèmes à fort trafic enseigne que la performance n'est pas seulement une métrique de vitesse, mais la physique même de l'espace virtuel.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800", "alt": "Implémentation Clean Code" },
+            "Un site web qui présente de la latence ou une architecture d'information confuse est l'équivalent fonctionnel d'un bâtiment avec des barrières architecturales infranchissables ; il ségrège l'utilisateur et dégrade son espace existentiel sur le réseau. Nous offrons un service fullstack qui comprend la totalité de l'écosystème numérique, de la fondation en base de données et sur le serveur jusqu'à la couche visible de l'interface utilisateur.",
+            "L'application de la rigueur du Clean Code est ici fondamentale. Le code doit s'expliquer de lui-même à travers une structure logique impeccable et des identifiants qui respectent la clarté d'un plan technique, permettant à la base logicielle d'être durable et lisible dans le temps. Nous utilisons des technologies de pointe, comme les Web Components et la bibliothèque Lit, pour créer des systèmes de design modulaires et agnostiques.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200", "alt": "Réflexion d'interface" },
+            "Ces composants fonctionnent comme des blocs de construction intelligents, capables d'être mis à l'échelle sans compromettre la stabilité du système. Le processus de déploiement est le moment de la matérialisation, où la logique théorique se confronte à la réalité de l'infrastructure mondiale, exigeant une attention absolue à la sécurité, à la stabilité et à la rapidité. Chez ibid., l'architecture d'interfaces est le dessin des limites où l'esprit humain s'étend vers le monde en réseau."
+          ]
+        },
+        {
+          "id": 38,
+          "location": "II",
+          "slug": "outils-numeriques",
+          "title": "Outils Numériques (Web et Apps)",
+          "content": [
+            "La création d'outils personnalisés pour le web et pour les appareils mobiles est un exercice d'ingénierie qui vise à étendre la capacité d'action humaine sur le monde. Chez ibid., nous nous spécialisons dans le développement d'outils sur mesure qui comblent les lacunes opérationnelles là où les solutions génériques échouent. Ce volet se concentre sur la productivité absolue et la clarté dans la gestion des données.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=1200", "alt": "Outil d'analyse de données" },
+            "Nous développons des écosystèmes allant de systèmes de gestion d'agenda et de contrôle d'inventaire à des outils avancés de visualisation de données spatiales et techniques. Notre vision hybride permet l'implémentation de solutions de pointe, telles que des visionneuses BIM intégrées dans le navigateur et des outils de réalité augmentée pour le secteur de la construction.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800", "alt": "Interface d'application" },
+            "Ces outils permettent aux informations techniques d'un projet d'être accessibles partout, faisant de la matière — le bâtiment — un objet communicatif et interactif bien avant son achèvement physique.",
+            { "type": "image", "path": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200", "alt": "Précision structurelle" }
+          ]
+        }
+      ],
+      "exit": [
+        {
+          "id": 39,
+          "location": "about",
+          "slug": "coordonnees",
+          "title": "Contacts",
+          "content": [
+            "Mon travail est une invitation à la collaboration, que vous recherchiez une solution technique d'ingénierie web haute performance ou une vision architecturale pour votre espace physique.",
+            "Email: alex.ibid@gmail.com",
+            "LinkedIn: linkedin.com/in/alexandresantos",
+            "Web: www.ibid.pt",
+            "Construisons sur ce qui existe déjà, en créant quelque chose d'entièrement nouveau et unique. Ibidem Au même endroit, mais sur une nouvelle page."
+          ]
+        },
+        {
+          "id": 40,
+          "location": "back-cover",
+          "slug": "merci",
+          "title": "Merci !",
+          "content": [
+            "Merci d'avoir exploré ce portfolio.",
+            "Le design n'est pas seulement ce à quoi il ressemble et ce qu'on ressent. Le design est la façon dont il fonctionne. - Steve Jobs"
+          ]
+        }
+      ]
+    }
+  }
+}

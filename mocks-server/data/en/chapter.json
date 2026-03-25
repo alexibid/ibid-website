@@ -1,0 +1,118 @@
+[
+  {
+    "id": 17,
+    "location": "I",
+    "slug": "web-design-and-apps",
+    "title": "Web Design and Apps",
+    "content": [
+      "Building a contemporary digital presence requires structural thinking that transcends the superficial aesthetics of the interface. At ibid., web development is approached as building livable infrastructures that must be simultaneously elegant and resilient under pressure.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", "alt": "Web design planning" },
+      "This competence is based on consolidated experience in managing and evolving massive-scale digital products, where technical responsibility demands surgical precision. Dealing with high-traffic systems teaches that performance is not just a speed metric, but the very physics of virtual space.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800", "alt": "Clean code implementation" },
+      "A website that presents latency or a confusing information architecture is the functional equivalent of a building with insurmountable architectural barriers; it segregates the user and degrades their existential space in the network. We offer a fullstack service that understands the entire digital ecosystem, from the database foundation and server to the visible user interface layer.",
+      "The application of Clean Code rigor is fundamental here. The code must explain itself through an impeccable logical structure and identifiers that respect the clarity of a technical plan, allowing the software base to be sustainable and readable over time. We use cutting-edge technologies, such as Web Components and the Lit library, to create modular and agnostic design systems.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200", "alt": "Interface reflection" },
+      "These components function as intelligent building blocks, capable of being scaled without compromising system stability. The deployment process is the moment of materialization, where theoretical logic confronts the reality of global infrastructure, requiring absolute attention to security, stability, and speed. In ibid., interface architecture is the design of the boundaries where the human mind expands into the networked world, ensuring that technology disappears in its own efficiency to let communication and productivity shine.",
+      "Search engine optimization and performance system integration are managed with the same vision that an urban planner applies to the flows of a dense urban center. Each design decision and each line of code aim to ensure that value is generated fluidly, without friction, combatting the tendency to create ephemeral digital \"non-places\". We create spaces with soul, where the user feels oriented and empowered, transforming the online presence into a faithful extension of each project's identity and goals. This technical vision ensures that each application is resilient over time, prepared to grow upon its own foundations without the need for demolition, honoring the shared authorship of knowledge that sustains the modern internet."
+    ]
+  },
+  {
+    "id": 18,
+    "location": "II",
+    "slug": "digital-tools",
+    "title": "Digital Tools (Web and Apps)",
+    "content": [
+      "Creating customized tools for web and mobile devices is an engineering exercise that aims to extend human capacity for action upon the world. At ibid., we specialize in developing tailor-made tools that solve operational gaps where generic solutions fail. This area focuses on absolute productivity and clarity in data management, transforming complex business processes into intuitive and powerful interfaces.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=1200", "alt": "Data analysis tool" },
+      "We develop ecosystems that range from schedule management and inventory control systems to advanced spatial and technical data visualization tools. Our hybrid vision allows for the implementation of cutting-edge solutions, such as BIM viewers integrated in the browser and augmented reality tools for the construction sector.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800", "alt": "Application interface" },
+      "These tools allow a project's technical information to be accessible anywhere, making the matter — the building — a communicative and interactive object long before its physical completion. Experience in manipulating large volumes of information and creating robust business logic allows us to deliver tools that function as prostheses of human intelligence.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200", "alt": "Structural precision" },
+      "Developed for the total man who operates in a constant network environment. Each tool is designed to integrate organically into the existing workflow, respecting the organization's continuity of knowledge and adding a layer of technological efficiency that frees the user for higher creative value tasks.",
+      "The engineering of customized tools requires a deep understanding of the user's \"site\" of work. We do not just deliver software; we deliver new methods of effectiveness that eliminate redundancy and human error. At ibid., we believe technology should be a silent facilitator. Whether it's a complex logistics application or a real-time monitoring system, the focus remains on user experience and data integrity. We build technological bridges that allow transforming the invisible into something tangible and useful, ensuring the web tool is a natural extension of the team's capabilities, boosting action on the physical and digital world in a unified and sustainable way."
+    ]
+  },
+  {
+    "id": 19,
+    "location": "III",
+    "slug": "website-and-app-maintenance",
+    "title": "Website and App Maintenance",
+    "content": [
+      "Technical maintenance is the chapter of sustainability and deep respect for the technological investment made. At ibid., we view maintenance not as a corrective burden, but as the continuous restoration of a project's digital architecture. A software system that does not evolve quickly becomes a digital ruin, accumulating technical debt that compromises security and performance.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200", "alt": "System maintenance" },
+      "Our consolidated experience allows us to carry out deep technical audits, identifying vulnerabilities and processing bottlenecks that can affect user experience and search engine visibility.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800", "alt": "Server monitoring" },
+      "We treat digital infrastructure as a living heritage that must be preserved and improved. ibid.'s maintenance service ensures constant updates of dependencies, refactoring of obsolete code, and database optimization, ensuring the system grows organically and resiliently. Applying the concept of ibidem, we work on what already exists.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200", "alt": "Circuitry of service" },
+      "Honoring the original structure while providing it with the security layers necessary to face global network challenges. This constant care prevents premature obsolescence and ensures the platform remains fast, secure, and functional amidst constant browser and device evolution.",
+      "Maintenance is also an act of vigilance over performance and accessibility. In the digital world, response speed is what keeps the inhabitant connected to the space. Through continuous monitoring, we ensure the client's \"digital place\" never degrades, offering specialized technical support that understands the entire technological stack's complexity. This commitment to longevity allows initial software investment to remain profitable and effective, ensuring the digital architecture continues to serve the total man with the same efficiency and clarity as on its launch day."
+    ]
+  },
+  {
+    "id": 20,
+    "location": "IV",
+    "slug": "office-remodeling",
+    "title": "Office Remodeling",
+    "content": [
+      "Workplace intervention requires a deep understanding of the duality between the worker's physical body and their digital omnipresence in the network society. At ibid., office remodeling is seen as the creation of strategic nodes where design must facilitate real encounter and virtual productivity.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200", "alt": "Modern office interior" },
+      "Our experience is sustained by direct participation in the rehabilitation and interior design for major prestigious international corporations, ranging from telecommunications to banking and global consulting.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800", "alt": "Collaborative space" },
+      "Intervening in spaces for entities such as Unitel, BESI, Conoco Philips, Vodacom or Ernst & Young required the development of a design methodology that merges institutional prestige with extreme technological flexibility.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200", "alt": "Minimalist workstation" },
+      "In these contexts, interior architecture ceases to be a matter of cosmetics to become a rigorous management of extended communication and existential well-being. The contemporary office must be a facilitator of the fluid transition between individual focused work and distributed global collaboration. We design spaces that integrate data and technology infrastructures invisibly, treating controlled acoustics and dynamic lighting as elements as structural as the partitions themselves.",
+      "The worker inhabits a physical space designed to protect their health and ergonomics, but their mind operates in a network; our design ensures these two dimensions coexist without friction. Remodeling a corporate office for these large entities is an exercise in social and technical engineering where schedule, budget, and operational continuity are paramount.",
+      "The space must act as a communicative medium that reinforces organizational culture, avoiding the creation of sterile and dehumanized \"non-places\". By using high-quality materials and intelligent spatial solutions, we transform the workplace into an environment that respects the total man, providing a sense of belonging and comfort that the internet alone cannot offer. It is the materialization of digital efficiency in a physical space that invites permanence, creativity, and real human connection."
+    ]
+  },
+  {
+    "id": 21,
+    "location": "V",
+    "slug": "housing-rehabilitation",
+    "title": "Housing Rehabilitation",
+    "content": [
+      "Absolute mastery of construction technique is what distinguishes simple interior decoration from true architectural rehabilitation with meaning. At ibid., technical detail is elevated to the category of fundamental language, fruit of consolidated expertise in high-end window and glass systems.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200", "alt": "Architectural renovation" },
+      "This technical journey was essential to understand the 'skin' of the building — the physical, thermal, and sensory boundary between interior comfort and the exterior environment. Glass and aluminum frames are not just closing elements; they are the regulators that define the inhabitant's relationship with sunlight, temperature, and the silence necessary for domestic existential space.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800", "alt": "Contemporary dwelling" },
+      "In housing rehabilitation, we apply this specialized knowledge to ensure that transparency and light do not compromise thermal inertia or acoustic insulation. Understanding material physics, thermal transmittance of profiles, and laminated glass performance allows us to design renovations where well-being is quantifiable and absolute.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=1200", "alt": "Serene interior" },
+      "The modern house has become a place of extreme functional density, serving simultaneously as a refuge, office, and leisure center. Therefore, ibid.'s rehabilitation is surgical: we work on the palimpsest of existing memories and structures — ibidem — to integrate the new requirements of connected life without destroying the home's soul and identity.",
+      "Through the technical mastery of glass and aluminum, we open homes to the landscape and urban context without losing the essential protection of shelter. This attention to millimetric detail, inherited from the technical framing industry, is what guarantees the macro quality of a rehabilitated house. We create spaces where light is shaped to generate serenity and where each material is chosen for its durability and ability to age with dignity. Habitation remains a faithful extension of the identity of those who reside in it, linking the historical roots of the place to the infinite possibilities of a network future, where the home is the safe harbor and the anchoring point of the total man."
+    ]
+  },
+  {
+    "id": 22,
+    "location": "VI",
+    "slug": "housing-project",
+    "title": "Housing Project",
+    "content": [
+      "Designing a house from scratch is the ultimate act of materializing a vision of human habitation in contemporary times. At ibid., residential design does not begin on a blank sheet, but in deep dialogue with the place, its topography, its climate, and its material culture.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1518005020451-eba89a046045?auto=format&fit=crop&q=80&w=1200", "alt": "House project from scratch" },
+      "We believe that architecture should enhance the encounter between the being and their environment, creating structures that are simultaneously protective filters and communicative bridges to the outside world. A house must allow for the disconnection necessary for rest and the total connection required by modern professional and social life.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=crop&q=80&w=800", "alt": "Architectural volumes" },
+      "We design architectures where matter communicates through the texture of stone, projected shadow, and the manipulation of emptiness. Our technical approach ensures that each project is thought for absolute longevity and passive sustainability.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1513584684374-8bdb7489feef?auto=format&fit=crop&q=80&w=1200", "alt": "Light and shadow" },
+      "We use knowledge of material physics to optimize natural climate control, reducing dependence on artificial systems and increasing the building's harmony with its geographic context. The primary goal is to create a unique identity for each home, combatting global homogenization and ensuring the inhabitant finds in their home a faithful extension of their way of being in the world.",
+      "Each design decision, from solar orientation to the choice of floorings, is grounded in the need to provide a dignified and inspiring existential space. Projecting with ibid. means possessing a home where precision engineering and space poetics merge seamlessly.",
+      "Every detail, from foundations to final finishing touches, is thought to elevate the daily experience of life. We believe the home is where the total man regenerates; therefore, we design spaces that celebrate light, silence, and comfort, providing a solid base for network life. The result is an architectural object that honors construction tradition while projecting towards the future, offering a true sense of belonging in a constantly changing world."
+    ]
+  },
+  {
+    "id": 23,
+    "location": "VII",
+    "slug": "other-facilities",
+    "title": "Other Facilities",
+    "content": [
+      "Architecture extends far beyond private living to reach the scale of collective leisure and the body in motion. The ATA (Tennis and Padel Academy) project is the perfect materialization of our philosophy applied to sports and community social interaction.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1542279151-c06db16f9f31?auto=format&fit=crop&q=80&w=1200", "alt": "Sports facility" },
+      "Designing sports facilities requires absolute geometric and technical rigor, where dimensions, drainage slopes, and the tactile response of surfaces admit no margin for error. The architectural challenge is to integrate this regulatory rigidity into a landscape that invites social encounter.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1563299201-90a6f4a8d46a?auto=format&fit=crop&q=80&w=800", "alt": "Padel court detail" },
+      "Sport is one of the purest ways for man to experience his body in existential space, and architecture must be the silent but technically impeccable stage that enhances that performance.",
+      { "type": "image", "path": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200", "alt": "Athletic space" },
+      "At ATA, the intervention focused on creating equipment that works as an organic support to human activity, where each court is treated as a high-fidelity interface between the athlete and the ground. Matter defines game speed, the practitioner's physical safety, and the quality of post-match social interaction.",
+      "We don't just build sports venues; we design the limit where human effort meets urban planning precision. Each project in this area is a reference to the accumulated knowledge of civil engineering and the phenomenology of public space.",
+      "Through the design of locker rooms, leisure areas, and play fields, we promote real encounter and personal overcoming as fundamental pillars of social health, ensuring common space remains a place of discovery, vitality, and authentic human connection."
+    ]
+  }
+]

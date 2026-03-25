@@ -1,0 +1,32 @@
+[
+  {
+    "id": 40,
+    "location": "front-cover",
+    "slug": "couverture",
+    "title": "Conception et implémentation web, outils numériques (web et apps), maintenance web, rénovation de bureaux, réhabilitation de logements,... architecture.",
+    "content": [
+      "Le nom ibid. (du latin ibidem) est plus qu'une référence bibliographique ; c'est notre philosophie d'intervention...",
+      "Nous créons pour l'homme total : celui qui habite un corps physique, mais dont l'esprit et la communication s'étendent à travers le réseau."
+    ]
+  },
+  {
+    "id": 41,
+    "location": "index",
+    "slug": "sommaire",
+    "title": "Sommaire",
+    "content": [
+      "{\"title\": \"I. Conception Web et Apps\", \"slug\": \"conception-web-et-apps\"}",
+      "{\"title\": \"II. Outils Numériques\", \"slug\": \"outils-numeriques\"}",
+      "{\"title\": \"VIII. Contactez-nous\", \"slug\": \"contactez-nous\"}"
+    ]
+  },
+  {
+    "id": 42,
+    "location": "preface",
+    "slug": "avant-propos",
+    "title": "Avant-propos",
+    "content": [
+      "Le projet ibid. est né au point de convergence entre la conception de structures physiques et l'architecture des systèmes d'information..."
+    ]
+  }
+]

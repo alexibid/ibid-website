@@ -1,0 +1,38 @@
+[
+  {
+    "id": 14,
+    "location": "front-cover",
+    "slug": "home",
+    "title": "Web design and implementation, digital tools (web and apps), web maintenance, office remodeling, housing rehabilitation,... architecture.",
+    "content": [
+      "The name ibid. (from Latin ibidem) is more than a bibliographic reference; it is our philosophy of intervention. In writing, it indicates that we return to the same work, but perhaps on a different page. In life and space, it reflects our refusal of the tabula rasa.",
+      "We do not believe in isolated spaces or systems. Cities, like code, are palimpsests — constructions upon reconstructions. ibid. was born to give continuity to the shared authorship of knowledge, connecting the physical 'existential space' to the digital 'network society'.",
+      "We create for the total man: the one who inhabits a physical body, but whose mind and communication expand through the network."
+    ]
+  },
+  {
+    "id": 15,
+    "location": "index",
+    "slug": "index",
+    "title": "Index",
+    "content": [
+      "{\"title\": \"I. Web Design and Apps\", \"slug\": \"web-design-and-apps\"}",
+      "{\"title\": \"II. Digital Tools (Web and Apps)\", \"slug\": \"digital-tools\"}",
+      "{\"title\": \"III. Website and App Maintenance\", \"slug\": \"website-and-app-maintenance\"}",
+      "{\"title\": \"IV. Office Remodeling\", \"slug\": \"office-remodeling\"}",
+      "{\"title\": \"V. Housing Rehabilitation\", \"slug\": \"housing-rehabilitation\"}",
+      "{\"title\": \"VI. Housing Project\", \"slug\": \"housing-project\"}",
+      "{\"title\": \"VII. Other Facilities\", \"slug\": \"other-facilities\"}",
+      "{\"title\": \"VIII. Contacts\", \"slug\": \"contacts\"}"
+    ]
+  },
+  {
+    "id": 16,
+    "location": "preface",
+    "slug": "preface",
+    "title": "Preface",
+    "content": [
+      "The ibid. project is born at the point of convergence between the design of physical structures and the architecture of information systems. The fundamental proposal of this brand is the application of the rigor of structural planning and the elegance of architectural design to the development of digital platforms and the rehabilitation of physical spaces. Under the Latin concept of ibidem — in the same place — we refuse the idea of tabula rasa. We believe that all value production is an additional layer built upon accumulated knowledge, ensuring continuity, root and identity in a world fragmented by technology. For those seeking a service that combines engineering precision with phenomenological sensitivity, ibid. offers an integrated vision where matter and code act as communicative media. The detailed professional path and training stages can be consulted in the available curriculum, but what defines this practice is the ability to transpose consolidated technical experience into personalized solutions that respect the total man — the being who simultaneously inhabits a physical body, a reflective mind, and an extended communication network."
+    ]
+  }
+]

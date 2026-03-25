@@ -1,0 +1,32 @@
+[
+  {
+    "id": 27,
+    "location": "front-cover",
+    "slug": "portada",
+    "title": "Diseño e implementación web, herramientas digitales (web e apps), mantenimiento web, remodelación de oficinas, rehabilitación de viviendas,... arquitectura.",
+    "content": [
+      "El nombre ibid. (del latín ibidem) es más que una referencia bibliográfica; es nuestra filosofía de intervención...",
+      "Creamos para el hombre total: aquel que habita un cuerpo físico, pero cuya mente y comunicación se expandem por la red."
+    ]
+  },
+  {
+    "id": 28,
+    "location": "index",
+    "slug": "sumario",
+    "title": "Sumario",
+    "content": [
+      "{\"title\": \"I. Diseño Web y Apps\", \"slug\": \"diseno-web-y-apps\"}",
+      "{\"title\": \"II. Herramientas Digitales\", \"slug\": \"herramientas-digitales\"}",
+      "{\"title\": \"VIII. Contacto\", \"slug\": \"contacto\"}"
+    ]
+  },
+  {
+    "id": 29,
+    "location": "preface",
+    "slug": "prologo",
+    "title": "Prólogo",
+    "content": [
+      "El proyecto ibid. nace en el punto de convergencia entre el diseño de la estructura física y la arquitectura de sistemas de información..."
+    ]
+  }
+]
