@@ -42,3 +42,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# PocketBase (CMS Backend)
+/pocketbase/pb_data/
+/pocketbase/pocketbase
+

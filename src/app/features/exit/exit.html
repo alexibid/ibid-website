@@ -1,1 +1,9 @@
-<p>exit works!</p>
+@if (pageData()) {
+  <div class="debug-page">
+    <small>Component: EXIT</small>
+    <h1>{{ pageData().title }}</h1>
+    <div class="content" [innerHTML]="pageData().content"></div>
+  </div>
+} @else {
+  <p>Loading exit content...</p>
+}

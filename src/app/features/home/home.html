@@ -1,1 +1,9 @@
-<p>Loading cover...</p>
+@if (pageData()) {
+  <div class="debug-page">
+    <small>Component: HOME</small>
+    <h1>{{ pageData().title }}</h1>
+    <div class="content" [innerHTML]="pageData().content"></div>
+  </div>
+} @else {
+  <p>Loading home content...</p>
+}
