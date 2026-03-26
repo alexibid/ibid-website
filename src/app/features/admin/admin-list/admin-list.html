@@ -1,0 +1,94 @@
+<div class="admin-container">
+  <header>
+    <h1>Administração do Website</h1>
+    <p>Gestão de Conteúdos Dinâmicos (PocketBase CMS)</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="loading">A carregar registos da Base de Dados...</div>
+  } @else {
+
+    <!-- SECÇÃO HOME -->
+    <section class="admin-table-group">
+      <h2>Páginas Iniciais (Home)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID da Página</th>
+            <th>Título</th>
+            <th>Caminho (URL)</th>
+            <th>Língua</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of homeUrls(); track item.id) {
+            <tr>
+              <td><code>{{ item.expand?.page_id?.id }}</code></td>
+              <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
+              <td><span class="lang-badge">{{ item.lang | uppercase }}</span></td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4" class="empty-state">Nenhum registo de tipo 'Home' encontrado.</td></tr>
+          }
+        </tbody>
+      </table>
+    </section>
+
+
+    <!-- SECÇÃO CAPÍTULOS -->
+    <section class="admin-table-group">
+      <h2>Páginas de Capítulo (Chapter)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID da Página</th>
+            <th>Título</th>
+            <th>Caminho (URL)</th>
+            <th>Língua</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of chapterUrls(); track item.id) {
+            <tr>
+              <td><code>{{ item.expand?.page_id?.id }}</code></td>
+              <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
+              <td><span class="lang-badge">{{ item.lang | uppercase }}</span></td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4" class="empty-state">Nenhum registo de tipo 'Chapter' encontrado.</td></tr>
+          }
+        </tbody>
+      </table>
+    </section>
+
+
+    <!-- SECÇÃO EXIT -->
+    <section class="admin-table-group">
+      <h2>Páginas de Saída (Exit)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID da Página</th>
+            <th>Título</th>
+            <th>Caminho (URL)</th>
+            <th>Língua</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of exitUrls(); track item.id) {
+            <tr>
+              <td><code>{{ item.expand?.page_id?.id }}</code></td>
+              <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
+              <td><span class="lang-badge">{{ item.lang | uppercase }}</span></td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4" class="empty-state">Nenhum registo de tipo 'Exit' encontrado.</td></tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+</div>

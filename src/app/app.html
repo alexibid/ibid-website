@@ -1,10 +1,10 @@
 <div class="lang-indicator">
   <span>[{{ i18n.currentLangCode() }}]</span>
   <div class="lang-buttons">
-    <button (click)="i18n.setLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
-    <button (click)="i18n.setLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
-    <button (click)="i18n.setLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
-    <button (click)="i18n.setLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+    <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
+    <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
+    <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
+    <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
   </div>
 </div>
 
