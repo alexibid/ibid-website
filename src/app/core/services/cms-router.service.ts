@@ -3,6 +3,7 @@ import { Router, Route } from '@angular/router';
 import { PocketbaseService } from './pocketbase.service';
 import { PageType } from '../models/page-type.enum';
 import { CmsUrl, CmsRouteData } from '../models/cms.interface';
+import { UiErrorService } from './ui-error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { CmsUrl, CmsRouteData } from '../models/cms.interface';
 export class CmsRouterService {
   private readonly pbService = inject(PocketbaseService);
   private readonly router = inject(Router);
+  private readonly uiErrorService = inject(UiErrorService);
 
   public async setupRoutes(): Promise<void> {
     try {
@@ -74,9 +76,15 @@ export class CmsRouterService {
       ];
 
       this.router.resetConfig(newConfig);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to initialize dynamic CMS routes', error);
-      // In case of error (e.g., PocketBase offline), we might want to fallback safely.
+      
+      // Se não conseguir chegar à BD do PocketBase (ex: offline), dispara o Error Banner!
+      if (error.status === 0 || error.isAbort) {
+        this.uiErrorService.showError('error-network');
+      } else {
+        this.uiErrorService.showError('error-generic');
+      }
     }
   }
 }

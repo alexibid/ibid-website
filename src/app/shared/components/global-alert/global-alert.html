@@ -1,0 +1,13 @@
+@if (alertData()) {
+  <div class="global-alert-overlay">
+    <div class="global-alert-dialog">
+      <h2>{{ alertData().title }}</h2>
+      <p>{{ alertData().message }}</p>
+      
+      <button (click)="closeAlert()">
+        <!-- Fallback to 'Close' or the dictionary value if defined -->
+        {{ alertData().close }}
+      </button>
+    </div>
+  </div>
+}

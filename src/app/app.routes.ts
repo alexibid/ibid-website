@@ -7,6 +7,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: ''
+    loadComponent: async () => (await import('./features/not-found/not-found')).NotFound
   }
 ];
