@@ -13,6 +13,9 @@ export class CmsRouterService {
   private readonly router = inject(Router);
   private readonly uiErrorService = inject(UiErrorService);
 
+  // Mapa global: location -> array de traduções disponíveis para essa página
+  public readonly translationMap = new Map<string, { lang: string, url: string }[]>();
+
   public async setupRoutes(): Promise<void> {
     try {
       const records = await this.pbService.pb.collection('urls').getFullList<CmsUrl>({
@@ -36,6 +39,12 @@ export class CmsRouterService {
           path = path.slice(1);
         }
 
+        if (location) {
+          const links = this.translationMap.get(location) || [];
+          links.push({ lang: record.lang, url: '/' + path });
+          this.translationMap.set(location, links);
+        }
+
         const routeData: CmsRouteData = {
           pageId: page.id,
           title: page.title,
@@ -43,6 +52,7 @@ export class CmsRouterService {
           type: page.type,
           content: page.content,
           metadata: page.metadata,
+          location: location,
         };
 
         switch (page.type) {

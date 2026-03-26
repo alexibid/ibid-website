@@ -30,4 +30,5 @@ export interface CmsRouteData {
   content: any;
   metadata?: any;
   scrollTo?: string;
+  location?: string;
 }
