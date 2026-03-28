@@ -1,0 +1,132 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.chapter-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: var(--header-height) 0 calc(var(--header-height) / 1.5);
+  box-sizing: border-box;
+}
+
+.page-content {
+  flex: 1;
+  display: block; // Mobile default
+  height: 100%;
+  margin: 0 auto;
+  min-height: 0;
+  box-sizing: border-box;
+  column-fill: auto;
+  width: 100%; // Mobile default
+  padding: 0 24px; // Mobile default
+  column-width: calc(100vw - 48px); // Mobile default
+  column-gap: 48px; // Mobile default
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 24px; // Mobile default
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch; // Mobile default
+
+  @media (min-width: 769px) {
+    padding: 0 30px;
+    column-count: 2;
+    column-width: auto;
+    column-gap: 120px;
+    scroll-padding: 0 30px;
+  }
+
+  p {
+    scroll-snap-align: start;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    text-align: left;
+
+    &:first-child {
+      scroll-snap-align: none;
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.chapter-header {
+  margin-bottom: 32px;
+  text-align: left;
+  scroll-snap-align: start; // Mobile default
+  break-inside: avoid; // Mobile default
+  break-after: avoid; // Mobile default
+
+  @media (min-width: 768px) {
+    margin-bottom: 40px;
+    scroll-snap-align: none; // Reset if needed, or keep
+    break-inside: auto;
+    break-after: auto;
+  }
+}
+
+.chapter-number {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-text);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 24px;
+}
+
+.chap-title {
+  font-family: var(--font-title);
+  font-size: 2.75rem;
+  margin-bottom: 56px;
+  color: var(--color-text);
+  font-weight: 400;
+  line-height: 1.1;
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+
+.inline-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 24px 0;
+  scroll-snap-align: start;
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - 120px);
+    height: auto;
+    object-fit: contain;
+    border-radius: 2px;
+  }
+}
+
+.first-paragraph::first-letter {
+  float: left;
+  font-size: 4.5rem;
+  line-height: 0.8;
+  padding-top: 0.45rem;
+  padding-right: 0.4rem;
+  font-family: var(--font-title);
+  font-weight: 500;
+  color: var(--color-text);
+}

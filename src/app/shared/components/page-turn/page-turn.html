@@ -1,1 +1,11 @@
-<p>page-turn works!</p>
+@if (bookService.flipDirection() === 1) {
+  <div class="leaf right-leaf" [class.do-flip]="flippedNext()">
+    <div class="face front"></div>
+    <div class="face back"></div>
+  </div>
+} @else if (bookService.flipDirection() === -1) {
+  <div class="leaf left-leaf" [class.do-flip]="flippedPrev()">
+    <div class="face front"></div>
+    <div class="face back"></div>
+  </div>
+}

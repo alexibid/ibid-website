@@ -1,13 +1,27 @@
-@if (homeSections().length > 0) {
-  <div class="book-sequence">
-    @for (section of homeSections(); track section.id) {
-      <section [id]="section.metadata?.location" class="debug-page" style="margin-bottom: 50px; border-bottom: 2px dashed #ccc; padding-bottom: 20px;">
-        <small>Component: HOME (Spread: {{ section.metadata?.location }})</small>
-        <h1>{{ section.title }}</h1>
-        <div class="content" [innerHTML]="section.content"></div>
-      </section>
+<div class="home-container">
+  <div class="page-content" #pageContent>
+    @if (homeSections().length > 0) {
+      @for (section of homeSections(); track section.id) {
+        @if (section.metadata?.location === 'front-cover') {
+          <div class="cover-page" [id]="section.metadata?.location">
+            <app-cover [data]="section" />
+          </div>
+        } @else if (section.metadata?.location === 'index') {
+          <div class="index-page" [id]="section.metadata?.location">
+            <h1 class="chap-title">{{ section.title }}</h1>
+            <div class="chap-body" [innerHTML]="section.content"></div>
+          </div>
+        } @else if (section.metadata?.location === 'preface') {
+          <div class="preface-page" [id]="section.metadata?.location">
+            <h1 class="chap-title">{{ section.title }}</h1>
+            <div class="chap-body" [innerHTML]="section.content"></div>
+          </div>
+        }
+      }
+    } @else {
+      <div class="cover-page">
+        <p>A carregar o livro...</p>
+      </div>
     }
   </div>
-} @else {
-  <p>Construindo os spreads da Home...</p>
-}
+</div>

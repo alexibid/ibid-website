@@ -1,0 +1,90 @@
+:host {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Dimensions matching exactly .book-pages via variables */
+  width: var(--book-width-mobile);
+  aspect-ratio: var(--book-ratio-mobile);
+
+  z-index: 9999;
+  pointer-events: none;
+  perspective: 2000px;
+  transform-style: preserve-3d;
+  opacity: 0;
+  transition: opacity 0.1s;
+
+  @media (min-width: 768px) {
+    width: var(--book-width-desktop);
+    aspect-ratio: var(--book-ratio-desktop);
+  }
+}
+
+:host(.is-active) {
+  opacity: 1;
+}
+
+.leaf {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* NEXT = starts on right, flips to left */
+.leaf.right-leaf {
+  left: 50%;
+  transform-origin: 0% 50%; /* center spine */
+  transform: rotateY(0deg);
+}
+
+.leaf.right-leaf.do-flip {
+  transform: rotateY(-180deg);
+}
+
+/* PREV = starts on left, flips to right */
+.leaf.left-leaf {
+  left: 0;
+  transform-origin: 100% 50%; /* center spine */
+  transform: rotateY(0deg);
+}
+
+.leaf.left-leaf.do-flip {
+  transform: rotateY(180deg);
+}
+
+.face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-color: var(--color-bg);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* Next Face Effects */
+.right-leaf .face.front {
+  transform: rotateY(0deg) translateZ(1px);
+  background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+}
+.right-leaf .face.back {
+  transform: rotateY(180deg) translateZ(1px);
+  background-image: linear-gradient(-90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+}
+
+/* Prev Face Effects */
+.left-leaf .face.front {
+  transform: rotateY(0deg) translateZ(1px);
+  background-image: linear-gradient(-90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+}
+.left-leaf .face.back {
+  transform: rotateY(180deg) translateZ(1px);
+  background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+}
+
+

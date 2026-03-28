@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
+/**
+ * Cover view for front and back covers.
+ */
 @Component({
   selector: 'app-cover',
-  imports: [],
+  standalone: true,
   templateUrl: './cover.html',
-  styleUrl: './cover.scss',
+  styleUrl: './cover.scss'
 })
-export class Cover {}
+export class Cover {
+  /** Cover data to render from CMS. */
+  public data = input.required<any>();
+
+  /** Whether this is the back cover. */
+  public isBack = input<boolean>(false);
+}

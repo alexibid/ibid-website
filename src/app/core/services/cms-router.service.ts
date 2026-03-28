@@ -1,9 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, effect } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { PocketbaseService } from './pocketbase.service';
 import { PageType } from '../models/page-type.enum';
 import { CmsUrl, CmsRouteData } from '../models/cms.interface';
 import { UiErrorService } from './ui-error.service';
+import { BookService } from './book.service';
+import { I18nService } from './i18n.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +14,63 @@ export class CmsRouterService {
   private readonly pbService = inject(PocketbaseService);
   private readonly router = inject(Router);
   private readonly uiErrorService = inject(UiErrorService);
+  private readonly bookService = inject(BookService);
+  private readonly i18n = inject(I18nService);
+
+  // Cache all URL records to allow reactive re-ordering on language change
+  private allUrlRecords = signal<CmsUrl[]>([]);
 
   // Mapa global: location -> array de traduções disponíveis para essa página
   public readonly translationMap = new Map<string, { lang: string, url: string }[]>();
+
+  constructor() {
+    // Reactive effect to update BookService route order whenever the language changes
+    effect(() => {
+      const records = this.allUrlRecords();
+      if (records.length === 0) return;
+
+      const lang = this.i18n.currentLangCode();
+      const langRecords = records.filter(r => r.lang === lang);
+
+      // Group and filter: we only want the primary entry for each type except Chapters
+      const homeRecord = langRecords
+        .filter(r => r.expand?.page_id?.type === PageType.Home)
+        .sort((a, b) => a.url.length - b.url.length)[0];
+
+      const exitRecord = langRecords
+        .filter(r => r.expand?.page_id?.type === PageType.Exit)
+        .sort((a, b) => a.url.length - b.url.length)[0];
+
+      const chapterRecords = langRecords
+        .filter(r => r.expand?.page_id?.type === PageType.Chapter)
+        .sort((a, b) => {
+          const orderA = Number(a.expand?.page_id?.metadata?.old_id) || 0;
+          const orderB = Number(b.expand?.page_id?.metadata?.old_id) || 0;
+          return orderA - orderB;
+        });
+
+      const finalRecords = [];
+      if (homeRecord) finalRecords.push(homeRecord);
+      finalRecords.push(...chapterRecords);
+      if (exitRecord) finalRecords.push(exitRecord);
+
+      const slugs = finalRecords.map(r => {
+        let path = r.url;
+        if (path.startsWith('/')) path = path.slice(1);
+        return path;
+      });
+      
+      this.bookService.setRouteOrder(slugs);
+    });
+  }
 
   public async setupRoutes(): Promise<void> {
     try {
       const records = await this.pbService.pb.collection('urls').getFullList<CmsUrl>({
         expand: 'page_id',
       });
+
+      this.allUrlRecords.set(records);
 
       const dynamicRoutes: Route[] = [];
 
@@ -80,12 +130,12 @@ export class CmsRouterService {
 
       const newConfig: Route[] = [
         ...staticRoutes,
-        { path: '', loadComponent: async () => (await import('../../features/home/home')).Home },
         ...dynamicRoutes,
         { path: '**', loadComponent: async () => (await import('../../features/not-found/not-found')).NotFound }
       ];
 
       this.router.resetConfig(newConfig);
+
     } catch (error: any) {
       console.error('Failed to initialize dynamic CMS routes', error);
       

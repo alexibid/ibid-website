@@ -1,9 +1,12 @@
-@if (pageData()) {
-  <div class="debug-page">
-    <small>Component: CHAPTER</small>
-    <h1>{{ pageData().title }}</h1>
-    <div class="content" [innerHTML]="pageData().content"></div>
-  </div>
-} @else {
-  <p>Loading chapter content...</p>
-}
+<div class="chapter-container">
+  @if (pageData()) {
+    <div class="page-content" #pageContent>
+      <header class="chapter-header">
+        <div class="chapter-number">{{ 'chapter' | translate }} {{ pageData().metadata?.old_id }}</div>
+        <h1 class="chap-title">{{ pageData().title }}</h1>
+      </header>
+      
+      <div style="display: contents" [innerHTML]="pageData().content"></div>
+    </div>
+  }
+</div>
