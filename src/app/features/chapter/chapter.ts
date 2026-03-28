@@ -26,6 +26,7 @@ export class Chapter implements AfterViewInit, OnDestroy {
   @ViewChild('pageContent') pageContent!: ElementRef<HTMLDivElement>;
   public isTransitioning = false;
   private isScrolling = false;
+  private lastTouchX = 0;
   private lastTouchY = 0;
 
   get currentSlug(): string {
@@ -119,6 +120,8 @@ export class Chapter implements AfterViewInit, OnDestroy {
     if ((direction === 1 && !isAtEnd) || (direction === -1 && !isAtStart)) {
       this.bookService.triggerFlip(direction);
       this.isScrolling = true;
+      
+      // Snap instantly!
       if (typeof el.scrollBy === 'function') {
         el.scrollBy({
           left: direction * el.clientWidth,
@@ -150,19 +153,23 @@ export class Chapter implements AfterViewInit, OnDestroy {
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
-    if (this.isBrowser && window.innerWidth <= 768) {
+    if (this.isBrowser && window.innerWidth < 768) {
+      this.lastTouchX = event.touches[0].clientX;
       this.lastTouchY = event.touches[0].clientY;
     }
   }
 
   @HostListener('touchmove', ['$event'])
   onTouchMove(event: TouchEvent) {
-    if (this.isBrowser && window.innerWidth <= 768 && this.pageContent && !this.isScrolling && !this.isTransitioning) {
+    if (this.isBrowser && window.innerWidth < 768 && this.pageContent && !this.isScrolling && !this.isTransitioning) {
+      const deltaX = this.lastTouchX - event.touches[0].clientX;
       const deltaY = this.lastTouchY - event.touches[0].clientY;
-      if (Math.abs(deltaY) > 20) {
-        const direction = deltaY > 0 ? 1 : -1;
+
+      // Swipe horizontal para flips
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        const direction = deltaX > 0 ? 1 : -1;
         this.handleNavigation(direction);
-        this.lastTouchY = event.touches[0].clientY;
+        this.lastTouchX = event.touches[0].clientX;
       }
     }
   }

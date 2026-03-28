@@ -27,14 +27,14 @@
   padding: 0 24px; // Mobile default
   column-width: calc(100vw - 48px); // Mobile default
   column-gap: 48px; // Mobile default
-  overflow-x: auto;
+  overflow-x: hidden; // Disable manual scroll
   overflow-y: hidden;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none; // Snap manually via JS
   scroll-padding: 0 24px; // Mobile default
   scroll-behavior: auto;
-  -webkit-overflow-scrolling: touch; // Mobile default
+  -webkit-overflow-scrolling: auto; // No momentum scroll needed if hidden
 
-  @media (min-width: 769px) {
+  @media (min-width: 768px) {
     padding: 0 30px;
     column-count: 2;
     column-width: auto;
