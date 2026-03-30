@@ -11,10 +11,10 @@ import { CmsPage } from '../../../core/models/cms.interface';
   template: `
     <div class="admin-page">
       <header class="admin-header">
-        <h2>Editar Página</h2>
+        <h2>Edit Page</h2>
         <div class="header-actions">
           <button class="btn-view" (click)="saveAndView()" [disabled]="!page() || isSaving()">
-            {{ isSaving() ? 'A Gravar...' : '💾 Gravar e Ver Página' }}
+            {{ isSaving() ? 'Saving...' : '💾 Save and View Page' }}
           </button>
         </div>
       </header>
@@ -22,12 +22,11 @@ import { CmsPage } from '../../../core/models/cms.interface';
       @if (page()) {
         <app-admin-form #adminForm [initialData]="page()" (save)="onSave($event)" (cancel)="onCancel()"></app-admin-form>
       } @else {
-        <p>A carregar dados da página...</p>
+        <p>Loading page data...</p>
       }
     </div>
   `,
   styles: [`
-    .admin-page { max-width: 900px; margin: 0 auto; }
     .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     h2 { margin: 0; color: #333; }
     .btn-view { 
@@ -56,7 +55,7 @@ export default class AdminUpdate implements OnInit {
         const data = await this.adminService.getPage(id);
         this.page.set(data);
       } catch (error) {
-        console.error('Falha ao carregar página', error);
+        console.error('Failed to load page', error);
         this.router.navigate(['/admin']);
       }
     }
@@ -74,13 +73,12 @@ export default class AdminUpdate implements OnInit {
           const pageUrl = urls.find(u => u.page_id === id)?.url || '';
           window.open('/' + pageUrl, '_blank');
           this.shouldViewAfterSave = false;
-          // Não navegamos para a lista, ficamos aqui
         } else {
-          this.router.navigate(['/admin']);
+          this.router.navigate(['/admin', data.lang]);
         }
       } catch (error) {
-        console.error('Falha ao atualizar página', error);
-        alert('Erro ao atualizar. Verifique a consola.');
+        console.error('Failed to update page', error);
+        alert('Error updating page. Please check the console.');
       } finally {
         this.isSaving.set(false);
       }

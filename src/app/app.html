@@ -1,12 +1,30 @@
 @if (isAdmin()) {
   <div class="admin-layout">
-    <nav class="admin-nav">
-      <a routerLink="/admin">Lista de Páginas</a>
-      <a routerLink="/admin/create">Criar Nova</a>
-      <a routerLink="/">Ver Website</a>
-    </nav>
     <main class="admin-main">
-      <router-outlet></router-outlet>
+      <div class="admin-page">
+        <nav class="admin-breadcrumbs">
+          <a routerLink="/" class="breadcrumb-logo">
+            <span class="char">i</span><span class="char">b</span><span class="char">i</span><span class="char">d</span><span class="char">.</span>
+          </a>
+          <span class="breadcrumb-separator">/</span>
+          <a routerLink="/admin" class="breadcrumb-item home">
+            <span class="home-icon">🏠</span>
+          </a>
+          @if (adminLang()) {
+            <span class="breadcrumb-separator">></span>
+            <a [routerLink]="['/admin', adminLang()]" class="breadcrumb-item lang">
+              {{ adminLang() | uppercase }}
+            </a>
+          }
+          @if (adminAction()) {
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-item action">
+              {{ adminAction() | titlecase }}
+            </span>
+          }
+        </nav>
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 } @else {

@@ -1,5 +1,5 @@
 import { Component, inject, computed, signal, HostListener, PLATFORM_ID, OnInit } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, UpperCasePipe, TitleCasePipe } from '@angular/common';
 import { RouterOutlet, Router, ActivatedRoute, NavigationEnd, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { UiErrorService } from './core/services/ui-error.service';
@@ -15,7 +15,7 @@ import { PageTurn } from './shared/components/page-turn/page-turn';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, GlobalAlertComponent, PageTurn],
+  imports: [RouterOutlet, RouterLink, GlobalAlertComponent, PageTurn, UpperCasePipe, TitleCasePipe],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -35,6 +35,8 @@ export class App implements OnInit {
 
   public isDesktop = signal<boolean>(true);
   public isAdmin = signal<boolean>(false);
+  public adminLang = signal<string | null>(null);
+  public adminAction = signal<string | null>(null);
 
   public isCoverPage = computed(() => {
     const type = this.bookService.activePageType();
@@ -76,6 +78,23 @@ export class App implements OnInit {
       const slug = (url === '/' || url === '') ? '' : url.substring(1);
       
       this.isAdmin.set(url.startsWith('/admin'));
+      
+      // Capturar língua no admin (ex: /admin/pt)
+      const adminLangMatch = url.match(/\/admin\/([a-z]{2})(?:\/|$)/);
+      if (adminLangMatch) {
+        this.adminLang.set(adminLangMatch[1]);
+        if (this.isBrowser) localStorage.setItem('lastAdminLang', adminLangMatch[1]);
+      } else if (url === '/admin') {
+        this.adminLang.set(null);
+      } else if (url.startsWith('/admin/') && this.isBrowser) {
+        const saved = localStorage.getItem('lastAdminLang');
+        if (saved) this.adminLang.set(saved);
+      }
+
+      // Capturar acção no admin (ex: /admin/update/...)
+      const actionMatch = url.match(/\/admin\/(create|update|read|delete)/);
+      this.adminAction.set(actionMatch ? actionMatch[1] : null);
+
       this.bookService.activeChapterSlug.set(slug);
 
       // Extract route data to set activePageType

@@ -8,17 +8,17 @@ import { CmsPage } from '../../../core/models/cms.interface';
   standalone: true,
   template: `
     <div class="delete-confirm">
-      <h2>Eliminar Página</h2>
+      <h2>Delete Page</h2>
       @if (page()) {
-        <p>Tem a certeza que deseja eliminar a página <strong>"{{ page()?.title }}"</strong>?</p>
-        <p class="warning">Aviso: Esta ação também eliminará todos os URLs associados a esta página.</p>
+        <p>Are you sure you want to delete the page <strong>"{{ page()?.title }}"</strong>?</p>
+        <p class="warning">Warning: This action will also delete all URLs associated with this page.</p>
         
         <div class="actions">
-          <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
-          <button class="btn-danger" (click)="onDelete()">Confirmar Eliminação</button>
+          <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+          <button class="btn-danger" (click)="onDelete()">Confirm Delete</button>
         </div>
       } @else {
-        <p>A carregar dados...</p>
+        <p>Loading data...</p>
       }
     </div>
   `,
@@ -68,10 +68,10 @@ export default class AdminDelete implements OnInit {
         }
 
         await this.adminService.deletePage(id);
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/admin', this.page()?.lang || '']);
       } catch (error) {
-        console.error('Falha ao eliminar', error);
-        alert('Erro ao eliminar. Verifique a consola.');
+        console.error('Delete failed', error);
+        alert('Error deleting page. Please check the console.');
       }
     }
   }

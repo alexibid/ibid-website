@@ -60,13 +60,13 @@ Quill.register(CustomImage, true);
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="admin-form">
       <div class="form-group">
-        <label for="title">Título</label>
-        <input id="title" type="text" formControlName="title" placeholder="Título da página">
+        <label for="title">Title</label>
+        <input id="title" type="text" formControlName="title" placeholder="Page title">
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="type">Tipo</label>
+          <label for="type">Type</label>
           <select id="type" formControlName="type">
             <option [value]="PageType.Home">Home</option>
             <option [value]="PageType.Chapter">Chapter</option>
@@ -75,82 +75,82 @@ Quill.register(CustomImage, true);
         </div>
 
         <div class="form-group">
-          <label for="lang">Língua</label>
+          <label for="lang">Language</label>
           <select id="lang" formControlName="lang">
-            <option value="pt">Português (PT)</option>
+            <option value="pt">Portuguese (PT)</option>
             <option value="en">English (EN)</option>
-            <option value="es">Español (ES)</option>
-            <option value="fr">Français (FR)</option>
+            <option value="es">Spanish (ES)</option>
+            <option value="fr">French (FR)</option>
           </select>
         </div>
         
         <div class="form-group">
-          <label for="old_id">ID Antigo (Ordem)</label>
-          <input id="old_id" type="text" formControlName="old_id" placeholder="Ex: 1">
+          <label for="old_id">Old ID (Order)</label>
+          <input id="old_id" type="text" formControlName="old_id" placeholder="e.g.: 1">
         </div>
       </div>
 
       <div class="form-group editor-group">
-        <label>Conteúdo</label>
-        <p class="editor-hint">Dica: Clique numa imagem para abrir o gestor de propriedades.</p>
+        <label>Content</label>
+        <p class="editor-hint">Tip: Click on an image to open the property manager.</p>
         <quill-editor 
           formControlName="content"
           [modules]="quillModules"
           (onEditorCreated)="onEditorCreated($event)"
-          placeholder="Escreva o conteúdo aqui...">
+          placeholder="Write content here...">
         </quill-editor>
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="onCancel()">Cancelar</button>
+        <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
         <button type="submit" class="btn-primary" [disabled]="form.invalid || isSubmitting()">
-          {{ isEdit() ? 'Guardar Alterações' : 'Criar Página' }}
+          {{ isEdit() ? 'Save Changes' : 'Create Page' }}
         </button>
       </div>
     </form>
 
-    <!-- Modal de Edição de Imagem -->
+    <!-- Image Editing Modal -->
     @if (selectedImage()) {
       <div class="modal-backdrop" (click)="closeImageModal()">
         <div class="image-modal" (click)="$event.stopPropagation()">
           <header class="modal-header">
-            <h3>Propriedades da Imagem</h3>
+            <h3>Image Properties</h3>
             <button class="close-x" (click)="closeImageModal()">&times;</button>
           </header>
           
           <div class="modal-body">
             <div class="modal-field">
-              <label>Substituir Ficheiro</label>
+              <label>Replace File</label>
               <input type="file" (change)="onReplaceFile($event)" accept="image/*" style="border: none; padding: 5px 0;">
             </div>
             
             <div class="modal-field">
-              <label>Texto Alternativo (SEO/Alt)</label>
-              <input type="text" [(ngModel)]="imageProps.alt" placeholder="Descrição da imagem">
+              <label>Alternative Text (SEO/Alt)</label>
+              <input type="text" [(ngModel)]="imageProps.alt" placeholder="Image description">
             </div>
             
             <div class="modal-field">
-              <label>Classes CSS</label>
-              <input type="text" [(ngModel)]="imageProps.class" placeholder="ex: inline-img cms-image">
+              <label>CSS Classes</label>
+              <input type="text" [(ngModel)]="imageProps.class" placeholder="e.g.: inline-img cms-image">
             </div>
             
             <div class="modal-field">
-              <label>Largura</label>
+              <label>Width</label>
               <div class="quick-sizes">
                 <button type="button" (click)="imageProps.width = '25%'">25%</button>
                 <button type="button" (click)="imageProps.width = '50%'">50%</button>
                 <button type="button" (click)="imageProps.width = '100%'">100%</button>
                 <button type="button" (click)="imageProps.width = ''">Auto</button>
               </div>
-              <input type="text" [(ngModel)]="imageProps.width" placeholder="ex: 100%, 400px ou auto">
+              <input type="text" [(ngModel)]="imageProps.width" placeholder="e.g.: 100%, 400px or auto">
             </div>
 
             <div class="modal-field">
-              <label>Alinhamento / Justificação</label>
+              <label>Alignment / Justification</label>
               <div class="alignment-buttons">
-                <button type="button" [class.active]="imageProps.align === 'left'" (click)="imageProps.align = 'left'">⬅ Esquerda</button>
-                <button type="button" [class.active]="imageProps.align === 'center'" (click)="imageProps.align = 'center'">↔ Centro</button>
-                <button type="button" [class.active]="imageProps.align === 'right'" (click)="imageProps.align = 'right'">➡ Direita</button>
+                <button type="button" [class.active]="imageProps.align === 'left'" (click)="imageProps.align = 'left'">⬅ Left</button>
+                <button type="button" [class.active]="imageProps.align === 'center'" (click)="imageProps.align = 'center'">↔ Center</button>
+                <button type="button" [class.active]="imageProps.align === 'right'" (click)="imageProps.align = 'right'">➡ Right</button>
               </div>
             </div>
 
@@ -160,10 +160,10 @@ Quill.register(CustomImage, true);
           </div>
 
           <footer class="modal-footer">
-            <button class="btn-danger-outline" (click)="deleteSelectedImage()">Eliminar Imagem</button>
+            <button class="btn-danger-outline" (click)="deleteSelectedImage()">Delete Image</button>
             <div class="footer-main-actions">
-              <button class="btn-secondary" (click)="closeImageModal()">Cancelar</button>
-              <button class="btn-primary" (click)="saveImageProps()">Aplicar Alterações</button>
+              <button class="btn-secondary" (click)="closeImageModal()">Cancel</button>
+              <button class="btn-primary" (click)="saveImageProps()">Apply Changes</button>
             </div>
           </footer>
         </div>
@@ -385,15 +385,15 @@ export class AdminForm implements OnInit {
         img.setAttribute('src', url);
         this.activeQuill.update();
       } catch (error) {
-        console.error('Falha ao substituir imagem', error);
-        alert('Erro ao carregar novo ficheiro.');
+        console.error('Failed to replace image', error);
+        alert('Error uploading new file.');
       }
     }
   }
 
   public deleteSelectedImage() {
     const img = this.selectedImage();
-    if (img && confirm('Deseja eliminar esta imagem?')) {
+    if (img && confirm('Do you want to delete this image?')) {
       const blot = Quill.find(img);
       if (blot) (blot as any).remove();
       this.activeQuill.update();
@@ -428,7 +428,7 @@ export class AdminForm implements OnInit {
           quill.update();
         } catch (error) {
           console.error('Image upload failed', error);
-          alert('Erro ao carregar imagem.');
+          alert('Error uploading image.');
         }
       }
     };
