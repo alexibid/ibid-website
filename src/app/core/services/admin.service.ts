@@ -73,40 +73,4 @@ export class AdminService {
   getFileUrl(record: any, fileName: string) {
     return this.pb.files.getURL(record, fileName);
   }
-
-  // Manutenção: Corrige conteúdos corrompidos na DB
-  async fixAllContent() {
-    const pages = await this.getPages();
-    let fixedCount = 0;
-
-    for (const page of pages) {
-      let content = page.content;
-      let changed = false;
-
-      // Se o conteúdo for um objeto (Delta do Quill) em vez de string HTML
-      if (typeof content === 'object' && content !== null) {
-        // Tentar converter para string se possível, ou pelo menos limpar
-        // Mas o mais provável é que o utilizador queira HTML.
-        // Se for um objeto, PocketBase guarda como JSON.
-        // Se o [object Object] aparece no front, é porque innerHTML recebeu um objeto.
-        content = JSON.stringify(content);
-        changed = true;
-      }
-
-      if (typeof content === 'string') {
-        // Corrigir especificamente o erro de imagens [object Object]
-        if (content.includes('[object Object]')) {
-          // Remove tags de imagem corrompidas ou tenta limpar
-          content = content.replace(/<img[^>]*src="\[object Object\]"[^>]*>/g, '');
-          changed = true;
-        }
-      }
-
-      if (changed) {
-        await this.updatePage(page.id, { content });
-        fixedCount++;
-      }
-    }
-    return fixedCount;
-  }
 }

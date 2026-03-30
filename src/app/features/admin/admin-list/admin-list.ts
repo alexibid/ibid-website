@@ -40,17 +40,4 @@ export default class AdminList implements OnInit {
       this.isLoading.set(false);
     }
   }
-
-  async fixContent() {
-    if (confirm('Deseja executar a manutenção da base de dados? Esta ação irá remover tags de imagem corrompidas.')) {
-      try {
-        const count = await this.adminService.fixAllContent();
-        alert(`Manutenção concluída! ${count} páginas foram corrigidas.`);
-        await this.loadData();
-      } catch (err) {
-        console.error('Erro na manutenção:', err);
-        alert('Ocorreu um erro ao corrigir a BD.');
-      }
-    }
-  }
 }
