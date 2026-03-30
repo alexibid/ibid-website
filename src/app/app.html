@@ -1,51 +1,64 @@
-<header class="book-header">
-  <div class="header-content">
-    <a routerLink="/" class="global-logo">
-      <span class="char char-i1">i</span>
-      <span class="char char-b">b</span>
-      <span class="char char-i2">i</span>
-      <span class="char char-d">d</span>
-      <span class="logo-anim-wrap">
-        <span class="char char-dot">.</span>
-        <span class="char char-e">e</span>
-        <span class="char char-m">m</span>
-      </span>
-    </a>
+@if (isAdmin()) {
+  <div class="admin-layout">
+    <nav class="admin-nav">
+      <a routerLink="/admin">Lista de Páginas</a>
+      <a routerLink="/admin/create">Criar Nova</a>
+      <a routerLink="/">Ver Website</a>
+    </nav>
+    <main class="admin-main">
+      <router-outlet></router-outlet>
+    </main>
   </div>
-  <div class="lang-indicator">
-    <span>[{{ i18n.currentLangCode() }}]</span>
-    <div class="lang-buttons">
-      <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
-      <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
-      <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
-      <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+} @else {
+  <header class="book-header">
+    <div class="header-content">
+      <a routerLink="/" class="global-logo">
+        <span class="char char-i1">i</span>
+        <span class="char char-b">b</span>
+        <span class="char char-i2">i</span>
+        <span class="char char-d">d</span>
+        <span class="logo-anim-wrap">
+          <span class="char char-dot">.</span>
+          <span class="char char-e">e</span>
+          <span class="char char-m">m</span>
+        </span>
+      </a>
     </div>
-  </div>
-</header>
+    <div class="lang-indicator">
+      <span>[{{ i18n.currentLangCode() }}]</span>
+      <div class="lang-buttons">
+        <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
+        <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
+        <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
+        <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+      </div>
+    </div>
+  </header>
 
-<main class="book-pages" [class.book-pages--cover]="isCoverPage()" #contentVolume>
-  <router-outlet></router-outlet>
-</main>
-<app-page-turn></app-page-turn>
+  <main class="book-pages" [class.book-pages--cover]="isCoverPage()" #contentVolume>
+    <router-outlet></router-outlet>
+  </main>
+  <app-page-turn></app-page-turn>
 
-<footer class="book-footer">
-  <div class="pagination-footer">
-    <span class="page-num page-left">{{ leftPageNum() }}</span>
-    <span class="page-num page-right desktop-only">{{ rightPageNum() }}</span>
-  </div>
-  <div class="footer-content">
-    @if (prevLink()) {
-    <a [routerLink]="prevLink()" class="nav-link prev-link">← Prev</a>
-    } @else {
-    <div></div>
-    }
+  <footer class="book-footer">
+    <div class="pagination-footer">
+      <span class="page-num page-left">{{ leftPageNum() }}</span>
+      <span class="page-num page-right desktop-only">{{ rightPageNum() }}</span>
+    </div>
+    <div class="footer-content">
+      @if (prevLink()) {
+      <a [routerLink]="prevLink()" class="nav-link prev-link">← Prev</a>
+      } @else {
+      <div></div>
+      }
 
-    @if (nextLink()) {
-    <a [routerLink]="nextLink()" class="nav-link next-link">Next →</a>
-    } @else {
-    <div></div>
-    }
-  </div>
-</footer>
+      @if (nextLink()) {
+      <a [routerLink]="nextLink()" class="nav-link next-link">Next →</a>
+      } @else {
+      <div></div>
+      }
+    </div>
+  </footer>
 
-<app-global-alert></app-global-alert>
+  <app-global-alert></app-global-alert>
+}

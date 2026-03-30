@@ -6,6 +6,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { CmsRouterService } from './core/services/cms-router.service';
 import { GlobalErrorHandler } from './core/handlers/global-error.handler';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { provideQuillConfig } from 'ngx-quill';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,17 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
        withInterceptors([errorInterceptor])
     ),
+    provideQuillConfig({
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline', 'strike'],
+          ['blockquote', 'code-block'],
+          [{ 'header': 1 }, { 'header': 2 }],
+          ['link', 'image']
+        ]
+      },
+      placeholder: 'Escreva algo aqui...'
+    }),
     provideRouter(routes), 
     provideClientHydration(withEventReplay()),
     provideAppInitializer(() => {

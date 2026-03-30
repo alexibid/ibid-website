@@ -1,3 +1,35 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: #f4f7f6;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 20px;
+  padding: 15px 30px;
+  background: #2c3e50;
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover { opacity: 0.8; }
+  }
+}
+
+.admin-main {
+  flex: 1;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
 :host {
   --header-height: 60px;
   --footer-height: 50px;

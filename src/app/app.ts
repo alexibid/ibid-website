@@ -34,6 +34,7 @@ export class App implements OnInit {
   public nextLink = signal<string | null>(null);
 
   public isDesktop = signal<boolean>(true);
+  public isAdmin = signal<boolean>(false);
 
   public isCoverPage = computed(() => {
     const type = this.bookService.activePageType();
@@ -74,6 +75,7 @@ export class App implements OnInit {
       let url = event.urlAfterRedirects.split('?')[0].split('#')[0];
       const slug = (url === '/' || url === '') ? '' : url.substring(1);
       
+      this.isAdmin.set(url.startsWith('/admin'));
       this.bookService.activeChapterSlug.set(slug);
 
       // Extract route data to set activePageType
