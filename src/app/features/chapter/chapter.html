@@ -2,7 +2,7 @@
   @if (pageData()) {
     <div class="page-content" #pageContent>
       <header class="chapter-header">
-        <div class="chapter-number">{{ 'chapter' | translate }} {{ pageData().metadata?.old_id }}</div>
+        <div class="chapter-number">{{ 'chapter' | translate }} {{ bookService.getChapterIndex(currentSlug) }}</div>
         <h1 class="chap-title">{{ pageData().title }}</h1>
       </header>
       

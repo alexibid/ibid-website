@@ -7,6 +7,7 @@ import { PageType } from '../models/page-type.enum';
 })
 export class BookService {
   private chapterPageCounts = new Map<string, number>();
+  private routeTypes = new Map<string, PageType>();
 
   public pageCountsUpdated = signal<number>(0);
   public activeChapterSlug = signal<string>('');
@@ -31,8 +32,12 @@ export class BookService {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
 
-  setRouteOrder(urls: string[]) {
-    this.dynamicRouteOrder.set(urls);
+  setRouteOrder(routes: { slug: string, type: PageType }[]) {
+    const slugs = routes.map(r => r.slug);
+    this.dynamicRouteOrder.set(slugs);
+    
+    this.routeTypes.clear();
+    routes.forEach(r => this.routeTypes.set(r.slug, r.type));
   }
 
   setPageCount(slug: string, count: number) {
@@ -46,11 +51,25 @@ export class BookService {
     return this.chapterPageCounts.get(slug) || 1;
   }
 
+  getChapterIndex(slug: string): number {
+    let index = 0;
+    for (const route of this.dynamicRouteOrder()) {
+      if (this.routeTypes.get(route) === PageType.Chapter) {
+        index++;
+      }
+      if (route === slug) return index;
+    }
+    return index;
+  }
+
   getStartingPage(slug: string): number {
     let startingPage = 1;
     for (const route of this.dynamicRouteOrder()) {
       if (route === slug) break;
-      startingPage += this.chapterPageCounts.get(route) || 0;
+      // Só somar se for um Chapter
+      if (this.routeTypes.get(route) === PageType.Chapter) {
+        startingPage += this.chapterPageCounts.get(route) || 1; // Default to 1 if not measured yet
+      }
     }
     return startingPage;
   }
@@ -58,7 +77,9 @@ export class BookService {
   getTotalPages(): number {
     let total = 0;
     for (const route of this.dynamicRouteOrder()) {
-      total += this.chapterPageCounts.get(route) || 0;
+      if (this.routeTypes.get(route) === PageType.Chapter) {
+        total += this.chapterPageCounts.get(route) || 1; // Default to 1
+      }
     }
     return total;
   }

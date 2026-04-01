@@ -54,13 +54,16 @@ export class CmsRouterService {
       finalRecords.push(...chapterRecords);
       if (exitRecord) finalRecords.push(exitRecord);
 
-      const slugs = finalRecords.map(r => {
+      const routes = finalRecords.map(r => {
         let path = r.url;
         if (path.startsWith('/')) path = path.slice(1);
-        return path;
+        return {
+          slug: path,
+          type: r.expand?.page_id?.type as PageType
+        };
       });
       
-      this.bookService.setRouteOrder(slugs);
+      this.bookService.setRouteOrder(routes);
     });
   }
 

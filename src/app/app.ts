@@ -26,9 +26,10 @@ export class App implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private cmsRouter = inject(CmsRouterService);
-  private bookService = inject(BookService);
+  public bookService = inject(BookService);
   private platformId = inject(PLATFORM_ID);
   public isBrowser = isPlatformBrowser(this.platformId);
+  public readonly PageType = PageType;
 
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
@@ -39,6 +40,7 @@ export class App implements OnInit {
   public adminAction = signal<string | null>(null);
 
   public isCoverPage = computed(() => {
+    this.bookService.pageCountsUpdated(); // Force dependency
     const type = this.bookService.activePageType();
     const slug = this.bookService.activeChapterSlug() || '';
     
@@ -52,6 +54,10 @@ export class App implements OnInit {
   });
 
   public globalPageNumber = computed(() => {
+    this.bookService.pageCountsUpdated(); // Force dependency
+    const type = this.bookService.activePageType();
+    if (type !== PageType.Chapter) return 0;
+    
     const slug = this.bookService.activeChapterSlug();
     const start = this.bookService.getStartingPage(slug) || 1;
     const current = this.bookService.currentPageInChapter() || 1;

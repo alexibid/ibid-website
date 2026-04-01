@@ -59,10 +59,12 @@
   <app-page-turn></app-page-turn>
 
   <footer class="book-footer">
-    <div class="pagination-footer">
-      <span class="page-num page-left">{{ leftPageNum() }}</span>
-      <span class="page-num page-right desktop-only">{{ rightPageNum() }}</span>
-    </div>
+    @if (bookService.activePageType() === PageType.Chapter) {
+      <div class="pagination-footer">
+        <span class="page-num page-left">{{ leftPageNum() }}</span>
+        <span class="page-num page-right desktop-only">{{ rightPageNum() }}</span>
+      </div>
+    }
     <div class="footer-content">
       @if (prevLink()) {
       <a [routerLink]="prevLink()" class="nav-link prev-link">← Prev</a>
