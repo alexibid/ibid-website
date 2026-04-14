@@ -55,8 +55,11 @@ export class Chapter implements AfterViewInit, OnDestroy {
       this.needsBlankPage.set(false); // Reset
       setTimeout(() => {
         const el = this.hostEl;
-        if (el) {
+        if (el && typeof el.scrollTo === 'function') {
           el.scrollTo({ left: 0, behavior: 'instant' });
+          this.measureChapter();
+        } else if (el) {
+          el.scrollLeft = 0;
           this.measureChapter();
         }
       }, 100);
