@@ -41,14 +41,32 @@
           <span class="char char-m">m</span>
         </span>
       </a>
-    </div>
-    <div class="lang-indicator">
-      <span>[{{ i18n.currentLangCode() }}]</span>
-      <div class="lang-buttons">
-        <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
-        <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
-        <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
-        <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+
+      <div class="header-actions">
+        <div class="lang-selector-wrap" [class.open]="isLangMenuOpen()">
+          <button class="action-btn lang-btn" (click)="toggleLangMenu()" aria-label="Change language">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="current-lang">{{ i18n.currentLangCode() | uppercase }}</span>
+          </button>
+          
+          <div class="lang-dropdown">
+            <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
+            <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
+            <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
+            <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+          </div>
+        </div>
+
+        <button class="action-btn settings-btn" aria-label="Settings">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </header>

@@ -39,6 +39,20 @@ export class App implements OnInit {
   public adminLang = signal<string | null>(null);
   public adminAction = signal<string | null>(null);
 
+  public isLangMenuOpen = signal<boolean>(false);
+
+  public toggleLangMenu() {
+    this.isLangMenuOpen.update(v => !v);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.lang-selector-wrap') && this.isLangMenuOpen()) {
+      this.isLangMenuOpen.set(false);
+    }
+  }
+
   public isCoverPage = computed(() => {
     this.bookService.pageCountsUpdated(); // Force dependency
     const type = this.bookService.activePageType();
