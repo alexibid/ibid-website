@@ -7,7 +7,7 @@
   overflow-x: hidden;
   overflow-y: hidden;
 
-  // Multi-column no Host para incluir tudo no fluxo de leitura
+  // Multi-column no Host
   column-fill: auto;
   column-width: calc(100vw - 48px);
   column-gap: 48px;
@@ -22,29 +22,27 @@
 }
 
 .chapter-header {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   break-inside: avoid-column;
   break-after: avoid-column;
-  
-  @media (min-width: 768px) {
-    margin-bottom: 40px;
-  }
+  display: block;
+  width: 100%;
 }
 
 .chapter-body {
-  display: contents;
+  display: contents; // Deixa o conteúdo HTML (p, img) fluir diretamente no host
 
   ::ng-deep {
     p {
-      margin-bottom: 24px;
+      display: block;
+      width: 100%;
+      margin: 0 0 24px 0;
       font-family: var(--font-body);
       font-size: 1.05rem;
       line-height: 1.7;
       color: var(--color-text);
       text-align: left;
       break-inside: avoid-column;
-
-      &:first-child { margin-top: 0; }
     }
 
     img {
@@ -54,7 +52,13 @@
       height: auto;
       object-fit: contain;
       border-radius: 2px;
-      margin-bottom: 32px;
+      margin: 32px 0;
+      break-inside: avoid-column;
+    }
+
+    // Caso o Quill tenha colocado imagens dentro de parágrafos
+    p:has(img) {
+      margin: 0;
       break-inside: avoid-column;
     }
   }
