@@ -97,6 +97,17 @@
       &:last-child {
         margin-bottom: 0;
       }
+
+      &:first-of-type::first-letter {
+        float: left;
+        font-size: 4.5rem;
+        line-height: 0.7;
+        padding-top: 0.5rem;
+        padding-right: 0.75rem;
+        font-family: var(--font-serif);
+        font-weight: 400;
+        color: var(--color-text);
+      }
     }
 
     em {
