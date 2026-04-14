@@ -7,17 +7,17 @@
   overflow-x: hidden;
   overflow-y: hidden;
 
-  // Multi-column no Host
+  // Multi-column
   column-fill: auto;
   column-width: calc(100vw - 48px);
   column-gap: 48px;
 
   @media (min-width: 768px) {
-    padding: var(--header-height) 30px calc(var(--header-height) / 1.5);
+    padding: var(--header-height) 60px calc(var(--header-height) / 1.5);
     column-count: 2;
     column-width: auto;
     column-gap: 120px;
-    column-fill: balance;
+    column-fill: auto;
   }
 }
 
@@ -26,11 +26,10 @@
   break-inside: avoid-column;
   break-after: avoid-column;
   display: block;
-  width: 100%;
 }
 
 .chapter-body {
-  display: contents; // Deixa o conteúdo HTML (p, img) fluir diretamente no host
+  display: contents;
 
   ::ng-deep {
     p {
@@ -43,6 +42,7 @@
       color: var(--color-text);
       text-align: left;
       break-inside: avoid-column;
+      &:first-child { margin-top: 0; }
     }
 
     img {
@@ -55,13 +55,13 @@
       margin: 32px 0;
       break-inside: avoid-column;
     }
-
-    // Caso o Quill tenha colocado imagens dentro de parágrafos
-    p:has(img) {
-      margin: 0;
-      break-inside: avoid-column;
-    }
   }
+}
+
+.blank-page {
+  break-before: column;
+  height: 1px;
+  width: 100%;
 }
 
 .chapter-number {

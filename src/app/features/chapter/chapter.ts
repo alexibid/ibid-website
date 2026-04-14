@@ -23,15 +23,14 @@ export class Chapter implements AfterViewInit, OnDestroy {
   public isBrowser = isPlatformBrowser(this.platformId);
 
   protected readonly pageData = signal<any>(null);
-
+  protected readonly needsBlankPage = signal<boolean>(false);
+  
   public isTransitioning = false;
   private isScrolling = false;
   private lastTouchX = 0;
   private lastTouchY = 0;
 
-  get hostEl(): HTMLElement {
-    return this.elRef.nativeElement;
-  }
+  get hostEl(): HTMLElement { return this.elRef.nativeElement; }
 
   get currentSlug(): string {
     let url = this.router.url.split('?')[0].split('#')[0];
@@ -41,26 +40,24 @@ export class Chapter implements AfterViewInit, OnDestroy {
   get nextSlug(): string | null {
     const routes = this.bookService.dynamicRouteOrder();
     const idx = routes.indexOf(this.currentSlug);
-    if(idx !== -1 && idx < routes.length - 1) return routes[idx+1];
-    return null;
+    return (idx !== -1 && idx < routes.length - 1) ? routes[idx+1] : null;
   }
 
   get prevSlug(): string | null {
     const routes = this.bookService.dynamicRouteOrder();
     const idx = routes.indexOf(this.currentSlug);
-    if(idx > 0) return routes[idx-1];
-    return null;
+    return (idx > 0) ? routes[idx-1] : null;
   }
 
   constructor() {
     this.route.data.subscribe((data) => {
       this.pageData.set(data);
+      this.needsBlankPage.set(false); // Reset
       setTimeout(() => {
-        this.measureChapter();
         const el = this.hostEl;
-        if (el && typeof el.scrollTo === 'function') {
-           el.scrollTo({ left: 0, behavior: 'instant' });
-           this.updateCurrentPage();
+        if (el) {
+          el.scrollTo({ left: 0, behavior: 'instant' });
+          this.measureChapter();
         }
       }, 100);
     });
@@ -68,9 +65,7 @@ export class Chapter implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (!this.isBrowser) return;
-
     this.measureChapter();
-
     fromEvent(window, 'resize')
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => this.measureChapter());
@@ -84,11 +79,9 @@ export class Chapter implements AfterViewInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (!this.isBrowser || this.isScrolling || this.isTransitioning) return;
-    
     let direction = 0;
     if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) direction = 1;
     else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) direction = -1;
-
     if (direction !== 0) {
       event.preventDefault();
       this.handleNavigation(direction);
@@ -99,24 +92,21 @@ export class Chapter implements AfterViewInit, OnDestroy {
     const el = this.hostEl;
     if (!el || this.isScrolling || this.isTransitioning) return;
     
+    // Agora o scroll é sempre 100% da largura visível (Spread)
     const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
     const isAtStart = el.scrollLeft <= 10;
 
     if (direction === 1 && isAtEnd && this.nextSlug) {
       this.isTransitioning = true;
       this.bookService.triggerFlip(direction);
-      setTimeout(() => {
-        this.router.navigate(['/', this.nextSlug]);
-      }, 450);
+      setTimeout(() => { this.router.navigate(['/', this.nextSlug]); }, 450);
       return;
     }
 
     if (direction === -1 && isAtStart && this.prevSlug) {
       this.isTransitioning = true;
       this.bookService.triggerFlip(direction);
-      setTimeout(() => {
-        this.router.navigate(['/', this.prevSlug]);
-      }, 450);
+      setTimeout(() => { this.router.navigate(['/', this.prevSlug]); }, 450);
       return;
     }
 
@@ -124,64 +114,48 @@ export class Chapter implements AfterViewInit, OnDestroy {
       this.bookService.triggerFlip(direction);
       this.isScrolling = true;
       
-      if (typeof el.scrollBy === 'function') {
-        el.scrollBy({
-          left: direction * el.clientWidth,
-          behavior: 'instant'
-        });
-      } else {
-        el.scrollLeft += direction * el.clientWidth;
-      }
+      // Salto de spread completo (2 páginas no desktop)
+      el.scrollBy({ left: direction * el.clientWidth, behavior: 'instant' });
 
       setTimeout(() => {
         this.isScrolling = false;
         this.updateCurrentPage();
-      }, 600);
+      }, 500);
     }
   }
 
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
-    if (!this.isBrowser) return;
-    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      const el = this.hostEl;
-      if (el && !this.isScrolling && !this.isTransitioning) {
-        if (Math.abs(event.deltaY) > 20) {
-          const direction = event.deltaY > 0 ? 1 : -1;
-          this.handleNavigation(direction);
-        }
-      }
-    }
-  }
-
-  @HostListener('touchstart', ['$event'])
-  onTouchStart(event: TouchEvent) {
-    if (this.isBrowser && window.innerWidth < 768) {
-      this.lastTouchX = event.touches[0].clientX;
-      this.lastTouchY = event.touches[0].clientY;
-    }
-  }
-
-  @HostListener('touchmove', ['$event'])
-  onTouchMove(event: TouchEvent) {
-    const el = this.hostEl;
-    if (this.isBrowser && window.innerWidth < 768 && el && !this.isScrolling && !this.isTransitioning) {
-      const deltaX = this.lastTouchX - event.touches[0].clientX;
-      const deltaY = this.lastTouchY - event.touches[0].clientY;
-
-      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
-        const direction = deltaX > 0 ? 1 : -1;
-        this.handleNavigation(direction);
-        this.lastTouchX = event.touches[0].clientX;
-      }
+    if (this.isBrowser && Math.abs(event.deltaY) > 30 && !this.isScrolling && !this.isTransitioning) {
+      this.handleNavigation(event.deltaY > 0 ? 1 : -1);
     }
   }
 
   private measureChapter() {
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
-      const count = Math.round(el.scrollWidth / el.clientWidth) || 1;
-      this.bookService.setPageCount(this.currentSlug, count);
+      const isDesktop = window.innerWidth >= 768;
+      const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
+      const totalCols = Math.round(el.scrollWidth / colWidth);
+      
+      // Se tivermos um número ímpar de colunas no desktop, precisamos de uma página em branco
+      if (isDesktop && totalCols % 2 !== 0) {
+        this.needsBlankPage.set(true);
+        // Re-medir após o Angular adicionar a blank-page
+        setTimeout(() => this.updatePageCount(), 50);
+      } else {
+        this.updatePageCount();
+      }
+    }
+  }
+
+  private updatePageCount() {
+    const el = this.hostEl;
+    if (el) {
+      const isDesktop = window.innerWidth >= 768;
+      const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
+      const totalCols = Math.round(el.scrollWidth / colWidth);
+      this.bookService.setPageCount(this.currentSlug, totalCols);
       this.updateCurrentPage();
     }
   }
@@ -189,7 +163,11 @@ export class Chapter implements AfterViewInit, OnDestroy {
   private updateCurrentPage() {
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
-      const current = Math.round(el.scrollLeft / el.clientWidth) + 1;
+      const isDesktop = window.innerWidth >= 768;
+      const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
+      
+      // A página atual é baseada na primeira coluna visível
+      const current = Math.round(el.scrollLeft / colWidth) + 1;
       this.bookService.currentPageInChapter.set(current);
     }
   }

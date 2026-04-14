@@ -5,4 +5,8 @@
   </header>
   
   <article class="chapter-body" [innerHTML]="pageData().content"></article>
+
+  @if (needsBlankPage()) {
+    <div class="blank-page"></div>
+  }
 }
