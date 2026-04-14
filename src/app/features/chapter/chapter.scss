@@ -42,24 +42,40 @@
     scroll-padding: 0 30px;
   }
 
-  p {
-    scroll-snap-align: start;
-    box-sizing: border-box;
-    margin-bottom: 24px;
-    max-width: 100%;
-    font-family: var(--font-body);
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--color-text);
-    text-align: left;
+  .chapter-content {
+    display: contents; // Deixa o column-count do .page-content atuar diretamente nos elementos filhos
 
-    &:first-child {
-      scroll-snap-align: none;
-      margin-top: 0;
+    p {
+      // Removido scroll-snap-align: start para evitar saltos bruscos
+      box-sizing: border-box;
+      margin-bottom: 24px;
+      max-width: 100%;
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      text-align: left;
+      break-inside: avoid-column; // Ajuda a manter o parágrafo coeso
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
-    &:last-child {
-      margin-bottom: 0;
+    img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      max-height: 75vh;
+      height: auto;
+      object-fit: contain;
+      border-radius: 2px;
+      margin-bottom: 32px;
+      // break-inside: avoid; // Pode forçar saltos se a imagem for alta
     }
   }
 }
@@ -67,9 +83,9 @@
 .chapter-header {
   margin-bottom: 32px;
   text-align: left;
-  scroll-snap-align: start; // Mobile default
-  break-inside: avoid; // Mobile default
-  break-after: avoid; // Mobile default
+  // scroll-snap-align: start; // Removido
+  break-inside: avoid;
+  break-after: avoid;
 
   @media (min-width: 768px) {
     margin-bottom: 40px;

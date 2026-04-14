@@ -9,12 +9,12 @@
         } @else if (section.metadata?.location === 'index') {
           <div class="index-page" [id]="section.metadata?.location">
             <h1 class="chap-title">{{ section.title }}</h1>
-            <div class="chap-body" [innerHTML]="section.content"></div>
+            <article class="chap-body" [innerHTML]="section.content"></article>
           </div>
         } @else if (section.metadata?.location === 'preface') {
           <div class="preface-page" [id]="section.metadata?.location">
             <h1 class="chap-title">{{ section.title }}</h1>
-            <div class="chap-body" [innerHTML]="section.content"></div>
+            <article class="chap-body" [innerHTML]="section.content"></article>
           </div>
         }
       }
