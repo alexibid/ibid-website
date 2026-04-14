@@ -2,96 +2,61 @@
   display: block;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  padding: var(--header-height) 24px calc(var(--header-height) / 1.5);
+  box-sizing: border-box;
   overflow-x: hidden;
-}
-
-.chapter-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: var(--header-height) 0 calc(var(--header-height) / 1.5);
-  box-sizing: border-box;
-}
-
-.page-content {
-  flex: 1;
-  display: block; // Mobile default
-  height: 100%;
-  margin: 0 auto;
-  min-height: 0;
-  box-sizing: border-box;
-  column-fill: auto;
-  width: 100%; // Mobile default
-  padding: 0 24px; // Mobile default
-  column-width: calc(100vw - 48px); // Mobile default
-  column-gap: 48px; // Mobile default
-  overflow-x: hidden; // Disable manual scroll
   overflow-y: hidden;
-  scroll-snap-type: none; // Snap manually via JS
-  scroll-padding: 0 24px; // Mobile default
-  scroll-behavior: auto;
-  -webkit-overflow-scrolling: auto; // No momentum scroll needed if hidden
+
+  // Multi-column no Host para incluir tudo no fluxo de leitura
+  column-fill: auto;
+  column-width: calc(100vw - 48px);
+  column-gap: 48px;
 
   @media (min-width: 768px) {
-    padding: 0 30px;
+    padding: var(--header-height) 30px calc(var(--header-height) / 1.5);
     column-count: 2;
     column-width: auto;
     column-gap: 120px;
-    scroll-padding: 0 30px;
-  }
-
-  .chapter-content {
-    display: contents; // Deixa o column-count do .page-content atuar diretamente nos elementos filhos
-
-    p {
-      // Removido scroll-snap-align: start para evitar saltos bruscos
-      box-sizing: border-box;
-      margin-bottom: 24px;
-      max-width: 100%;
-      font-family: var(--font-body);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--color-text);
-      text-align: left;
-      break-inside: avoid-column; // Ajuda a manter o parágrafo coeso
-
-      &:first-child {
-        margin-top: 0;
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      max-height: 75vh;
-      height: auto;
-      object-fit: contain;
-      border-radius: 2px;
-      margin-bottom: 32px;
-      // break-inside: avoid; // Pode forçar saltos se a imagem for alta
-    }
+    column-fill: balance;
   }
 }
 
 .chapter-header {
   margin-bottom: 32px;
-  text-align: left;
-  // scroll-snap-align: start; // Removido
-  break-inside: avoid;
-  break-after: avoid;
-
+  break-inside: avoid-column;
+  break-after: avoid-column;
+  
   @media (min-width: 768px) {
     margin-bottom: 40px;
-    scroll-snap-align: none; // Reset if needed, or keep
-    break-inside: auto;
-    break-after: auto;
+  }
+}
+
+.chapter-body {
+  display: contents;
+
+  ::ng-deep {
+    p {
+      margin-bottom: 24px;
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      text-align: left;
+      break-inside: avoid-column;
+
+      &:first-child { margin-top: 0; }
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 75vh;
+      height: auto;
+      object-fit: contain;
+      border-radius: 2px;
+      margin-bottom: 32px;
+      break-inside: avoid-column;
+    }
   }
 }
 
@@ -100,49 +65,15 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: var(--color-text);
   opacity: 0.6;
-  display: block;
   margin-bottom: 24px;
 }
 
 .chap-title {
   font-family: var(--font-title);
   font-size: 2.75rem;
-  margin-bottom: 56px;
-  color: var(--color-text);
+  margin-bottom: 0;
   font-weight: 400;
   line-height: 1.1;
-  text-align: left;
   letter-spacing: -0.01em;
-}
-
-.inline-img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin: 0 0 24px 0;
-  scroll-snap-align: start;
-
-  img {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    max-height: calc(100vh - 120px);
-    height: auto;
-    object-fit: contain;
-    border-radius: 2px;
-  }
-}
-
-.first-paragraph::first-letter {
-  float: left;
-  font-size: 4.5rem;
-  line-height: 0.8;
-  padding-top: 0.45rem;
-  padding-right: 0.4rem;
-  font-family: var(--font-title);
-  font-weight: 500;
-  color: var(--color-text);
 }

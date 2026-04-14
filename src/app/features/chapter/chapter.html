@@ -1,12 +1,8 @@
-<div class="chapter-container">
-  @if (pageData()) {
-    <div class="page-content" #pageContent>
-      <header class="chapter-header">
-        <div class="chapter-number">{{ 'chapter' | translate }} {{ bookService.getChapterIndex(currentSlug) }}</div>
-        <h1 class="chap-title">{{ pageData().title }}</h1>
-      </header>
-      
-      <article class="chapter-content" [innerHTML]="pageData().content"></article>
-    </div>
-  }
-</div>
+@if (pageData()) {
+  <header class="chapter-header">
+    <div class="chapter-number">{{ 'chapter' | translate }} {{ bookService.getChapterIndex(currentSlug) }}</div>
+    <h1 class="chap-title">{{ pageData().title }}</h1>
+  </header>
+  
+  <div class="chapter-body" [innerHTML]="pageData().content"></div>
+}

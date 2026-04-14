@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, inject, PLATFORM_ID, HostListener, OnDestroy, signal } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, inject, PLATFORM_ID, HostListener, OnDestroy, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../../core/services/book.service';
@@ -17,17 +17,21 @@ export class Chapter implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
+  private elRef = inject(ElementRef);
   public bookService = inject(BookService);
   private destroy$ = new Subject<void>();
   public isBrowser = isPlatformBrowser(this.platformId);
 
   protected readonly pageData = signal<any>(null);
 
-  @ViewChild('pageContent') pageContent!: ElementRef<HTMLDivElement>;
   public isTransitioning = false;
   private isScrolling = false;
   private lastTouchX = 0;
   private lastTouchY = 0;
+
+  get hostEl(): HTMLElement {
+    return this.elRef.nativeElement;
+  }
 
   get currentSlug(): string {
     let url = this.router.url.split('?')[0].split('#')[0];
@@ -51,12 +55,11 @@ export class Chapter implements AfterViewInit, OnDestroy {
   constructor() {
     this.route.data.subscribe((data) => {
       this.pageData.set(data);
-      // Wait for Angular to re-render DOM with new content
       setTimeout(() => {
         this.measureChapter();
-        const contentEl = this.pageContent?.nativeElement;
-        if (contentEl && typeof contentEl.scrollTo === 'function') {
-           contentEl.scrollTo({ left: 0, behavior: 'instant' });
+        const el = this.hostEl;
+        if (el && typeof el.scrollTo === 'function') {
+           el.scrollTo({ left: 0, behavior: 'instant' });
            this.updateCurrentPage();
         }
       }, 100);
@@ -80,7 +83,7 @@ export class Chapter implements AfterViewInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    if (!this.isBrowser || this.isScrolling || this.isTransitioning || !this.pageContent) return;
+    if (!this.isBrowser || this.isScrolling || this.isTransitioning) return;
     
     let direction = 0;
     if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) direction = 1;
@@ -93,9 +96,9 @@ export class Chapter implements AfterViewInit, OnDestroy {
   }
 
   private handleNavigation(direction: number) {
-    if (!this.pageContent || this.isScrolling || this.isTransitioning) return;
+    const el = this.hostEl;
+    if (!el || this.isScrolling || this.isTransitioning) return;
     
-    const el = this.pageContent.nativeElement;
     const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
     const isAtStart = el.scrollLeft <= 10;
 
@@ -121,7 +124,6 @@ export class Chapter implements AfterViewInit, OnDestroy {
       this.bookService.triggerFlip(direction);
       this.isScrolling = true;
       
-      // Snap instantly!
       if (typeof el.scrollBy === 'function') {
         el.scrollBy({
           left: direction * el.clientWidth,
@@ -142,7 +144,8 @@ export class Chapter implements AfterViewInit, OnDestroy {
   onWheel(event: WheelEvent) {
     if (!this.isBrowser) return;
     if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      if (this.pageContent && !this.isScrolling && !this.isTransitioning) {
+      const el = this.hostEl;
+      if (el && !this.isScrolling && !this.isTransitioning) {
         if (Math.abs(event.deltaY) > 20) {
           const direction = event.deltaY > 0 ? 1 : -1;
           this.handleNavigation(direction);
@@ -161,11 +164,11 @@ export class Chapter implements AfterViewInit, OnDestroy {
 
   @HostListener('touchmove', ['$event'])
   onTouchMove(event: TouchEvent) {
-    if (this.isBrowser && window.innerWidth < 768 && this.pageContent && !this.isScrolling && !this.isTransitioning) {
+    const el = this.hostEl;
+    if (this.isBrowser && window.innerWidth < 768 && el && !this.isScrolling && !this.isTransitioning) {
       const deltaX = this.lastTouchX - event.touches[0].clientX;
       const deltaY = this.lastTouchY - event.touches[0].clientY;
 
-      // Swipe horizontal para flips
       if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
         const direction = deltaX > 0 ? 1 : -1;
         this.handleNavigation(direction);
@@ -175,23 +178,19 @@ export class Chapter implements AfterViewInit, OnDestroy {
   }
 
   private measureChapter() {
-    if (this.pageContent) {
-      const el = this.pageContent.nativeElement;
-      if (el.clientWidth > 0) {
-        const count = Math.round(el.scrollWidth / el.clientWidth) || 1;
-        this.bookService.setPageCount(this.currentSlug, count);
-        this.updateCurrentPage();
-      }
+    const el = this.hostEl;
+    if (el && el.clientWidth > 0) {
+      const count = Math.round(el.scrollWidth / el.clientWidth) || 1;
+      this.bookService.setPageCount(this.currentSlug, count);
+      this.updateCurrentPage();
     }
   }
 
   private updateCurrentPage() {
-    if (this.pageContent) {
-      const el = this.pageContent.nativeElement;
-      if (el.clientWidth > 0) {
-        const current = Math.round(el.scrollLeft / el.clientWidth) + 1;
-        this.bookService.currentPageInChapter.set(current);
-      }
+    const el = this.hostEl;
+    if (el && el.clientWidth > 0) {
+      const current = Math.round(el.scrollLeft / el.clientWidth) + 1;
+      this.bookService.currentPageInChapter.set(current);
     }
   }
 }
