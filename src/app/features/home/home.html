@@ -1,27 +1,22 @@
-<div class="home-container">
-  <div class="page-content" #pageContent>
-    @if (homeSections().length > 0) {
-      @for (section of homeSections(); track section.id) {
-        @if (section.metadata?.location === 'front-cover') {
-          <div class="cover-page" [id]="section.metadata?.location">
-            <app-cover [data]="section" />
-          </div>
-        } @else if (section.metadata?.location === 'index') {
-          <div class="index-page" [id]="section.metadata?.location">
-            <h1 class="chap-title">{{ section.title }}</h1>
-            <article class="chap-body" [innerHTML]="section.content"></article>
-          </div>
-        } @else if (section.metadata?.location === 'preface') {
-          <div class="preface-page" [id]="section.metadata?.location">
-            <h1 class="chap-title">{{ section.title }}</h1>
-            <article class="chap-body" [innerHTML]="section.content"></article>
-          </div>
-        }
-      }
-    } @else {
-      <div class="cover-page">
-        <p>A carregar o livro...</p>
-      </div>
+@if (homeSections().length > 0) {
+  @for (section of homeSections(); track section.id) {
+    @if (section.metadata?.location === 'front-cover') {
+      <app-cover [data]="section" [fullSpread]="true" [id]="section.metadata?.location" />
     }
+  }
+
+  <article class="page-body">
+    @for (section of homeSections(); track section.id) {
+      @if (section.metadata?.location === 'index') {
+        <h1>{{ section.title }}</h1>
+      }
+      @if (section.metadata?.location === 'preface') {
+        <div [innerHTML]="section.content"></div>
+      }
+    }
+  </article>
+} @else {
+  <div class="loading-state">
+    <p>A carregar o livro...</p>
   </div>
-</div>
+}

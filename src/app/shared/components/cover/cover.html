@@ -1,23 +1,2 @@
-<div class="cover-wrapper" [class.is-back]="isBack()">
-  @if (!isBack()) {
-  <!-- Front Cover -->
-  <div class="front-cover">
-    <div class="logo-placeholder"
-      style="opacity: 0; user-select: none; font-size: 2.75rem; font-family: var(--font-logo); margin-bottom: 3rem;">
-      ibid.</div>
-    <h1 class="cover-tagline"><span class="hidden">ibid. </span>{{ data().title }}</h1>
-    <div class="cover-vision-lines" [innerHTML]="data().content"></div>
-  </div>
-  } @else {
-  <!-- Back Cover -->
-  <div class="back-cover">
-    <h1 class="thanks-title">{{ data().title }}</h1>
-    <div class="cover-vision-lines" [innerHTML]="data().content"></div>
-
-    <div class="social-links">
-      <a href="https://linkedin.com/in/alexandresantos" target="_blank">LinkedIn</a>
-      <a href="mailto:alex.ibid@gmail.com">Email</a>
-    </div>
-  </div>
-  }
-</div>
+<h1>{{ data().title }}</h1>
+<div [innerHTML]="data().content"></div>
