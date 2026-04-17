@@ -1,40 +1,44 @@
 @if (sections().length > 0) {
-  <div class="page-body">
-  @for (section of sections(); track section.id) {
-    @if (section.metadata?.location === 'front-cover') {
-      <!-- <app-cover [data]="section" [fullSpread]="true" /> -->
+  <div class="book-content-wrapper">
+    <!-- 1. Capa Frontal (Contém o único H1 da página) -->
+    @for (section of sections(); track section.id) {
+      @if (section.metadata?.location === 'front-cover') {
+        <app-cover [data]="section" [fullSpread]="true" />
+      }
     }
 
-    @if (section.metadata?.location === 'index') {
-      <nav class="index-section">
-        <h2 class="page-title">{{ section.title }}</h2>
-        
-        <ul class="index-list">
-          @for (route of bookService.routesMetadata(); track route.slug) {
-            @if (route.type === 'chapter') {
-              <li>
-                <span><a [routerLink]="['/' + route.slug]">{{ route.title }}</a></span>
-                <span class="page-num">{{ ('000' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
-              </li>
+    <!-- 2. Índice Dinâmico (Título sem peso de H1 para SEO) -->
+    <section class="index-section">
+      <header class="page-header">
+        <div class="page-title">Índice</div>
+      </header>
+      
+      <ul class="index-list">
+        @for (route of bookService.routesMetadata(); track route.slug) {
+          @if (route.type === 'chapter') {
+            <li>
+              <span><a [routerLink]="['/' + route.slug]">{{ route.title }}</a></span>
+              <span class="page-num">{{ ('000' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
+            </li>
+          }
+        }
+      </ul>
+    </section>
+
+    @for (section of sections(); track section.id) {
+      @if (section.metadata?.location === 'preface') {
+        <section class="preface-section">
+          <header class="page-header">
+            <h2 class="page-title">{{ section.title }}</h2>
+            @if (section.metadata?.subtitle || section.metadata?.content_subtitle) {
+              <div class="subtitle">{{ section.metadata?.subtitle || section.metadata?.content_subtitle }}</div>
             }
-          }
-        </ul>
-      </nav>
+          </header>
+          
+          <div [innerHTML]="section.content"></div>
+        </section>
+      }
     }
-
-    @if (section.metadata?.location === 'preface') {
-      <section class="preface-section">
-        <header class="page-header">
-          <h1 class="page-title">{{ section.title }}</h1>
-          @if (section.metadata?.subtitle) {
-            <div class="subtitle">{{ section.metadata.subtitle }}</div>
-          }
-        </header>
-        
-        <div [innerHTML]="section.content"></div>
-      </section>
-    }
-  }
   </div>
 } @else {
   <div class="loading-state">

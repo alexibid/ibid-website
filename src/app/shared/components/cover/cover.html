@@ -1,2 +1,17 @@
-<h1>{{ data().title }}</h1>
-<div [innerHTML]="data().content"></div>
+@if (fullSpread()) {
+  <div class="cover-spread" [class.cover-spread--back]="isBack()">
+    <h1 class="cover-logo">
+      <span class="branding">ibid.</span>
+      <br>
+      <span class="title-text">{{ data().title }}</span>
+    </h1>
+      
+      @if (data().metadata?.subtitle || data().metadata?.content_subtitle) {
+        <h2 class="cover-subtitle">{{ data().metadata?.subtitle || data().metadata?.content_subtitle }}</h2>
+      }
+
+  </div>
+} @else {
+  <h1 class="simple-title">{{ data().title }}</h1>
+  <div [innerHTML]="data().content"></div>
+}
