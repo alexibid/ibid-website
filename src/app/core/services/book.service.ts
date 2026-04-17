@@ -20,6 +20,7 @@ export class BookService {
   // Array of valid slugs in the book, in reading order
   // Includes '' (home) and 'contactos' (exit) or whatever the CMS dictates
   public dynamicRouteOrder = signal<string[]>([]);
+  public routesMetadata = signal<{ slug: string, title: string, type: PageType }[]>([]);
 
   triggerFlip(direction: number) {
     this.flipDirection.set(direction);
@@ -32,9 +33,10 @@ export class BookService {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
 
-  setRouteOrder(routes: { slug: string, type: PageType }[]) {
+  setRouteOrder(routes: { slug: string, title: string, type: PageType }[]) {
     const slugs = routes.map(r => r.slug);
     this.dynamicRouteOrder.set(slugs);
+    this.routesMetadata.set(routes);
     
     this.routeTypes.clear();
     routes.forEach(r => this.routeTypes.set(r.slug, r.type));

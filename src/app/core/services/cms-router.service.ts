@@ -59,6 +59,7 @@ export class CmsRouterService {
         if (path.startsWith('/')) path = path.slice(1);
         return {
           slug: path,
+          title: r.expand?.page_id?.title || '',
           type: r.expand?.page_id?.type as PageType
         };
       });

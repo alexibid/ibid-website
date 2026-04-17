@@ -4,3 +4,103 @@
   @include book-page-layout;
 }
 
+.page-header {
+  margin: 30px 0 60px;
+  break-inside: avoid-column;
+  break-after: avoid-column;
+  display: block;
+}
+
+.page-number {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.5;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.page-title {
+  font-family: var(--font-title);
+  font-size: 3.5rem;
+  margin-bottom: 0;
+  font-weight: 400;
+  line-height: 1;
+  font-style: italic;
+}
+
+.page-body {
+  display: contents;
+
+  ::ng-deep {
+    p {
+      display: block;
+      width: 100%;
+      margin: 0 0 2rem 0;
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--color-text);
+      text-align: left;
+      break-inside: avoid-column;
+      &:first-child { margin-top: 0; }
+
+      &:first-of-type::first-letter {
+        float: left;
+        font-size: 4.5rem;
+        line-height: 0.7;
+        padding-top: 0.5rem;
+        padding-right: 0.75rem;
+        font-family: var(--font-serif);
+        font-weight: 400;
+        color: var(--color-text);
+      }
+    }
+
+    .subtitle {
+      display: block;
+      font-style: italic;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    .index-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+
+      li {
+        font-family: var(--font-serif);
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        opacity: 0.9;
+
+        &::after {
+          content: "";
+          flex-grow: 1;
+          border-bottom: 1px dotted rgba(0,0,0,0.1);
+          margin: 0 10px;
+          order: 2;
+        }
+
+        .page-num {
+          order: 3;
+          font-family: var(--font-sans);
+          font-size: 0.8rem;
+          opacity: 0.5;
+        }
+
+        span:first-child {
+          order: 1;
+        }
+      }
+    }
+  }
+}
+
