@@ -2,6 +2,9 @@ import { Component, AfterViewInit, ElementRef, inject, PLATFORM_ID, HostListener
 import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../services/book.service';
+import { PocketbaseService } from '../services/pocketbase.service';
+import { I18nService } from '../services/i18n.service';
+import { PageType } from '../models/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -14,16 +17,22 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   protected readonly platformId = inject(PLATFORM_ID);
   protected readonly elRef = inject(ElementRef);
   protected readonly bookService = inject(BookService);
+  protected readonly pbService = inject(PocketbaseService);
+  protected readonly i18n = inject(I18nService);
+  
   protected destroy$ = new Subject<void>();
   public isBrowser = isPlatformBrowser(this.platformId);
 
   public isTransitioning = false;
   protected isScrolling = false;
   protected lastTouchY = 0;
+  protected anchorTarget = '';
+
+  protected readonly sections = signal<any[]>([]);
+  protected readonly pageData = signal<any>(null);
 
   get hostEl(): HTMLElement { return this.elRef.nativeElement; }
 
-  // Getters comuns de navegação
   get currentSlug(): string {
     const url = this.router.url.split('?')[0].split('#')[0];
     return (url === '/' || url === '') ? '' : url.substring(1);
@@ -41,8 +50,22 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     return (idx > 0) ? routes[idx - 1] : null;
   }
 
+  constructor() {
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      this.pageData.set(data);
+      if (data && data['location']) {
+        this.anchorTarget = data['location'];
+        this.triggerScroll();
+      }
+    });
+  }
+
   ngAfterViewInit() {
     if (!this.isBrowser) return;
+    
+    // Define o slug ativo globalmente para navegação/UI
+    this.bookService.activeChapterSlug.set(this.currentSlug);
+    
     this.measurePage();
     fromEvent(window, 'resize')
       .pipe(debounceTime(300), takeUntil(this.destroy$))
@@ -73,17 +96,17 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
     const isAtStart = el.scrollLeft <= 10;
 
-    if (direction === 1 && isAtEnd && this.nextSlug) {
+    if (direction === 1 && isAtEnd && this.nextSlug !== null) {
       this.isTransitioning = true;
       this.bookService.triggerFlip(direction);
-      setTimeout(() => { this.router.navigate(['/', this.nextSlug]); }, 450);
+      setTimeout(() => { this.router.navigate(['/' + this.nextSlug]); }, 450);
       return;
     }
 
-    if (direction === -1 && isAtStart && this.prevSlug) {
+    if (direction === -1 && isAtStart && this.prevSlug !== null) {
       this.isTransitioning = true;
       this.bookService.triggerFlip(direction);
-      setTimeout(() => { this.router.navigate(['/', this.prevSlug]); }, 450);
+      setTimeout(() => { this.router.navigate(['/' + this.prevSlug]); }, 450);
       return;
     }
 
@@ -123,7 +146,19 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     }
   }
 
+  protected triggerScroll() {
+    if (!this.isBrowser || !this.anchorTarget) return;
+    setTimeout(() => {
+      const el = document.getElementById(this.anchorTarget);
+      if (el && typeof el.scrollTo === 'function') {
+        this.hostEl.scrollTo({ left: el.offsetLeft, behavior: 'instant' });
+        this.updateCurrentPage();
+      }
+    }, 100);
+  }
+
   protected measurePage() {
+    if (!this.isBrowser) return;
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
@@ -139,6 +174,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   }
 
   protected updateCurrentPage() {
+    if (!this.isBrowser) return;
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
@@ -149,7 +185,33 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   }
 
   protected scrollToStart() {
+    if (!this.isBrowser) return;
     const el = this.hostEl;
-    if (el) el.scrollTo({ left: 0, behavior: 'instant' });
+    if (el && typeof el.scrollTo === 'function') {
+      el.scrollTo({ left: 0, behavior: 'instant' });
+    }
+  }
+
+  protected async loadAllSections(type: PageType, lang: string, sortFn?: (a: any, b: any) => number) {
+    try {
+      let filter = `type = '${type}' && lang = '${lang}'`;
+      const records = await this.pbService.pb.collection('pages').getFullList({
+        filter: filter,
+        sort: type === PageType.Home ? 'metadata.old_id' : ''
+      });
+
+      if (sortFn) records.sort(sortFn);
+      
+      this.sections.set(records);
+      
+      if (this.isBrowser) {
+        setTimeout(() => {
+          this.measurePage();
+          this.triggerScroll();
+        }, 100);
+      }
+    } catch (e) {
+      console.error(`Failed to load sections for ${type}`, e);
+    }
   }
 }

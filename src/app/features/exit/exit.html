@@ -1,7 +1,7 @@
-@if (exitSections().length > 0) {
+@if (sections().length > 0) {
   <article class="page-body">
     <section class="page-section">
-      @for (section of exitSections(); track section.id) {
+      @for (section of sections(); track section.id) {
          @if (section.metadata?.location === 'contact-form') {
            <header class="page-header">
              <h1 class="page-title">{{ section.title }}</h1>
@@ -30,7 +30,7 @@
     <section class="page-section">
       <div class="info-block">
          <h2 class="sub-title">Informações</h2>
-         @for (section of exitSections(); track section.id) {
+         @for (section of sections(); track section.id) {
            @if (section.metadata?.location === 'about') {
              <p class="company-name"><strong>{{ section.title }}</strong></p>
              <div [innerHTML]="section.content"></div>
@@ -40,7 +40,7 @@
     </section>
   </article>
 
-  @for (section of exitSections(); track section.id) {
+  @for (section of sections(); track section.id) {
     @if (section.metadata?.location === 'back-cover') {
       <app-cover [data]="section" [isBack]="true" [fullSpread]="true" #thankYouSection [id]="section.metadata?.location"></app-cover>
     }

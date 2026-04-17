@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnDestroy, signal, effect } from '@angular/core';
 import { TranslatePipe } from '../../core/pipes/translate.pipe';
 import { BasePage } from '../../core/base/base-page';
 
@@ -9,19 +9,19 @@ import { BasePage } from '../../core/base/base-page';
   templateUrl: './chapter.html',
   styleUrl: './chapter.scss',
 })
-export class Chapter extends BasePage implements AfterViewInit, OnDestroy {
-  protected readonly pageData = signal<any>(null);
+export class Chapter extends BasePage implements OnDestroy {
   protected readonly needsBlankPage = signal<boolean>(false);
 
   constructor() {
     super();
-    this.route.data.subscribe((data) => {
-      this.pageData.set(data);
-      this.needsBlankPage.set(false);
-      setTimeout(() => {
-        this.scrollToStart();
-        this.measurePage();
-      }, 100);
+    effect(() => {
+      if (this.pageData() && this.isBrowser) {
+        this.needsBlankPage.set(false);
+        setTimeout(() => {
+          this.scrollToStart();
+          this.measurePage();
+        }, 100);
+      }
     });
   }
 

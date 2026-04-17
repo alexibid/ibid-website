@@ -1,12 +1,12 @@
-@if (homeSections().length > 0) {
-  @for (section of homeSections(); track section.id) {
+@if (sections().length > 0) {
+  @for (section of sections(); track section.id) {
     @if (section.metadata?.location === 'front-cover') {
       <app-cover [data]="section" [fullSpread]="true" [id]="section.metadata?.location" />
     }
   }
 
   <article class="page-body">
-    @for (section of homeSections(); track section.id) {
+    @for (section of sections(); track section.id) {
       @if (section.metadata?.location === 'index') {
         <h1>{{ section.title }}</h1>
       }
