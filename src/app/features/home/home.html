@@ -1,41 +1,41 @@
 @if (sections().length > 0) {
+  <div class="page-body">
   @for (section of sections(); track section.id) {
     @if (section.metadata?.location === 'front-cover') {
-      <app-cover [data]="section" [fullSpread]="true" [id]="section.metadata?.location" />
+      <!-- <app-cover [data]="section" [fullSpread]="true" /> -->
     }
-  }
 
-  @for (section of sections(); track section.id) {
     @if (section.metadata?.location === 'index') {
-      <header class="page-header">
-        <div class="page-number">SECTION I</div>
-        <h1 class="page-title">{{ section.title }}</h1>
-      </header>
-      <article class="page-body">
+      <nav class="index-section">
+        <h2 class="page-title">{{ section.title }}</h2>
+        
         <ul class="index-list">
           @for (route of bookService.routesMetadata(); track route.slug) {
             @if (route.type === 'chapter') {
               <li>
-                <span><a [routerLink]="['/' + route.slug]" style="color: inherit; text-decoration: none;">{{ route.title }}</a></span>
+                <span><a [routerLink]="['/' + route.slug]">{{ route.title }}</a></span>
                 <span class="page-num">{{ ('000' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
               </li>
             }
           }
         </ul>
-      </article>
+      </nav>
     }
+
     @if (section.metadata?.location === 'preface') {
-      <header class="page-header">
-        <h1 class="page-title">{{ section.title }}</h1>
-        @if (section.metadata?.subtitle) {
-          <div class="subtitle">{{ section.metadata.subtitle }}</div>
-        }
-      </header>
-      <article class="page-body">
+      <section class="preface-section">
+        <header class="page-header">
+          <h1 class="page-title">{{ section.title }}</h1>
+          @if (section.metadata?.subtitle) {
+            <div class="subtitle">{{ section.metadata.subtitle }}</div>
+          }
+        </header>
+        
         <div [innerHTML]="section.content"></div>
-      </article>
+      </section>
     }
   }
+  </div>
 } @else {
   <div class="loading-state">
     <p>A carregar o livro...</p>
