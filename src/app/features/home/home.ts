@@ -9,7 +9,7 @@ import { BasePage } from '../../core/base/base-page';
   standalone: true,
   imports: [Cover, RouterLink],
   templateUrl: './home.html',
-  styleUrl: './home.scss',
+  styleUrl: './home.scss'
 })
 export class Home extends BasePage implements OnDestroy {
   constructor() {

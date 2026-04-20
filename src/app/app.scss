@@ -167,12 +167,12 @@
   }
 
   &--cover {
-    background-color: transparent !important;
-    box-shadow: none !important;
+    background-color: transparent;
+    box-shadow: none;
 
     @media (min-width: 768px) {
       &::after {
-        display: none !important;
+        display: none;
       }
     }
   }
