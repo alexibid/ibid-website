@@ -12,41 +12,18 @@
   display: block;
 }
 
-.page-number {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  opacity: 0.5;
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-.page-title,
-h2.page-title {
+.page-title {
   font-family: var(--font-title);
   font-size: 3.5rem;
-  margin-bottom: 0;
+  margin-bottom: 2rem;
   font-weight: 400;
   line-height: 1;
   font-style: italic;
-  display: block; // For the div in Index
+  display: block;
 }
 
-.book-content-wrapper {
+.page-body {
   display: contents;
-
-  app-cover {
-    @media (min-width: 768px) {
-      column-span: all;
-    }
-  }
-
-  .index-section {
-    @media (min-width: 768px) {
-      break-after: column;
-    }
-  }
 
   .subtitle {
     display: block;

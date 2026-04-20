@@ -6,8 +6,9 @@
       }
     }
   </header>
+  
   <div class="page-body">
-    <section class="index-section">
+    <nav class="index-section">
       <div class="page-title">Índice</div>
       
       <ul class="index-list">
@@ -20,7 +21,7 @@
           }
         }
       </ul>
-    </section>
+    </nav>
 
     @for (section of sections(); track section.id) {
       @if (section.metadata?.location === 'preface') {
