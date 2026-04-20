@@ -60,7 +60,17 @@ h2.page-title {
 
   ::ng-deep {
     p {
-...
+      display: block;
+      width: 100%;
+      margin: 0 0 2rem 0;
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--color-text);
+      text-align: left;
+      break-inside: avoid-column;
+      &:first-child { margin-top: 0; }
+    }
 
     .index-list {
       list-style: none;
