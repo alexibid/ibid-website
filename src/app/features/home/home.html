@@ -1,17 +1,14 @@
 @if (sections().length > 0) {
-  <div class="book-content-wrapper">
-    <!-- 1. Capa Frontal (Contém o único H1 da página) -->
+  <header class="page-head">
     @for (section of sections(); track section.id) {
       @if (section.metadata?.location === 'front-cover') {
         <app-cover [data]="section" [fullSpread]="true" />
       }
     }
-
-    <!-- 2. Índice Dinâmico (Título sem peso de H1 para SEO) -->
+  </header>
+  <div class="page-body">
     <section class="index-section">
-      <header class="page-header">
-        <div class="page-title">Índice</div>
-      </header>
+      <div class="page-title">Índice</div>
       
       <ul class="index-list">
         @for (route of bookService.routesMetadata(); track route.slug) {
@@ -29,7 +26,7 @@
       @if (section.metadata?.location === 'preface') {
         <section class="preface-section">
           <header class="page-header">
-            <h2 class="page-title">{{ section.title }}</h2>
+            <div class="page-title">{{ section.title }}</div>
             @if (section.metadata?.subtitle || section.metadata?.content_subtitle) {
               <div class="subtitle">{{ section.metadata?.subtitle || section.metadata?.content_subtitle }}</div>
             }
