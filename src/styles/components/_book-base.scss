@@ -3,6 +3,33 @@
   break-inside: avoid-column;
   break-after: avoid-column;
   display: block;
+
+  .page-number,
+  .page-subheader {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    display: block;
+  }
+
+  ::ng-deep {
+    .page-subheader p {
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+
+      &:first-of-type::first-letter {
+        float: none;
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        padding-top: 0;
+        padding-right: 0;
+      }
+    }
+  }
 }
 
 .page-title {
@@ -39,7 +66,20 @@
       color: var(--color-text);
       text-align: left;
       break-inside: avoid-column;
-      &:first-child { margin-top: 0; }
+
+      &:first-child { 
+        margin-top: 0;
+      }
+      &:first-of-type::first-letter {
+        float: left;
+        font-size: 4.5rem;
+        line-height: 0.7;
+        padding-top: 0.5rem;
+        padding-right: 0.75rem;
+        font-family: var(--font-serif);
+        font-weight: 400;
+        color: var(--color-text);
+      }
     }
 
     h2 {

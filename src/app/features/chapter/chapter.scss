@@ -5,31 +5,8 @@
   @include book-page-layout;
 }
 
-.page-header {
-  .page-number {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    opacity: 0.5;
-    margin-bottom: 16px;
-    font-weight: 500;
-  }
-}
-
 .page-body {
   ::ng-deep {
-    p:first-of-type::first-letter {
-      float: left;
-      font-size: 4.5rem;
-      line-height: 0.7;
-      padding-top: 0.5rem;
-      padding-right: 0.75rem;
-      font-family: var(--font-serif);
-      font-weight: 400;
-      color: var(--color-text);
-    }
-
     ul, ol {
       list-style: none;
       padding: 0;

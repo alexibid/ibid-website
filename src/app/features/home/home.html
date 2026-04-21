@@ -9,7 +9,10 @@
   
   <div class="page-body">
     <nav class="index-section">
-      <div class="page-title">Índice</div>
+      <header class="page-header">
+        <a class="page-subheader" (click)="previousUrl()">< {{ 'return' | translate }}</a>
+        <div class="page-title">Índice</div>
+      </header>
       
       <ul class="index-list">
         @for (route of bookService.routesMetadata(); track route.slug) {
@@ -23,16 +26,17 @@
       </ul>
     </nav>
 
+
     @for (section of sections(); track section.id) {
       @if (section.metadata?.location === 'preface') {
         <section class="preface-section">
           <header class="page-header">
+            <div class="page-subheader" [innerHTML]="sections()[0].content"></div>
             <div class="page-title">{{ section.title }}</div>
             @if (section.metadata?.subtitle || section.metadata?.content_subtitle) {
               <div class="subtitle">{{ section.metadata?.subtitle || section.metadata?.content_subtitle }}</div>
             }
           </header>
-          
           <div [innerHTML]="section.content"></div>
         </section>
       }

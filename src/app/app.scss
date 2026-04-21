@@ -169,6 +169,7 @@
   &--cover {
     background-color: transparent;
     box-shadow: none;
+    padding: 0;
 
     @media (min-width: 768px) {
       &::after {
