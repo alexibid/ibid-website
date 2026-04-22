@@ -20,15 +20,12 @@ export class RoutingService {
   public readonly translationMap = new Map<string, { lang: string, url: string }[]>();
 
   constructor() {
-    // Reactive effect to update BookService route order whenever the language changes
     effect(() => {
       const records = this.allUrlRecords();
       if (records.length === 0) return;
 
       const lang = this.i18n.currentLangCode();
       const langRecords = records.filter(r => r.lang === lang);
-
-      // Group and filter: we only want the primary entry for each type except Chapters
       const homeRecord = langRecords
         .filter(r => r.expand?.page_id?.type === PageType.Home)
         .sort((a, b) => a.url.length - b.url.length)[0];
@@ -59,7 +56,7 @@ export class RoutingService {
           type: r.expand?.page_id?.type as PageType
         };
       });
-      
+
       this.bookService.setRouteOrder(routes);
     });
   }

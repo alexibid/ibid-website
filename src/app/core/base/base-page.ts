@@ -1,9 +1,9 @@
 import { Component, AfterViewInit, ElementRef, inject, PLATFORM_ID, HostListener, OnDestroy, signal } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../services/book.service';
 import { PocketbaseService } from '../services/pocketbase.service';
 import { I18nService } from '../services/i18n.service';
+import { StateService } from '../services/state.service';
 import { PageType } from '../../shared/types/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -14,14 +14,14 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 export abstract class BasePage implements AfterViewInit, OnDestroy {
   protected readonly route = inject(ActivatedRoute);
   protected readonly router = inject(Router);
-  protected readonly platformId = inject(PLATFORM_ID);
   protected readonly elRef = inject(ElementRef);
   protected readonly bookService = inject(BookService);
   protected readonly pbService = inject(PocketbaseService);
   protected readonly i18n = inject(I18nService);
+  protected readonly stateService = inject(StateService);
   
   protected destroy$ = new Subject<void>();
-  public isBrowser = isPlatformBrowser(this.platformId);
+  public isBrowser = this.stateService.isBrowser;
 
   public isTransitioning = false;
   protected isScrolling = false;
@@ -35,18 +35,27 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
 
   get currentSlug(): string {
     const url = this.router.url.split('?')[0].split('#')[0];
-    return (url === '/' || url === '') ? '' : url.substring(1);
+    let slug = (url === '/' || url === '') ? '' : url.substring(1);
+    if (slug.startsWith('/')) slug = slug.substring(1);
+    return slug;
   }
 
   get nextSlug(): string | null {
     const routes = this.bookService.dynamicRouteOrder();
-    const idx = routes.indexOf(this.currentSlug);
+    const current = this.currentSlug;
+    const idx = routes.indexOf(current);
+    
+    if (idx === -1 && current === '') {
+      return routes.length > 1 ? routes[1] : null;
+    }
+    
     return (idx !== -1 && idx < routes.length - 1) ? routes[idx + 1] : null;
   }
 
   get prevSlug(): string | null {
     const routes = this.bookService.dynamicRouteOrder();
-    const idx = routes.indexOf(this.currentSlug);
+    const current = this.currentSlug;
+    const idx = routes.indexOf(current);
     return (idx > 0) ? routes[idx - 1] : null;
   }
 
@@ -63,7 +72,6 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     if (!this.isBrowser) return;
     
-    // Define o slug ativo globalmente para navegação/UI
     this.bookService.activeChapterSlug.set(this.currentSlug);
     
     this.measurePage();

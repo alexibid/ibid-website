@@ -1,5 +1,5 @@
-import { Component, inject, HostBinding, signal, effect, computed, PLATFORM_ID, HostListener } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, inject, HostBinding, signal, effect, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BookService } from '../../../../core/services/book.service';
 import { PageType } from '../../../../shared/types/page-type.enum';
 import { StateService } from '../../../../core/services/state.service';
@@ -13,39 +13,29 @@ import { StateService } from '../../../../core/services/state.service';
 })
 export class PageTurn {
   public bookService = inject(BookService);
-  private stateService = inject(StateService);
-  private platformId = inject(PLATFORM_ID);
-  public isBrowser = isPlatformBrowser(this.platformId);
-  
+  public stateService = inject(StateService);
   public flippedNext = signal(false);
   public flippedPrev = signal(false);
-  public isDesktop = signal<boolean>(true);
 
-  // Marcar o estado da página actual
   public state = computed(() => this.stateService.currentState());
 
-  // Numeração no Display (Visual)
   public leftPageNum = computed(() => {
     const s = this.state();
     if (s.type !== PageType.Chapter) return 0;
-    return this.isDesktop() ? s.leftPage : s.page;
+    return this.stateService.isDesktop() ? s.leftPage : s.page;
   });
 
   public rightPageNum = computed(() => {
     const s = this.state();
     if (s.type !== PageType.Chapter) return 0;
-    return this.isDesktop() ? s.rightPage : s.page;
+    return this.stateService.isDesktop() ? s.rightPage : s.page;
   });
 
   constructor() {
-    if (this.isBrowser) {
-      this.isDesktop.set(window.innerWidth >= 768);
-    }
-
     effect(() => {
       const isFlipping = this.bookService.isFlipping();
       const dir = this.bookService.flipDirection();
-      
+
       if (isFlipping) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
@@ -58,13 +48,6 @@ export class PageTurn {
         this.flippedPrev.set(false);
       }
     });
-  }
-
-  @HostListener('window:resize')
-  onResize() {
-    if (this.isBrowser) {
-      this.isDesktop.set(window.innerWidth >= 768);
-    }
   }
 
   @HostBinding('class.is-active') get isActive() {

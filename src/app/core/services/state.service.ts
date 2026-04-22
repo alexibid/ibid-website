@@ -16,11 +16,12 @@ export class StateService {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
-  private isBrowser = isPlatformBrowser(this.platformId);
+  public isBrowser = isPlatformBrowser(this.platformId);
 
   public isAdmin = signal<boolean>(false);
   public adminLang = signal<string | null>(null);
   public adminAction = signal<string | null>(null);
+  public isDesktop = signal<boolean>(true);
   
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
@@ -95,6 +96,14 @@ export class StateService {
 
   constructor() {
     this.initNavigationListener();
+
+    if (this.isBrowser) {
+      this.isDesktop.set(window.innerWidth >= 768);
+      window.addEventListener('resize', () => {
+        this.isDesktop.set(window.innerWidth >= 768);
+      });
+    }
+
     effect(() => {
       if (isDevMode()) {
         // console.log('[Global State Update]:', this.currentState());

@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { I18nService } from '../../../../core/services/i18n.service';
-import { CmsRouterService } from '../../../../core/services/routing.service';
+import { RoutingService } from '../../../../core/services/routing.service';
 import { CmsRouteData } from '../../../../shared/types/cms.interface';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
 
@@ -17,7 +17,7 @@ export class LangSelector {
   public i18n = inject(I18nService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private cmsRouter = inject(CmsRouterService);
+  private routingService = inject(RoutingService);
 
   public isLangMenuOpen = signal<boolean>(false);
 
@@ -41,7 +41,7 @@ export class LangSelector {
     const currentLocation = routeData?.location;
 
     if (currentLocation) {
-      const translations = this.cmsRouter.translationMap.get(currentLocation);
+      const translations = this.routingService.translationMap.get(currentLocation);
       if (translations) {
         const matchedTranslation = translations.find(t => t.lang === targetLang);
         if (matchedTranslation) {
@@ -54,7 +54,7 @@ export class LangSelector {
 
     if (targetLang === 'pt') this.router.navigate(['/']);
     else this.router.navigate(['/' + targetLang]);
-    
+
     this.isLangMenuOpen.set(false);
   }
 }

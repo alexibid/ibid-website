@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { CmsRouterService } from './core/services/routing.service';
+import { RoutingService } from './core/services/routing.service';
 import { GlobalErrorHandler } from './core/handlers/global-error.handler';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { provideQuillConfig } from 'ngx-quill';
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideHttpClient(
-       withInterceptors([errorInterceptor])
+      withInterceptors([errorInterceptor])
     ),
     provideQuillConfig({
       modules: {
@@ -27,11 +27,11 @@ export const appConfig: ApplicationConfig = {
       },
       placeholder: 'Escreva algo aqui...'
     }),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideAppInitializer(() => {
-      const cmsService = inject(CmsRouterService);
-      return cmsService.setupRoutes();
+      const routingService = inject(RoutingService);
+      return routingService.setupRoutes();
     })
   ]
 };
