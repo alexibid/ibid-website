@@ -1,7 +1,7 @@
 import { Component, OnDestroy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Cover } from '../../shared/components/cover/cover';
-import { PageType } from '../../core/models/page-type.enum';
+import { Cover } from '../../shared/components/layout/cover/cover';
+import { PageType } from '../../shared/types/page-type.enum';
 import { BasePage } from '../../core/base/base-page';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { PocketbaseService } from './pocketbase.service';
-import { PageType } from '../models/page-type.enum';
-import { CmsUrl, CmsRouteData } from '../models/cms.interface';
+import { PageType } from '../../shared/types/page-type.enum';
+import { CmsUrl, CmsRouteData } from '../../shared/types/cms.interface';
 import { UiErrorService } from './ui-error.service';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';

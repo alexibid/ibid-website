@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
-import { AdminForm } from '../admin-form';
-import { CmsPage } from '../../../core/models/cms.interface';
+import { AdminForm } from '../admin-form/admin-form';
+import { CmsPage } from '../../../shared/types/cms.interface';
 
 @Component({
   selector: 'app-admin-update',

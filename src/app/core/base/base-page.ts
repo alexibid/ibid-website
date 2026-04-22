@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../services/book.service';
 import { PocketbaseService } from '../services/pocketbase.service';
 import { I18nService } from '../services/i18n.service';
-import { PageType } from '../models/page-type.enum';
+import { PageType } from '../../shared/types/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 

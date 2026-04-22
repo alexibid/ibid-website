@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { PocketbaseService } from './pocketbase.service';
-import { CmsPage, CmsUrl } from '../models/cms.interface';
+import { CmsPage, CmsUrl } from '../../shared/types/cms.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -2,8 +2,8 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { UpperCasePipe } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
-import { CmsUrl } from '../../../core/models/cms.interface';
-import { PageType } from '../../../core/models/page-type.enum';
+import { CmsUrl } from '../../../shared/types/cms.interface';
+import { PageType } from '../../../shared/types/page-type.enum';
 
 @Component({
   selector: 'app-admin-list',

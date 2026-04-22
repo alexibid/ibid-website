@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, PLATFORM_ID, inject } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { UI_I18N } from '../data/ui-i18n';
+import { UI_I18N } from '../../shared/constants/ui-i18n';
 
 @Injectable({
   providedIn: 'root'

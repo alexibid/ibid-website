@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
-import { AdminForm } from '../admin-form';
+import { AdminForm } from '../admin-form/admin-form';
 
 @Component({
   selector: 'app-admin-create',

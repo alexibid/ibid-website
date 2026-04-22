@@ -1,6 +1,6 @@
 import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PageType } from '../models/page-type.enum';
+import { PageType } from '../../shared/types/page-type.enum';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, signal, effect } from '@angular/core';
-import { TranslatePipe } from '../../core/pipes/translate.pipe';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { BasePage } from '../../core/base/base-page';
 
 @Component({

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Cover } from '../../shared/components/cover/cover';
-import { PageType } from '../../core/models/page-type.enum';
+import { Cover } from '../../shared/components/layout/cover/cover';
+import { PageType } from '../../shared/types/page-type.enum';
 import { BasePage } from '../../core/base/base-page';
 import { NavigationService } from '../../core/services/navigation.service';
-import { TranslatePipe } from '../../core/pipes/translate.pipe';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-home',

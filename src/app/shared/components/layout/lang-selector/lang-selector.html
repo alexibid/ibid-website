@@ -1,0 +1,17 @@
+<div class="lang-selector-wrap" [class.open]="isLangMenuOpen()" (appClickOutside)="closeMenu()">
+  <button class="action-btn lang-btn" (click)="toggleLangMenu()" aria-label="Change language">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="2" y1="12" x2="22" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+    <span class="current-lang">{{ i18n.currentLangCode() | uppercase }}</span>
+  </button>
+  
+  <div class="lang-dropdown">
+    <button (click)="changeLanguage('pt')" [class.active]="i18n.currentLangCode() === 'pt'">PT</button>
+    <button (click)="changeLanguage('en')" [class.active]="i18n.currentLangCode() === 'en'">EN</button>
+    <button (click)="changeLanguage('es')" [class.active]="i18n.currentLangCode() === 'es'">ES</button>
+    <button (click)="changeLanguage('fr')" [class.active]="i18n.currentLangCode() === 'fr'">FR</button>
+  </div>
+</div>

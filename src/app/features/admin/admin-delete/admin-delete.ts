@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
-import { CmsPage } from '../../../core/models/cms.interface';
+import { CmsPage } from '../../../shared/types/cms.interface';
 
 @Component({
   selector: 'app-admin-delete',

@@ -5,7 +5,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { I18nService } from './i18n.service';
 import { CmsRouterService } from './cms-router.service';
-import { CmsRouteData } from '../models/cms.interface';
+import { CmsRouteData } from '../../shared/types/cms.interface';
 
 @Injectable({
   providedIn: 'root'

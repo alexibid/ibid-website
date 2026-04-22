@@ -2,9 +2,9 @@ import { Component, inject, input, output, OnInit, signal, computed } from '@ang
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { AdminService } from '../../core/services/admin.service';
-import { PageType } from '../../core/models/page-type.enum';
-import { CmsPage } from '../../core/models/cms.interface';
+import { AdminService } from '../../../core/services/admin.service';
+import { PageType } from '../../../shared/types/page-type.enum';
+import { CmsPage } from '../../../shared/types/cms.interface';
 import Quill from 'quill';
 
 // Extend Image format

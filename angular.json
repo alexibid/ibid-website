@@ -41,7 +41,11 @@
             "ssr": {
               "entry": "src/server.ts"
             },
-            "prerender": false
+            "prerender": false,
+            "allowedCommonJsDependencies": [
+              "quill",
+              "quill-delta"
+            ]
           },
           "configurations": {
             "production": {

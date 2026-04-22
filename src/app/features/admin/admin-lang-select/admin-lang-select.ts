@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UI_I18N } from '../../../core/data/ui-i18n';
+import { UI_I18N } from '../../../shared/constants/ui-i18n';
 import { UpperCasePipe } from '@angular/common';
 
 @Component({
