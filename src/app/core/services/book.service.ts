@@ -1,6 +1,7 @@
 import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PageType } from '../../shared/types/page-type.enum';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,8 @@ export class BookService {
   public flipDirection = signal<number>(1);
   public dynamicRouteOrder = signal<string[]>([]);
   public routesMetadata = signal<{ slug: string, title: string, type: PageType }[]>([]);
+
+  public navigationRequest = new Subject<number>();
 
   triggerFlip(direction: number) {
     this.flipDirection.set(direction);

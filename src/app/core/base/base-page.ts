@@ -67,6 +67,10 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
         this.triggerScroll();
       }
     });
+
+    this.bookService.navigationRequest.pipe(takeUntil(this.destroy$)).subscribe(dir => {
+      this.handleNavigation(dir);
+    });
   }
 
   ngAfterViewInit() {

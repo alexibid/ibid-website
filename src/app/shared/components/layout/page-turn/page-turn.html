@@ -1,11 +1,14 @@
-@if (bookService.flipDirection() === 1) {
-  <div class="leaf right-leaf" [class.do-flip]="flippedNext()">
-    <div class="face front"></div>
-    <div class="face back"></div>
-  </div>
-} @else if (bookService.flipDirection() === -1) {
-  <div class="leaf left-leaf" [class.do-flip]="flippedPrev()">
-    <div class="face front"></div>
-    <div class="face back"></div>
-  </div>
-}
+<div class="leaf left-leaf" 
+     [class.is-active]="bookService.isFlipping() && bookService.flipDirection() === -1"
+     [class.show-mobile]="!stateService.isDesktop() && !stateService.isOnCover()"
+     [class.do-flip]="flippedPrev()">
+  <div class="face front"></div>
+  <div class="face back"></div>
+</div>
+
+<div class="leaf right-leaf" 
+     [class.is-active]="bookService.isFlipping() && bookService.flipDirection() === 1"
+     [class.do-flip]="flippedNext()">
+  <div class="face front"></div>
+  <div class="face back"></div>
+</div>

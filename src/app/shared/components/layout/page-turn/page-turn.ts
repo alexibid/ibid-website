@@ -50,10 +50,6 @@ export class PageTurn {
     });
   }
 
-  @HostBinding('class.is-active') get isActive() {
-    return this.bookService.isFlipping();
-  }
-
   @HostBinding('class.page-turn--to-cover') get isToCover() {
     return this.stateService.isGoingToCover();
   }

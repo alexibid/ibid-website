@@ -10,10 +10,12 @@
   pointer-events: none;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
+  justify-content: flex-start;
+  padding-top: 8px;
 
   @media (min-width: 768px) {
     top: calc(50vh + var(--book-height-desktop) / 2);
+    padding-top: 16px;
   }
 
   .pagination-footer {
@@ -45,33 +47,92 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding-top: 10px;
+    align-items: center;
     pointer-events: none;
+    padding: 0 8px;
+
 
     @media (min-width: 768px) {
+      padding: 0 24px;
       width: var(--book-width-desktop);
     }
 
-    .nav-link {
-      height: 100%;
+    .nav-group {
       display: flex;
-      align-items: center;
-      padding: 0 24px;
-      font-family: var(--font-title);
-      font-size: 1.1rem;
-      color: var(--color-text);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
+      gap: 10px;
       pointer-events: auto;
+      flex: 1;
 
       @media (min-width: 768px) {
-        padding: 0 60px;
+        gap: 20px;
       }
 
-      &:hover {
-        opacity: 0.6;
+      &.left {
+        justify-content: flex-start;
       }
+
+      &.right {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-copyright {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 0 0 auto;
+
+      .copyright {
+        font-family: var(--font-title);
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        color: var(--color-text);
+        opacity: 0.4;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: auto;
+
+        @media (min-width: 768px) {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 1.8rem;
+    font-weight: 200;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s;
+    border-radius: 20px;
+    user-select: none;
+
+    @media (min-width: 768px) {
+      padding: 8px 12px;
+    }
+
+    &:hover:not(:disabled) {
+      opacity: 1;
+      background: rgba(0,0,0,0.05);
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+
+    &.chapter-prev, &.chapter-next {
+      font-size: 1.4rem;
     }
   }
 }

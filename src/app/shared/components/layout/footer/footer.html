@@ -12,16 +12,32 @@
   }
 
   <div class="footer-content">
-    @if (globalState.prevLink()) {
-    <a [routerLink]="globalState.prevLink()" class="nav-link prev-link">← Prev</a>
-    } @else {
-    <div></div>
-    }
+    <div class="nav-group left">
+      <button (click)="navigateChapter(globalState.prevLink(), -1)" 
+              [disabled]="!globalState.prevLink()" 
+              class="nav-btn chapter-prev" 
+              title="Previous Chapter">«</button>
+      <button (click)="navigatePage(-1)" 
+              [disabled]="!canGoPrev()"
+              class="nav-btn page-prev" 
+              title="Previous Page">‹</button>
+    </div>
 
-    @if (globalState.nextLink()) {
-    <a [routerLink]="globalState.nextLink()" class="nav-link next-link">Next →</a>
-    } @else {
-    <div></div>
-    }
+    <div class="footer-copyright">
+      <div class="copyright">
+        MMXXIV • ® IBID. 
+      </div>
+    </div>
+
+    <div class="nav-group right">
+      <button (click)="navigatePage(1)" 
+              [disabled]="!canGoNext()"
+              class="nav-btn page-next" 
+              title="Next Page">›</button>
+      <button (click)="navigateChapter(globalState.nextLink(), 1)" 
+              [disabled]="!globalState.nextLink()"
+              class="nav-btn chapter-next" 
+              title="Next Chapter">»</button>
+    </div>
   </div>
 </footer>
