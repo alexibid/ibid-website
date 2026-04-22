@@ -2,7 +2,7 @@ import { Component, inject, HostBinding, signal, effect, computed, PLATFORM_ID, 
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BookService } from '../../../../core/services/book.service';
 import { PageType } from '../../../../shared/types/page-type.enum';
-import { GlobalStateService } from '../../../../core/services/global-state.service';
+import { StateService } from '../../../../core/services/state.service';
 
 @Component({
   selector: 'app-page-turn',
@@ -13,7 +13,7 @@ import { GlobalStateService } from '../../../../core/services/global-state.servi
 })
 export class PageTurn {
   public bookService = inject(BookService);
-  private stateService = inject(GlobalStateService);
+  private stateService = inject(StateService);
   private platformId = inject(PLATFORM_ID);
   public isBrowser = isPlatformBrowser(this.platformId);
   

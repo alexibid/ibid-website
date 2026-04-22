@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { I18nService } from '../../../../core/services/i18n.service';
-import { CmsRouterService } from '../../../../core/services/cms-router.service';
+import { CmsRouterService } from '../../../../core/services/routing.service';
 import { CmsRouteData } from '../../../../shared/types/cms.interface';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
 

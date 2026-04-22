@@ -8,8 +8,6 @@ import { CmsPage, CmsUrl } from '../../shared/types/cms.interface';
 export class AdminService {
   private pbService = inject(PocketbaseService);
   private pb = this.pbService.pb;
-
-  // CRUD for Pages
   async getPages() {
     return this.pb.collection('pages').getFullList<CmsPage>({
       sort: '-created',
@@ -58,15 +56,9 @@ export class AdminService {
     return this.pb.collection('urls').delete(id);
   }
 
-  // Image Upload helper
   async uploadImage(file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    // Let's assume we have an 'assets' or 'media' collection for images
-    // For now, let's use a generic 'assets' collection or just attach to page
-    // Actually, PocketBase allows files on any collection.
-    // Let's create a dedicated 'media' collection in PocketBase schema later if needed.
-    // For simplicity, we can upload to a 'media' collection.
     return this.pb.collection('media').create(formData);
   }
 

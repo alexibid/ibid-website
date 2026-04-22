@@ -9,7 +9,7 @@ import { BookService } from './core/services/book.service';
 import { PageTurn } from './shared/components/layout/page-turn/page-turn';
 import { LangSelector } from './shared/components/layout/lang-selector/lang-selector';
 import { Settings } from './shared/components/layout/settings/settings';
-import { GlobalStateService } from './core/services/global-state.service';
+import { StateService } from './core/services/state.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +22,7 @@ export class App implements OnInit {
   protected errorService = inject(UiErrorService);
   private appMetaService = inject(MetaService);
   public bookService = inject(BookService);
-  public globalState = inject(GlobalStateService);
+  public globalState = inject(StateService);
   
   public readonly PageType = PageType;
 

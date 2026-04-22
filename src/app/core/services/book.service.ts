@@ -13,12 +13,8 @@ export class BookService {
   public activeChapterSlug = signal<string>('');
   public activePageType = signal<PageType | null>(null);
   public currentPageInChapter = signal<number>(1);
-
   public isFlipping = signal<boolean>(false);
   public flipDirection = signal<number>(1);
-
-  // Array of valid slugs in the book, in reading order
-  // Includes '' (home) and 'contactos' (exit) or whatever the CMS dictates
   public dynamicRouteOrder = signal<string[]>([]);
   public routesMetadata = signal<{ slug: string, title: string, type: PageType }[]>([]);
 
@@ -27,7 +23,7 @@ export class BookService {
     this.isFlipping.set(true);
     setTimeout(() => {
       this.isFlipping.set(false);
-    }, 900); // from Codepen transition timing
+    }, 900);
   }
 
   private platformId = inject(PLATFORM_ID);
@@ -68,9 +64,8 @@ export class BookService {
     let startingPage = 1;
     for (const route of this.dynamicRouteOrder()) {
       if (route === slug) break;
-      // Só somar se for um Chapter
       if (this.routeTypes.get(route) === PageType.Chapter) {
-        startingPage += this.chapterPageCounts.get(route) || 1; // Default to 1 if not measured yet
+        startingPage += this.chapterPageCounts.get(route) || 1;
       }
     }
     return startingPage;

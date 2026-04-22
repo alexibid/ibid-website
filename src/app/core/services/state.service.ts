@@ -10,7 +10,7 @@ import { CmsRouteData } from '../../shared/types/cms.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class GlobalStateService {
+export class StateService {
   private bookService = inject(BookService);
   private i18n = inject(I18nService);
   private router = inject(Router);
@@ -95,11 +95,9 @@ export class GlobalStateService {
 
   constructor() {
     this.initNavigationListener();
-
-    // Log do state sempre que for alterado em dev mode
     effect(() => {
       if (isDevMode()) {
-        console.log('[Global State Update]:', this.currentState());
+        // console.log('[Global State Update]:', this.currentState());
       }
     });
   }

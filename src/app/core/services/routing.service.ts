@@ -10,17 +10,13 @@ import { I18nService } from './i18n.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CmsRouterService {
+export class RoutingService {
   private readonly pbService = inject(PocketbaseService);
   private readonly router = inject(Router);
   private readonly uiErrorService = inject(UiErrorService);
   private readonly bookService = inject(BookService);
   private readonly i18n = inject(I18nService);
-
-  // Cache all URL records to allow reactive re-ordering on language change
   private allUrlRecords = signal<CmsUrl[]>([]);
-
-  // Mapa global: location -> array de traduções disponíveis para essa página
   public readonly translationMap = new Map<string, { lang: string, url: string }[]>();
 
   constructor() {
@@ -142,8 +138,6 @@ export class CmsRouterService {
 
     } catch (error: any) {
       console.error('Failed to initialize dynamic CMS routes', error);
-      
-      // Se não conseguir chegar à BD do PocketBase (ex: offline), dispara o Error Banner!
       if (error.status === 0 || error.isAbort) {
         this.uiErrorService.showError('error-network');
       } else {
