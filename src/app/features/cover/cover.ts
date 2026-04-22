@@ -7,7 +7,10 @@ import { Component, input } from '@angular/core';
   selector: 'app-cover',
   standalone: true,
   templateUrl: './cover.html',
-  styleUrl: './cover.scss'
+  styleUrl: './cover.scss',
+  host: {
+    '[class.back-cover]': 'isBack()'
+  }
 })
 export class Cover {
   /** Cover data to render from CMS. */
