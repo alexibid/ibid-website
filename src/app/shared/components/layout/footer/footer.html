@@ -1,0 +1,27 @@
+<footer class="book-footer">
+  @if (globalState.currentState().page > 0) {
+  <div class="pagination-footer">
+    <span class="page-num page-left" [style.visibility]="pageTurn().leftPageNum() > 0 ? 'visible' : 'hidden'">
+      {{ pageTurn().leftPageNum() }}
+    </span>
+    <span class="page-num page-right footer-desktop-only"
+      [style.visibility]="pageTurn().rightPageNum() > 0 ? 'visible' : 'hidden'">
+      {{ pageTurn().rightPageNum() }}
+    </span>
+  </div>
+  }
+
+  <div class="footer-content">
+    @if (globalState.prevLink()) {
+    <a [routerLink]="globalState.prevLink()" class="nav-link prev-link">← Prev</a>
+    } @else {
+    <div></div>
+    }
+
+    @if (globalState.nextLink()) {
+    <a [routerLink]="globalState.nextLink()" class="nav-link next-link">Next →</a>
+    } @else {
+    <div></div>
+    }
+  </div>
+</footer>

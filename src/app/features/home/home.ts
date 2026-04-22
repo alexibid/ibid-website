@@ -1,6 +1,6 @@
 import { Component, OnDestroy, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Cover } from '../../shared/components/layout/cover/cover';
+import { Cover } from '../cover/cover';
 import { PageType } from '../../shared/types/page-type.enum';
 import { BasePage } from '../../core/base/base-page';
 import { NavigationService } from '../../core/services/navigation.service';

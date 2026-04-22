@@ -7,14 +7,14 @@ import { MetaService } from './core/services/meta.service';
 import { PageType } from './shared/types/page-type.enum';
 import { BookService } from './core/services/book.service';
 import { PageTurn } from './shared/components/layout/page-turn/page-turn';
-import { LangSelector } from './shared/components/layout/lang-selector/lang-selector';
-import { Settings } from './shared/components/layout/settings/settings';
+import { Header } from './shared/components/layout/header/header';
+import { Footer } from './shared/components/layout/footer/footer';
 import { StateService } from './core/services/state.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, GlobalAlertComponent, PageTurn, LangSelector, Settings, UpperCasePipe, TitleCasePipe],
+  imports: [RouterOutlet, RouterLink, GlobalAlertComponent, PageTurn, Header, Footer, UpperCasePipe, TitleCasePipe],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

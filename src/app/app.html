@@ -28,26 +28,7 @@
     </main>
   </div>
 } @else {
-  <header class="book-header">
-    <div class="header-content">
-      <a routerLink="/" class="global-logo">
-        <span class="char char-i1">i</span>
-        <span class="char char-b">b</span>
-        <span class="char char-i2">i</span>
-        <span class="char char-d">d</span>
-        <span class="logo-anim-wrap">
-          <span class="char char-dot">.</span>
-          <span class="char char-e">e</span>
-          <span class="char char-m">m</span>
-        </span>
-      </a>
-
-      <div class="header-actions">
-        <app-lang-selector></app-lang-selector>
-        <app-settings></app-settings>
-      </div>
-    </div>
-  </header>
+  <app-header></app-header>
 
   <main class="book-pages" [class.book-pages--cover]="globalState.isOnCover()" #contentVolume>
     <router-outlet></router-outlet>
@@ -55,28 +36,7 @@
 
   <app-page-turn #pageTurn></app-page-turn>
 
-  <footer class="book-footer">
-    @if (bookService.activePageType() === PageType.Chapter) {
-      <div class="pagination-footer">
-        <span class="page-num page-left">{{ pageTurn.leftPageNum() }}</span>
-        <span class="page-num page-right desktop-only">{{ pageTurn.rightPageNum() }}</span>
-      </div>
-    }
-
-    <div class="footer-content">
-      @if (globalState.prevLink()) {
-      <a [routerLink]="globalState.prevLink()" class="nav-link prev-link">← Prev</a>
-      } @else {
-      <div></div>
-      }
-
-      @if (globalState.nextLink()) {
-      <a [routerLink]="globalState.nextLink()" class="nav-link next-link">Next →</a>
-      } @else {
-      <div></div>
-      }
-    </div>
-  </footer>
+  <app-footer [pageTurn]="pageTurn"></app-footer>
 
   <app-global-alert></app-global-alert>
 }

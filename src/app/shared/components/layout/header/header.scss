@@ -1,0 +1,106 @@
+@use "../../../../../styles/abstracts/mixins" as *;
+
+.book-header {
+  position: fixed;
+  top: 0;
+  bottom: calc(50vh + var(--book-height-mobile) / 2);
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  @media (min-width: 768px) {
+    bottom: calc(50vh + var(--book-height-desktop) / 2);
+  }
+
+  .header-content {
+    width: var(--book-width-mobile);
+    position: relative;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      width: var(--book-width-desktop);
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 24px;
+    pointer-events: auto;
+
+    @media (min-width: 768px) {
+      padding: 0 60px;
+    }
+  }
+
+  .global-logo {
+    position: relative;
+    font-family: var(--font-logo);
+    font-size: var(--logo-size);
+    color: var(--color-text);
+    text-decoration: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    letter-spacing: -0.02em;
+    pointer-events: auto;
+    padding: calc(var(--logo-size) / 4) 24px;
+    height: var(--header-height);
+
+    @media (min-width: 768px) {
+      justify-content: flex-start;
+      font-size: calc(var(--logo-size) * 1.2);
+      padding: calc(var(--logo-size) / 4) 60px;
+    }
+
+    .char {
+      display: inline-block;
+      transition: opacity 0.3s ease;
+    }
+
+    .logo-anim-wrap {
+      display: inline-grid;
+      grid-template-columns: auto auto;
+      align-items: baseline;
+    }
+
+    .char-dot {
+      grid-area: 1 / 1;
+      opacity: 1;
+      display: inline-block;
+    }
+
+    .char-e, .char-m {
+      opacity: 0;
+      display: none;
+    }
+
+    &:hover {
+      .char-dot { animation: dotOut 2.5s forwards; }
+      .char-e { display: inline-block; grid-area: 1 / 1; animation: typeInAndOut 2.2s forwards; animation-delay: 0.2s; }
+      .char-m { display: inline-block; grid-area: 1 / 2; animation: typeInAndOut 2.2s forwards; animation-delay: 0.3s; }
+    }
+  }
+}
+
+@keyframes dotOut {
+  0% { opacity: 1; display: inline-block; }
+  10% { opacity: 0; display: none; }
+  90% { opacity: 0; display: none; }
+  100% { opacity: 1; }
+}
+
+@keyframes typeInAndOut {
+  0% { opacity: 0; display: none; transform: translateY(8px); }
+  15% { opacity: 1; display: inline-block; transform: translateY(0); }
+  80% { opacity: 1; display: inline-block; transform: translateY(0); }
+  100% { opacity: 0; display: none; transform: translateY(-8px); }
+}
