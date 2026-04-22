@@ -50,26 +50,7 @@
   }
 }
 
-// Estilo específico para a capa centrada
-:host-context(.book-pages--cover) {
-  height: 100vh;
-  transform: scale(0.9);
 
-  @media (min-width: 768px) {
-    column-count: 1;
-    column-width: auto;
-    width: 50%;
-    transform: translateX(50%) scale(0.9);
-    text-align: center;
-    height: 100%;
-  }
-  
-  &.back-cover {
-    @media (min-width: 768px) {
-      transform: translateX(0) scale(0.9);
-    }
-  }
-}
 
 .cover-wrapper {
   font-family: var(--font-logo);

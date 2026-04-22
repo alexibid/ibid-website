@@ -5,6 +5,19 @@
   @include book-page-layout;
 }
 
+:host-context(.book-pages--cover) {
+  height: 100vh;
+  transform: scale(0.9);
+
+  @media (min-width: 768px) {
+    column-count: 1;
+    column-width: auto;
+    width: 50%;
+    transform: translateX(50%) scale(0.9);
+    text-align: center;
+    height: 100%;
+  }
+}
 
 .page-head {
   display: block;
