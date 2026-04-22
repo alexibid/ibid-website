@@ -6,6 +6,7 @@ import { CmsUrl, CmsRouteData } from '../../shared/types/cms.interface';
 import { UiErrorService } from './ui-error.service';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';
+import { FrontofficeLayout } from '../layouts/frontoffice-layout/frontoffice-layout';
 
 @Injectable({
   providedIn: 'root'
@@ -123,12 +124,18 @@ export class RoutingService {
       }
 
       const currentConfig = this.router.config;
-      const staticRoutes = currentConfig.filter(r => r.path !== '**');
+      const staticRoutes = currentConfig.filter(r => r.path !== '' && r.path !== '**');
 
       const newConfig: Route[] = [
         ...staticRoutes,
-        ...dynamicRoutes,
-        { path: '**', loadComponent: async () => (await import('../../features/not-found/not-found')).NotFound }
+        {
+          path: '',
+          component: FrontofficeLayout,
+          children: [
+            ...dynamicRoutes,
+            { path: '**', loadComponent: async () => (await import('../../features/not-found/not-found')).NotFound }
+          ]
+        }
       ];
 
       this.router.resetConfig(newConfig);

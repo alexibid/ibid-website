@@ -19,12 +19,32 @@ export class StateService {
   public isBrowser = isPlatformBrowser(this.platformId);
 
   public isAdmin = signal<boolean>(false);
+  public isAuthenticated = signal<boolean>(false);
   public adminLang = signal<string | null>(null);
   public adminAction = signal<string | null>(null);
   public isDesktop = signal<boolean>(true);
   
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
+
+  public login(password: string): boolean {
+    if (password === '123') {
+      this.isAuthenticated.set(true);
+      if (this.isBrowser) {
+        localStorage.setItem('admin_auth', 'true');
+      }
+      return true;
+    }
+    return false;
+  }
+
+  public logout() {
+    this.isAuthenticated.set(false);
+    if (this.isBrowser) {
+      localStorage.removeItem('admin_auth');
+    }
+    this.router.navigate(['/admin/login']);
+  }
 
   public isOnCover = computed(() => {
     this.bookService.pageCountsUpdated(); 
@@ -99,6 +119,7 @@ export class StateService {
 
     if (this.isBrowser) {
       this.isDesktop.set(window.innerWidth >= 768);
+      this.isAuthenticated.set(localStorage.getItem('admin_auth') === 'true');
       window.addEventListener('resize', () => {
         this.isDesktop.set(window.innerWidth >= 768);
       });

@@ -1,0 +1,83 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: #f4f7f6;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
+.admin-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 20px 0;
+
+  .breadcrumb-logo {
+    text-decoration: none;
+    color: #2c3e50;
+    font-family: var(--font-logo);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.02em;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    .char {
+      line-height: 1;
+    }
+  }
+
+  .breadcrumb-item {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+
+    &.home {
+      .home-icon {
+        font-size: 1.4rem;
+      }
+    }
+
+    &.lang {
+      color: #3498db;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &.action {
+      color: #7f8c8d;
+      font-weight: 400;
+    }
+  }
+
+  .breadcrumb-separator {
+    color: #bdc3c7;
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
+}
+
+.admin-main {
+  flex: 1;
+  padding: 40px;
+  box-sizing: border-box;
+}

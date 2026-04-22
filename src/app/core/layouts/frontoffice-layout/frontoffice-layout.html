@@ -1,0 +1,11 @@
+<app-header></app-header>
+
+<main class="book-pages" [class.book-pages--cover]="globalState.isOnCover()" #contentVolume>
+  <router-outlet></router-outlet>
+</main>
+
+<app-page-turn #pageTurn></app-page-turn>
+
+<app-footer [pageTurn]="pageTurn"></app-footer>
+
+<app-global-alert></app-global-alert>
