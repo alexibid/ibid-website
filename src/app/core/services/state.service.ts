@@ -16,14 +16,14 @@ export class StateService {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
-  public isBrowser = isPlatformBrowser(this.platformId);
 
+  public isBrowser = isPlatformBrowser(this.platformId);
   public isAdmin = signal<boolean>(false);
   public isAuthenticated = signal<boolean>(false);
   public adminLang = signal<string | null>(null);
   public adminAction = signal<string | null>(null);
   public isDesktop = signal<boolean>(true);
-  
+
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
 
@@ -50,12 +50,12 @@ export class StateService {
   }
 
   public isOnCover = computed(() => {
-    this.bookService.pageCountsUpdated(); 
+    this.bookService.pageCountsUpdated();
     const type = this.bookService.activePageType();
     const slug = this.bookService.activeChapterSlug() || '';
-    
+
     return (type === PageType.Home && this.bookService.currentPageInChapter() === 1) ||
-           (type === PageType.Exit && this.bookService.currentPageInChapter() === this.bookService.getChapterPageCount(slug));
+      (type === PageType.Exit && this.bookService.currentPageInChapter() === this.bookService.getChapterPageCount(slug));
   });
 
   public isGoingToCover = computed(() => {
@@ -65,7 +65,7 @@ export class StateService {
     const slug = this.bookService.activeChapterSlug() || '';
     const page = this.bookService.currentPageInChapter();
     const total = this.bookService.getChapterPageCount(slug);
-    
+
     const routes = this.bookService.dynamicRouteOrder();
     const idx = routes.indexOf(slug);
     const metadata = this.bookService.routesMetadata();
@@ -92,7 +92,7 @@ export class StateService {
     const slug = this.bookService.activeChapterSlug();
     const type = this.bookService.activePageType();
     const pageInChapter = this.bookService.currentPageInChapter();
-    
+
     let absoluteColumnIndex = 0;
     if (type === PageType.Chapter) {
       const start = this.bookService.getStartingPage(slug) || 1;
@@ -141,9 +141,9 @@ export class StateService {
     ).subscribe((event: any) => {
       const url = event.urlAfterRedirects.split('?')[0].split('#')[0];
       const slug = (url === '/' || url === '') ? '' : url.substring(1);
-      
+
       this.isAdmin.set(url.startsWith('/admin'));
-      
+
       const adminLangMatch = url.match(/\/admin\/([a-z]{2})(?:\/|$)/);
       if (adminLangMatch) {
         this.adminLang.set(adminLangMatch[1]);
@@ -169,7 +169,7 @@ export class StateService {
 
       const routes = this.bookService.dynamicRouteOrder();
       let index = routes.indexOf(slug);
-      
+
       if (index === -1) {
         const langRoute = this.i18n.currentLangCode() === 'pt' ? '' : this.i18n.currentLangCode();
         index = routes.indexOf(langRoute);
@@ -180,7 +180,7 @@ export class StateService {
         this.nextLink.set(null);
         return;
       }
-      
+
       this.prevLink.set(index > 0 ? '/' + routes[index - 1] : null);
       this.nextLink.set(index < routes.length - 1 ? '/' + routes[index + 1] : null);
     });

@@ -22,7 +22,7 @@ export class Home extends BasePage implements OnDestroy {
 
   constructor() {
     super();
-    
+
     effect(() => {
       const lang = this.i18n.currentLangCode();
       this.loadAllSections(PageType.Home, lang);
@@ -30,7 +30,9 @@ export class Home extends BasePage implements OnDestroy {
 
     effect(() => {
       const sections = this.sections();
-      const frontCover = sections.find(s => s.metadata?.location === 'front-cover');
+      const frontCover = sections.find(s => {
+        return s.metadata?.location === 'front-cover';
+      });
       if (frontCover) {
         this.stateService.coverData.set(frontCover);
       }

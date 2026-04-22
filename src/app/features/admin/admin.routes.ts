@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-const ADMIN_LANG_SELECT = () => import('./admin-lang-select/admin-lang-select').then(m => m.AdminLangSelect);
+const ADMIN_LANG_SELECT = async () => (await import('./admin-lang-select/admin-lang-select')).AdminLangSelect;
 const ADMIN_LIST        = () => import('./admin-list/admin-list');
 const ADMIN_CREATE      = () => import('./admin-create/admin-create');
 const ADMIN_READ        = () => import('./admin-read/admin-read');

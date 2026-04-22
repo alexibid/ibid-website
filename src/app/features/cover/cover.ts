@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 
 /**
  * Cover view for front and back covers.
@@ -10,12 +10,7 @@ import { Component, input } from '@angular/core';
   styleUrl: './cover.scss'
 })
 export class Cover {
-  /** Cover data to render from CMS. */
   public data = input.required<any>();
-
-  /** Whether this is the back cover. */
   public isBack = input<boolean>(false);
-
-  /** Whether the cover should occupy the full spread (2 columns). */
   public fullSpread = input<boolean>(false);
 }

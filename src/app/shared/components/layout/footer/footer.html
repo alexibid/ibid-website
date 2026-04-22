@@ -13,31 +13,22 @@
 
   <div class="footer-content">
     <div class="nav-group left">
-      <button (click)="navigateChapter(globalState.prevLink(), -1)" 
-              [disabled]="!globalState.prevLink()" 
-              class="nav-btn chapter-prev" 
-              title="Previous Chapter">«</button>
-      <button (click)="navigatePage(-1)" 
-              [disabled]="!canGoPrev()"
-              class="nav-btn page-prev" 
-              title="Previous Page">‹</button>
+      <button (click)="navigateChapter(globalState.prevLink(), -1)" [disabled]="!globalState.prevLink()"
+        class="nav-btn chapter-prev" title="Previous Chapter">«</button>
+      <button (click)="navigatePage(-1)" [disabled]="!canGoPrev()" class="nav-btn page-prev"
+        title="Previous Page">‹</button>
     </div>
 
     <div class="footer-copyright">
       <div class="copyright">
-        MMXXIV • ® IBID. 
+        MMXXVI • ® IBID.
       </div>
     </div>
 
     <div class="nav-group right">
-      <button (click)="navigatePage(1)" 
-              [disabled]="!canGoNext()"
-              class="nav-btn page-next" 
-              title="Next Page">›</button>
-      <button (click)="navigateChapter(globalState.nextLink(), 1)" 
-              [disabled]="!globalState.nextLink()"
-              class="nav-btn chapter-next" 
-              title="Next Chapter">»</button>
+      <button (click)="navigatePage(1)" [disabled]="!canGoNext()" class="nav-btn page-next" title="Next Page">›</button>
+      <button (click)="navigateChapter(globalState.nextLink(), 1)" [disabled]="!globalState.nextLink()"
+        class="nav-btn chapter-next" title="Next Chapter">»</button>
     </div>
   </div>
 </footer>

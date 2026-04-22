@@ -2,7 +2,7 @@
 
 <main class="book-pages" #contentVolume>
   @if (globalState.currentState().type === 'home' && globalState.coverData()) {
-    <app-cover [data]="globalState.coverData()" [fullSpread]="true" />
+  <app-cover [data]="globalState.coverData()" [fullSpread]="true" />
   }
   <router-outlet></router-outlet>
 </main>
