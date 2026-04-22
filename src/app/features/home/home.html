@@ -1,19 +1,11 @@
 @if (sections().length > 0) {
-  <header class="page-head">
-    @for (section of sections(); track section.id) {
-      @if (section.metadata?.location === 'front-cover') {
-        <app-cover [data]="section" [fullSpread]="true" />
-      }
-    }
+  <header class="page-header">
+    <a class="page-subheader" (click)="previousUrl()">< {{ 'return' | translate }}</a>
+    <div class="page-title">{{ 'index' | translate }}</div>
   </header>
   
-  <div class="page-body">
+  <article class="page-body">
     <nav class="index-section">
-      <header class="page-header">
-        <a class="page-subheader" (click)="previousUrl()">< {{ 'return' | translate }}</a>
-        <div class="page-title">Índice</div>
-      </header>
-      
       <ul class="index-list">
         @for (route of bookService.routesMetadata(); track route.slug) {
           @if (route.type === 'chapter') {
@@ -25,7 +17,6 @@
         }
       </ul>
     </nav>
-
 
     @for (section of sections(); track section.id) {
       @if (section.metadata?.location === 'preface') {
@@ -41,7 +32,11 @@
         </section>
       }
     }
-  </div>
+  </article>
+
+  @if (needsBlankPage()) {
+    <div class="page-blank"></div>
+  }
 } @else {
   <div class="loading-state">
     <p>A carregar o livro...</p>

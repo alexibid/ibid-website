@@ -32,6 +32,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   protected readonly pageData = signal<any>(null);
 
   get hostEl(): HTMLElement { return this.elRef.nativeElement; }
+  get scrollEl(): HTMLElement { return this.hostEl.closest('.book-pages') as HTMLElement || this.hostEl; }
 
   get currentSlug(): string {
     const url = this.router.url.split('?')[0].split('#')[0];
@@ -102,7 +103,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   }
 
   protected handleNavigation(direction: number) {
-    const el = this.hostEl;
+    const el = this.scrollEl;
     if (!el || this.isScrolling || this.isTransitioning) return;
     
     const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
@@ -163,7 +164,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       const el = document.getElementById(this.anchorTarget);
       if (el && typeof el.scrollTo === 'function') {
-        this.hostEl.scrollTo({ left: el.offsetLeft, behavior: 'instant' });
+        this.scrollEl.scrollTo({ left: el.offsetLeft, behavior: 'instant' });
         this.updateCurrentPage();
       }
     }, 100);
@@ -171,7 +172,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
 
   protected measurePage() {
     if (!this.isBrowser) return;
-    const el = this.hostEl;
+    const el = this.scrollEl;
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
       const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
@@ -187,7 +188,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
 
   protected updateCurrentPage() {
     if (!this.isBrowser) return;
-    const el = this.hostEl;
+    const el = this.scrollEl;
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
       const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
@@ -198,7 +199,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
 
   protected scrollToStart() {
     if (!this.isBrowser) return;
-    const el = this.hostEl;
+    const el = this.scrollEl;
     if (el && typeof el.scrollTo === 'function') {
       el.scrollTo({ left: 0, behavior: 'instant' });
     }

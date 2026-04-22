@@ -27,6 +27,9 @@ export class StateService {
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
 
+  public coverData = signal<any>(null);
+  public backCoverData = signal<any>(null);
+
   public login(password: string): boolean {
     if (password === '123') {
       this.isAuthenticated.set(true);

@@ -1,6 +1,8 @@
-<h1 class="cover-wrapper">
-  <span class="cover-branding">ibid.</span>
-  <br>
-  <span class="cover-title">{{ data().title }}</span>
-</h1>
+<div class="cover-layer" [class.back-cover]="isBack()">
+  <h1 class="cover-wrapper">
+    <span class="cover-branding">ibid.</span>
+    <br>
+    <span class="cover-title">{{ data().title }}</span>
+  </h1>
+</div>
 

@@ -1,6 +1,9 @@
 <app-header></app-header>
 
-<main class="book-pages" [class.book-pages--cover]="globalState.isOnCover()" #contentVolume>
+<main class="book-pages" #contentVolume>
+  @if (globalState.currentState().type === 'home' && globalState.coverData()) {
+    <app-cover [data]="globalState.coverData()" [fullSpread]="true" />
+  }
   <router-outlet></router-outlet>
 </main>
 
