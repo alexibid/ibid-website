@@ -36,7 +36,7 @@ export class BookService {
     const slugs = routes.map(r => r.slug);
     this.dynamicRouteOrder.set(slugs);
     this.routesMetadata.set(routes);
-    
+
     this.routeTypes.clear();
     routes.forEach(r => this.routeTypes.set(r.slug, r.type));
   }

@@ -4,6 +4,7 @@ import { UpperCasePipe } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { CmsUrl } from '../../../shared/types/cms.interface';
 import { PageType } from '../../../shared/types/page-type.enum';
+import { parseLocationToNumber } from '../../../shared/utils/location.utils';
 
 @Component({
   selector: 'app-admin-list',
@@ -28,9 +29,23 @@ export default class AdminList implements OnInit {
     this.allUrls().filter(u => u.lang === this.lang())
   );
 
-  public homeUrls = computed(() => this.filteredUrls().filter(u => u.expand?.page_id?.type === PageType.Home));
-  public chapterUrls = computed(() => this.filteredUrls().filter(u => u.expand?.page_id?.type === PageType.Chapter));
-  public exitUrls = computed(() => this.filteredUrls().filter(u => u.expand?.page_id?.type === PageType.Exit));
+  public homeUrls = computed(() => 
+    this.filteredUrls()
+      .filter(u => u.expand?.page_id?.type === PageType.Home)
+      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+  );
+
+  public chapterUrls = computed(() => 
+    this.filteredUrls()
+      .filter(u => u.expand?.page_id?.type === PageType.Chapter)
+      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+  );
+
+  public exitUrls = computed(() => 
+    this.filteredUrls()
+      .filter(u => u.expand?.page_id?.type === PageType.Exit)
+      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+  );
 
   async ngOnInit() {
     this.lang.set(this.route.snapshot.paramMap.get('lang') || '');

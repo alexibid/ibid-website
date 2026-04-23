@@ -30,6 +30,18 @@ export class AdminService {
     return this.pb.collection('pages').delete(id);
   }
 
+  async getPagesByType(type: string, lang: string) {
+    return this.pb.collection('pages').getFullList<CmsPage>({
+      filter: `type = "${type}" && lang = "${lang}"`,
+    });
+  }
+
+  async getPageByLocation(type: string, lang: string, location: string) {
+    return this.pb.collection('pages').getFirstListItem<CmsPage>(
+      `type = "${type}" && lang = "${lang}" && metadata.location = "${location}"`
+    ).catch(() => null);
+  }
+
   // CRUD for URLs
   async getUrls() {
     return this.pb.collection('urls').getFullList<CmsUrl>({

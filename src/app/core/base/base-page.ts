@@ -5,6 +5,7 @@ import { PocketbaseService } from '../services/pocketbase.service';
 import { I18nService } from '../services/i18n.service';
 import { StateService } from '../services/state.service';
 import { PageType } from '../../shared/types/page-type.enum';
+import { parseLocationToNumber } from '../../shared/utils/location.utils';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -209,10 +210,17 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
       let filter = `type = '${type}' && lang = '${lang}'`;
       const records = await this.pbService.pb.collection('pages').getFullList({
         filter: filter,
-        sort: type === PageType.Home ? 'metadata.old_id' : ''
+        sort: type === PageType.Home ? 'metadata.location' : ''
       });
 
-      if (sortFn) records.sort(sortFn);
+      // Secondary sorting in JS to handle Roman numerals and string numbers correctly
+      const effectiveSortFn = sortFn || ((a: any, b: any) => {
+        const orderA = parseLocationToNumber(a.metadata?.location);
+        const orderB = parseLocationToNumber(b.metadata?.location);
+        return orderA - orderB;
+      });
+
+      records.sort(effectiveSortFn);
       
       this.sections.set(records);
       

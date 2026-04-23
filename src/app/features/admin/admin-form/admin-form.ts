@@ -5,6 +5,7 @@ import { QuillModule } from 'ngx-quill';
 import { AdminService } from '../../../core/services/admin.service';
 import { PageType } from '../../../shared/types/page-type.enum';
 import { CmsPage } from '../../../shared/types/cms.interface';
+import { parseLocationToNumber, intToRoman } from '../../../shared/utils/location.utils';
 import Quill from 'quill';
 
 // Extend Image format
@@ -85,8 +86,17 @@ Quill.register(CustomImage, true);
         </div>
         
         <div class="form-group">
-          <label for="old_id">Old ID (Order)</label>
-          <input id="old_id" type="text" formControlName="old_id" placeholder="e.g.: 1">
+          <label for="location">Location</label>
+          <select id="location" formControlName="location">
+            @for (opt of locationOptions(); track opt) {
+              <option [value]="opt">{{ opt }}</option>
+            }
+            <option value="custom">-- Custom / Other --</option>
+          </select>
+          @if (form.get('location')?.value === 'custom') {
+            <input type="text" formControlName="customLocation" placeholder="Enter custom location" style="margin-top: 5px;">
+          }
+          <small class="form-hint">Swaps positions automatically if location is already taken.</small>
         </div>
       </div>
 
@@ -176,6 +186,7 @@ Quill.register(CustomImage, true);
     .form-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
     .editor-hint { font-size: 0.85rem; color: #666; margin-bottom: 5px; }
     label { font-weight: 600; color: #333; }
+    .form-hint { font-size: 0.75rem; color: #888; margin-top: 2px; }
     input, select { padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
     .editor-group { min-height: 400px; }
     ::ng-deep .ql-container { min-height: 300px; font-family: inherit; font-size: 1.05rem; }
@@ -240,6 +251,7 @@ export class AdminForm implements OnInit {
   public form: FormGroup;
   public isSubmitting = signal(false);
   public isEdit = computed(() => !!this.initialData());
+  public locationOptions = signal<string[]>([]);
 
   // Image Modal State
   public selectedImage = signal<HTMLImageElement | null>(null);
@@ -267,7 +279,8 @@ export class AdminForm implements OnInit {
       type: [PageType.Chapter, Validators.required],
       lang: ['pt', Validators.required],
       content: ['', Validators.required],
-      old_id: ['']
+      location: [''],
+      customLocation: ['']
     });
   }
 
@@ -279,8 +292,86 @@ export class AdminForm implements OnInit {
         type: data.type,
         lang: data.lang,
         content: data.content,
-        old_id: data.metadata?.old_id || ''
+        location: data.metadata?.location || ''
       });
+    }
+
+    this.updateLocationOptions();
+
+    // Watch for type/lang changes to update options and suggestion
+    this.form.get('type')?.valueChanges.subscribe(() => {
+      this.updateLocationOptions();
+      this.suggestNextLocation();
+    });
+    this.form.get('lang')?.valueChanges.subscribe(() => {
+      this.updateLocationOptions();
+      this.suggestNextLocation();
+    });
+  }
+
+  private async updateLocationOptions() {
+    const type = this.form.get('type')?.value;
+    const lang = this.form.get('lang')?.value;
+    
+    let options: string[] = [];
+    
+    if (type === PageType.Home) {
+      options = ['front-cover', 'index', 'preface'];
+    } else if (type === PageType.Exit) {
+      options = ['about', 'contact-form', 'back-cover'];
+    }
+
+    if (lang) {
+      try {
+        const pages = await this.adminService.getPagesByType(type, lang);
+        const existing = pages
+          .map(p => p.metadata?.location)
+          .filter((l): l is string => !!l && !options.includes(l));
+        options.push(...existing);
+        
+        // Add next Roman if it's a chapter and not there
+        if (type === PageType.Chapter) {
+          let max = 0;
+          pages.forEach(p => {
+            const n = parseLocationToNumber(p.metadata?.location);
+            if (n > max) max = n;
+          });
+          const next = intToRoman(max + 1);
+          if (!options.includes(next)) options.push(next);
+        }
+      } catch (err) {}
+    }
+
+    // Sort options
+    options.sort((a, b) => parseLocationToNumber(a) - parseLocationToNumber(b));
+    this.locationOptions.set(options);
+  }
+
+  private async suggestNextLocation() {
+    if (this.isEdit()) return;
+    
+    const type = this.form.get('type')?.value;
+    const lang = this.form.get('lang')?.value;
+
+    if (type === PageType.Chapter && lang) {
+      try {
+        const chapters = await this.adminService.getPagesByType(PageType.Chapter, lang);
+        let maxOrder = 0;
+        chapters.forEach(c => {
+          const order = parseLocationToNumber(c.metadata?.location);
+          if (order > maxOrder) maxOrder = order;
+        });
+        
+        const nextRoman = intToRoman(maxOrder + 1);
+        this.form.patchValue({ location: nextRoman }, { emitEvent: false });
+      } catch (err) {
+        console.error('Failed to suggest next location', err);
+      }
+    } else if (type === PageType.Home) {
+      // Default suggested locations for Home type
+      if (!this.form.get('location')?.value) {
+         this.form.patchValue({ location: 'front-cover' }, { emitEvent: false });
+      }
     }
   }
 
@@ -438,19 +529,42 @@ export class AdminForm implements OnInit {
     this.onSubmit();
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.valid) {
+      this.isSubmitting.set(true);
       const val = this.form.value;
-      const data = {
-        title: val.title,
-        type: val.type,
-        lang: val.lang,
-        content: val.content,
-        metadata: {
-          old_id: val.old_id
+      const newLocation = val.location === 'custom' ? val.customLocation : val.location;
+      const oldLocation = this.initialData()?.metadata?.location;
+
+      try {
+        // SWAP LOGIC
+        if (this.isEdit() && newLocation && newLocation !== oldLocation) {
+          const targetPage = await this.adminService.getPageByLocation(val.type, val.lang, newLocation);
+          
+          if (targetPage && targetPage.id !== this.initialData()?.id) {
+            // Swap: Update the other page to our current old position
+            await this.adminService.updatePage(targetPage.id, {
+              metadata: { ...targetPage.metadata, location: oldLocation || '' }
+            });
+          }
         }
-      };
-      this.save.emit(data);
+
+        const data = {
+          title: val.title,
+          type: val.type,
+          lang: val.lang,
+          content: val.content,
+          metadata: {
+            location: newLocation
+          }
+        };
+        this.save.emit(data);
+      } catch (err) {
+        console.error('Error during swap or save', err);
+        alert('An error occurred while saving.');
+      } finally {
+        this.isSubmitting.set(false);
+      }
     }
   }
 

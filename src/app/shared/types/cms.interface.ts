@@ -1,14 +1,15 @@
 import { RecordModel } from 'pocketbase';
 import { PageType } from './page-type.enum';
 
+export type PageLocation = 'front-cover' | 'index' | 'preface' | 'about' | 'contact-form' | 'back-cover' | string;
+
 export interface CmsPage extends RecordModel {
   title: string;
   content: any;
   type: PageType;
   lang: string;
   metadata?: {
-    location?: string;
-    old_id?: string;
+    location?: PageLocation;
     [key: string]: any;
   };
 }

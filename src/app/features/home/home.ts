@@ -38,6 +38,7 @@ export class Home extends BasePage implements OnDestroy {
       }
 
       if (sections.length > 0 && this.isBrowser) {
+        console.log('this.sections', this.sections());
         this.needsBlankPage.set(false);
         setTimeout(() => {
           this.scrollToStart();

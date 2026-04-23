@@ -7,12 +7,10 @@ import { GlobalAlertComponent } from '../../../shared/components/ui/global-alert
 import { StateService } from '../../services/state.service';
 import { CommonModule } from '@angular/common';
 
-import { Cover } from '../../../features/cover/cover';
-
 @Component({
   selector: 'app-frontoffice-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Header, Footer, PageTurn, GlobalAlertComponent, Cover],
+  imports: [CommonModule, RouterOutlet, Header, Footer, PageTurn, GlobalAlertComponent],
   templateUrl: './frontoffice-layout.html',
   styleUrl: './frontoffice-layout.scss',
   host: {

@@ -21,6 +21,7 @@
         <thead>
           <tr>
             <th>Title</th>
+            <th>Location</th>
             <th>Path (URL)</th>
             <th>Actions</th>
           </tr>
@@ -29,6 +30,7 @@
           @for (item of homeUrls(); track item.id) {
             <tr>
               <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
               <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
               <td class="actions">
                 <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>
@@ -49,6 +51,7 @@
         <thead>
           <tr>
             <th>Title</th>
+            <th>Location</th>
             <th>Path (URL)</th>
             <th>Actions</th>
           </tr>
@@ -57,6 +60,7 @@
           @for (item of exitUrls(); track item.id) {
             <tr>
               <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
               <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
               <td class="actions">
                 <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>
@@ -77,6 +81,7 @@
         <thead>
           <tr>
             <th>Title</th>
+            <th>Location</th>
             <th>Path (URL)</th>
             <th>Actions</th>
           </tr>
@@ -85,6 +90,7 @@
           @for (item of chapterUrls(); track item.id) {
             <tr>
               <td class="page-title">{{ item.expand?.page_id?.title }}</td>
+              <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
               <td><a [routerLink]="'/' + item.url" target="_blank">{{ item.url }}</a></td>
               <td class="actions">
                 <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>

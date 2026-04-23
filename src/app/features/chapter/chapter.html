@@ -1,12 +1,12 @@
 @if (pageData()) {
-  <header class="page-header">
-    <div class="page-number">{{ 'chapter' | translate }} {{ bookService.getChapterIndex(currentSlug) }}</div>
-    <h1 class="page-title">{{ pageData().title }}</h1>
-  </header>
-  
-  <article class="page-body" [innerHTML]="pageData().content"></article>
+<header class="page-header">
+  <div class="page-number">{{ 'chapter' | translate }} {{ pageData().metadata.location }}</div>
+  <h1 class="page-title">{{ pageData().title }}</h1>
+</header>
 
-  @if (needsBlankPage()) {
-    <div class="page-blank"></div>
-  }
+<article class="page-body" [innerHTML]="pageData().content"></article>
+
+@if (needsBlankPage()) {
+<div class="page-blank"></div>
+}
 }

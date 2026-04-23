@@ -1,6 +1,7 @@
 @if (sections().length > 0) {
 <div class="page-body">
   @for (section of sections(); track section.id) {
+
   @if (section.metadata?.location === 'index') {
   <nav class="index-section">
     <header class="page-header">
@@ -14,7 +15,7 @@
       <a [routerLink]="['/' + route.slug]">
         <li>
           <span>{{ route.title }}</span>
-          <span class="page-num">{{ ('000' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
+          <span class="page-num">{{ ('' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
         </li>
       </a>
       }

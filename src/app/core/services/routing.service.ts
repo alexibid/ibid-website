@@ -7,6 +7,7 @@ import { UiErrorService } from './ui-error.service';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';
 import { FrontofficeLayout } from '../layouts/frontoffice-layout/frontoffice-layout';
+import { parseLocationToNumber } from '../../shared/utils/location.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,8 @@ export class RoutingService {
       const chapterRecords = langRecords
         .filter(r => r.expand?.page_id?.type === PageType.Chapter)
         .sort((a, b) => {
-          const orderA = Number(a.expand?.page_id?.metadata?.old_id) || 0;
-          const orderB = Number(b.expand?.page_id?.metadata?.old_id) || 0;
+          const orderA = parseLocationToNumber(a.expand?.page_id?.metadata?.location);
+          const orderB = parseLocationToNumber(b.expand?.page_id?.metadata?.location);
           return orderA - orderB;
         });
 
