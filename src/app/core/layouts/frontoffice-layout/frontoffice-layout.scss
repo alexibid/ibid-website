@@ -18,42 +18,6 @@
   overflow: hidden;
   background: var(--desk-bg);
   background-image: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.2) 100%);
-  position: relative;
-
-  @media (min-width: 768px) {
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: var(--book-height-desktop);
-      width: 50px;
-      /* Deep soft gradient simulating a curved spine fold */
-      background: linear-gradient(to right,
-          rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.02) 30%,
-          rgba(0, 0, 0, 0.06) 48%,
-          rgba(0, 0, 0, 0.12) 50%,
-          rgba(0, 0, 0, 0.06) 52%,
-          rgba(0, 0, 0, 0.02) 70%,
-          rgba(0, 0, 0, 0) 100%);
-      z-index: 10;
-      pointer-events: none;
-    }
-  }
-
-  &.is-cover {
-    &::after {
-      display: none;
-    }
-
-    .book-pages {
-      background-color: transparent;
-      box-shadow: none;
-      padding: 0;
-    }
-  }
 }
 
 .book-pages {
@@ -61,9 +25,7 @@
   height: auto;
   aspect-ratio: var(--book-ratio-mobile);
   border-radius: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: block;
   position: relative;
   background-color: var(--color-bg);
   box-shadow:
@@ -74,15 +36,6 @@
   scroll-snap-type: none;
   scroll-behavior: auto;
   padding: 2px 0;
-
-  // Flex children sizing
-  app-cover {
-    flex: 0 0 100%;
-  }
-
-  >*:not(app-cover):not(router-outlet) {
-    flex: 0 0 100%;
-  }
 
   /* Mobile Spine */
   &::before {
@@ -112,6 +65,39 @@
     padding: 10px;
     box-sizing: border-box;
     overflow: hidden;
+    /* NO SCROLL HERE ON DESKTOP */
 
+    // The Book Spine Separator
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(50% - 25px);
+      width: 50px;
+      /* Deep soft gradient simulating a curved spine fold */
+      background: linear-gradient(to right,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.02) 30%,
+          rgba(0, 0, 0, 0.06) 48%,
+          rgba(0, 0, 0, 0.12) 50%,
+          rgba(0, 0, 0, 0.06) 52%,
+          rgba(0, 0, 0, 0.02) 70%,
+          rgba(0, 0, 0, 0) 100%);
+      z-index: 10;
+      pointer-events: none;
+    }
+  }
+
+  &--cover {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+
+    @media (min-width: 768px) {
+      &::after {
+        display: none;
+      }
+    }
   }
 }
