@@ -131,7 +131,7 @@ export class StateService {
     effect(() => {
       if (isDevMode()) {
         // console.log('[Global State Update]:', this.currentState());
-      }
+      }2
     });
   }
 
