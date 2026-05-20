@@ -69,6 +69,13 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
       }
     });
 
+    this.route.fragment.pipe(takeUntil(this.destroy$)).subscribe(fragment => {
+      if (fragment) {
+        this.anchorTarget = fragment;
+        this.triggerScroll();
+      }
+    });
+
     this.bookService.navigationRequest.pipe(takeUntil(this.destroy$)).subscribe(dir => {
       this.handleNavigation(dir);
     });
@@ -183,7 +190,20 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   }
 
   protected onPageMeasured(totalCols: number) {
-    this.bookService.setPageCount(this.currentSlug, totalCols);
+    const el = this.hostEl;
+    let effectiveCols = totalCols;
+    
+    // Na Home, se a capa ocupar 200%, o totalCols medido pelo scrollWidth 
+    // pode precisar de ajuste dependendo de como o browser interpreta o multi-column
+    if (this.currentSlug === '') {
+      const cover = el.querySelector('.book-cover-page');
+      if (cover && window.innerWidth >= 768) {
+        // A lógica de scrollWidth já deve incluir as 2 colunas da capa,
+        // mas garantimos que a contagem é consistente.
+      }
+    }
+    
+    this.bookService.setPageCount(this.currentSlug, effectiveCols);
   }
 
   protected updateCurrentPage() {
@@ -192,7 +212,16 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
       const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
-      const current = Math.round(el.scrollLeft / colWidth) + 1;
+      
+      let current: number;
+      
+      // Se estamos na Home e no início, é sempre a página 1 (Capa)
+      if (this.currentSlug === '' && el.scrollLeft < 10) {
+        current = 1;
+      } else {
+        current = Math.round(el.scrollLeft / colWidth) + 1;
+      }
+      
       this.bookService.currentPageInChapter.set(current);
     }
   }

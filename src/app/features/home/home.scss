@@ -13,6 +13,37 @@
 }
 
 .page-body {
+  .book-cover-page {
+    display: block;
+    height: 100%;
+    width: 100%;
+    scroll-snap-align: start;
+
+    @media (min-width: 768px) {
+      // Ocupa o espaço de duas colunas (o spread total)
+      width: 200%; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .page-break-spacer {
+    display: block;
+    break-after: column;
+    height: 100%;
+    
+    @media (min-width: 768px) {
+      // No desktop, isto garante que o browser "gasta" 
+      // o espaço da segunda coluna coberto pela capa.
+      width: 1px;
+    }
+  }
+
+  .index-section {
+    // Garante que o índice começa num novo spread (página da direita do 2º spread)
+    break-before: column;
+  }
 
   // Overrides or specific Home styles
   ::ng-deep {

@@ -1,9 +1,14 @@
 @if (sections().length > 0) {
 <div class="page-body">
+  @if (stateService.coverData()) {
+  <app-cover id="cover" class="book-cover-page" [data]="stateService.coverData()"></app-cover>
+  <div class="page-break-spacer"></div>
+  }
+
   @for (section of sections(); track section.id) {
 
   @if (section.metadata?.location === 'index') {
-  <nav class="index-section">
+  <nav id="menu" class="index-section">
     <header class="page-header">
       <a class="page-subheader" (click)="previousUrl()">
         < {{ 'return' | translate }}</a>

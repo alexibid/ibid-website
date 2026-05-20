@@ -4,11 +4,12 @@ import { PageType } from '../../shared/types/page-type.enum';
 import { BasePage } from '../../core/base/base-page';
 import { NavigationService } from '../../core/services/navigation.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { Cover } from '../cover/cover';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, Cover],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -17,7 +18,7 @@ export class Home extends BasePage implements OnDestroy {
   protected readonly needsBlankPage = signal<boolean>(false);
 
   public previousUrl() {
-    this.navService.back();
+    this.handleNavigation(-1);
   }
 
   constructor() {
@@ -41,7 +42,11 @@ export class Home extends BasePage implements OnDestroy {
         console.log('this.sections', this.sections());
         this.needsBlankPage.set(false);
         setTimeout(() => {
-          this.scrollToStart();
+          if (!this.anchorTarget) {
+            this.scrollToStart();
+          } else {
+            this.triggerScroll();
+          }
           this.measurePage();
         }, 100);
       }

@@ -86,6 +86,7 @@
           rgba(0, 0, 0, 0) 100%);
       z-index: 10;
       pointer-events: none;
+      transition: opacity 0.3s ease;
     }
   }
 
@@ -98,6 +99,21 @@
       &::after {
         display: none;
       }
+    }
+  }
+}
+
+:host.is-cover {
+  .book-pages {
+    background-color: transparent;
+    box-shadow: none;
+
+    &::after {
+      opacity: 0;
+    }
+    
+    &::before {
+      opacity: 0;
     }
   }
 }

@@ -53,9 +53,15 @@ export class StateService {
     this.bookService.pageCountsUpdated();
     const type = this.bookService.activePageType();
     const slug = this.bookService.activeChapterSlug() || '';
+    const page = this.bookService.currentPageInChapter();
 
-    return (type === PageType.Home && this.bookService.currentPageInChapter() === 1) ||
-      (type === PageType.Exit && this.bookService.currentPageInChapter() === this.bookService.getChapterPageCount(slug));
+    // Na Home, a página 1 é a Capa que ocupa o spread total (livro fechado)
+    if (type === PageType.Home && page === 1) return true;
+    
+    // No Exit, a última página é a contracapa
+    if (type === PageType.Exit && page === this.bookService.getChapterPageCount(slug)) return true;
+
+    return false;
   });
 
   public isGoingToCover = computed(() => {
