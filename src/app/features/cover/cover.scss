@@ -16,8 +16,6 @@
   padding: 40px 40px 40px 80px;
 
   @media (min-width: 768px) {
-    // Como o pai (.book-cover-page) tem 200%, 
-    // 50% aqui equivale a exatamente 1 coluna (1 página).
     width: 50%;
   }
 

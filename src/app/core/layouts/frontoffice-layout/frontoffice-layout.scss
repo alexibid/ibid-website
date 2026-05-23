@@ -10,6 +10,11 @@
   --book-ratio-desktop: 2 / 1.53;
   --book-height-desktop: calc(var(--book-width-desktop) * 1.53 / 2);
 
+  --book-padding-h-mobile: 20px;
+  --book-padding-w-mobile: 30px;
+  --book-padding-w-desktop: 70px;
+  --book-padding-h-desktop: 50px;
+
   display: flex;
   align-items: center;
   justify-content: center;

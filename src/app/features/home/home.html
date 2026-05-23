@@ -25,6 +25,16 @@
       </a>
       }
       }
+      @for (route of bookService.routesMetadata(); track route.slug) {
+        @if (route.type === 'exit') {
+        <a [routerLink]="['/' + route.slug]">
+          <li>
+            <span>{{ route.title }}</span>
+            <span class="page-num">{{ ('' + bookService.getStartingPage(route.slug)).slice(-3) }}</span>
+          </li>
+        </a>
+        }
+      }
     </ul>
   </nav>
   }

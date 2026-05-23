@@ -20,8 +20,7 @@
     scroll-snap-align: start;
 
     @media (min-width: 768px) {
-      // Ocupa o espaço de duas colunas (o spread total)
-      width: 200%; 
+      width: calc(200% + (var(--book-padding-w-desktop) * 2)); 
       display: flex;
       justify-content: center;
       align-items: center;
@@ -34,14 +33,11 @@
     height: 100%;
     
     @media (min-width: 768px) {
-      // No desktop, isto garante que o browser "gasta" 
-      // o espaço da segunda coluna coberto pela capa.
       width: 1px;
     }
   }
 
   .index-section {
-    // Garante que o índice começa num novo spread (página da direita do 2º spread)
     break-before: column;
   }
 
