@@ -171,7 +171,10 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       const el = document.getElementById(this.anchorTarget);
       if (el && typeof el.scrollTo === 'function') {
-        this.hostEl.scrollTo({ left: el.offsetLeft, behavior: 'instant' });
+        const viewportWidth = this.hostEl.clientWidth;
+        const targetScroll = Math.floor(el.offsetLeft / viewportWidth) * viewportWidth;
+        
+        this.hostEl.scrollTo({ left: targetScroll, behavior: 'instant' });
         this.updateCurrentPage();
       }
     }, 100);
@@ -192,14 +195,9 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
   protected onPageMeasured(totalCols: number) {
     const el = this.hostEl;
     let effectiveCols = totalCols;
-    
-    // Na Home, se a capa ocupar 200%, o totalCols medido pelo scrollWidth 
-    // pode precisar de ajuste dependendo de como o browser interpreta o multi-column
     if (this.currentSlug === '') {
       const cover = el.querySelector('.book-cover-page');
       if (cover && window.innerWidth >= 768) {
-        // A lógica de scrollWidth já deve incluir as 2 colunas da capa,
-        // mas garantimos que a contagem é consistente.
       }
     }
     
@@ -215,7 +213,6 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
       
       let current: number;
       
-      // Se estamos na Home e no início, é sempre a página 1 (Capa)
       if (this.currentSlug === '' && el.scrollLeft < 10) {
         current = 1;
       } else {
