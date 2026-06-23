@@ -23,6 +23,10 @@
     1px 1px 1px rgba(255, 255, 255, 0.1);
 }
 
+.cover-content {
+  justify-content: center;
+}
+
 .cover-branding {
   font-size: 15cqh;
 }
@@ -92,20 +96,4 @@
     }
   }
 
-  .no-caps.cover-content {
-    &::ng-deep :first-of-type::first-letter {
-      font-family: var(--font-sans);
-      float: unset;
-      font-size: inherit;
-      line-height: inherit;
-      padding-top: 0;
-      padding-right: 0;
-      font-family: var(--font-serif);
-      font-weight: 400;
-      color: #2a140d;
-      text-shadow:
-        -1px -1px 1px rgba(0, 0, 0, 0.8),
-        1px 1px 1px rgba(255, 255, 255, 0.1);
-    }
-  }
 }

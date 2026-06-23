@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Cover } from '../cover/cover';
 import { PageType } from '../../shared/types/page-type.enum';
 import { BasePage } from '../../core/base/base-page';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-exit',
   standalone: true,
-  imports: [CommonModule, Cover],
+  imports: [CommonModule, Cover, TranslatePipe],
   templateUrl: './exit.html',
   styleUrl: './exit.scss',
 })

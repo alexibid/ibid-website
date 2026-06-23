@@ -1,4 +1,4 @@
-import { Component, input, effect } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 /**
  * Cover view for front and back covers.

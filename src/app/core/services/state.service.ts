@@ -58,8 +58,11 @@ export class StateService {
     // Na Home, a página 1 é a Capa que ocupa o spread total (livro fechado)
     if (type === PageType.Home && page === 1) return true;
     
-    // No Exit, a última página é a contracapa
-    if (type === PageType.Exit && page === this.bookService.getChapterPageCount(slug)) return true;
+    // No Exit, a última página é a contracapa (que ocupa 2 colunas em desktop)
+    if (type === PageType.Exit) {
+      const total = this.bookService.getChapterPageCount(slug);
+      return this.isDesktop() ? (page >= total - 1) : (page === total);
+    }
 
     return false;
   });
