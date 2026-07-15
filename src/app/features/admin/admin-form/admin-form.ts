@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { QuillModule } from 'ngx-quill';
 import { AdminService } from '../../../core/services/admin.service';
 import { PageType } from '../../../shared/types/page-type.enum';
-import { CmsPage } from '../../../shared/types/cms.interface';
+import { CmsPage, CmsPagePayload } from '../../../shared/types/cms.interface';
 import { locationToInt, intToRoman } from '../../../shared/utils/location.utils';
 import Quill from 'quill';
 
@@ -243,7 +243,7 @@ export class AdminForm implements OnInit {
   private adminService = inject(AdminService);
 
   initialData = input<CmsPage | null>(null);
-  save = output<any>();
+  save = output<CmsPagePayload>();
   cancel = output<void>();
 
   public PageType = PageType;
@@ -254,7 +254,7 @@ export class AdminForm implements OnInit {
 
   public selectedImage = signal<HTMLImageElement | null>(null);
   public imageProps = { alt: '', class: '', width: '', align: '' };
-  private activeQuill: any;
+  private activeQuill: Quill | null = null;
 
   quillModules = {
     toolbar: [
@@ -369,10 +369,12 @@ export class AdminForm implements OnInit {
     }
   }
 
-  onEditorCreated(quill: any) {
+  onEditorCreated(quill: Quill) {
     this.activeQuill = quill;
-    const toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', () => this.imageHandler(quill));
+    const toolbar = quill.getModule('toolbar') as Record<string, any>;
+    if (toolbar && typeof toolbar['addHandler'] === 'function') {
+      toolbar['addHandler']('image', () => this.imageHandler(quill));
+    }
 
     quill.root.addEventListener('click', (ev: MouseEvent) => {
       const target = ev.target as HTMLElement;
@@ -454,8 +456,9 @@ export class AdminForm implements OnInit {
     }
   }
 
-  public async onReplaceFile(event: any) {
-    const file = event.target.files?.[0];
+  public async onReplaceFile(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     const img = this.selectedImage();
     if (file && img) {
       try {
@@ -464,7 +467,9 @@ export class AdminForm implements OnInit {
         const url = this.adminService.getFileUrl(record, fileName);
         
         img.setAttribute('src', url);
-        this.activeQuill.update();
+        if (this.activeQuill) {
+          this.activeQuill.update();
+        }
       } catch (error) {
         console.error('Failed to replace image', error);
         alert('Error uploading new file.');
@@ -477,12 +482,14 @@ export class AdminForm implements OnInit {
     if (img && confirm('Do you want to delete this image?')) {
       const blot = Quill.find(img);
       if (blot) (blot as any).remove();
-      this.activeQuill.update();
+      if (this.activeQuill) {
+        this.activeQuill.update();
+      }
       this.closeImageModal();
     }
   }
 
-  async imageHandler(quill: any) {
+  async imageHandler(quill: Quill) {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');

@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { AdminForm } from '../admin-form/admin-form';
+import { CmsPagePayload } from '../../../shared/types/cms.interface';
 
 @Component({
   selector: 'app-admin-create',
@@ -21,7 +22,7 @@ export default class AdminCreate {
   private adminService = inject(AdminService);
   private router = inject(Router);
 
-  async onSave(data: any) {
+  async onSave(data: CmsPagePayload) {
     try {
       const page = await this.adminService.createPage(data);
       

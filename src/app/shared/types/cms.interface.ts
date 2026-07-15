@@ -35,3 +35,13 @@ export interface CmsRouteData {
   scrollTo?: string;
   location?: string;
 }
+
+export interface CmsPagePayload {
+  title: string;
+  type: PageType;
+  lang: string;
+  content: string;
+  metadata: {
+    location: string;
+  };
+}
