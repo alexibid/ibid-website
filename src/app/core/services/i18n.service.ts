@@ -12,7 +12,7 @@ export class I18nService {
   currentLangCode = signal<string>('pt');
   ui = computed(() => UI_I18N[this.currentLangCode()] || UI_I18N['en']);
   getTranslation(section: string) {
-    return computed(() => this.ui()[section]);
+    return computed(() => (this.ui() as Record<string, any>)[section]);
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class I18nService {
   setLanguage(lang: string) {
     this.currentLangCode.set(lang);
     if (this.isBrowser) {
-      const maxAge = 365 * 24 * 60 * 60; // 1 year
+      const maxAge = 365 * 24 * 60 * 60;
       this.document.cookie = `ibid-lang=${lang}; path=/; max-age=${maxAge}; samesite=lax`;
     }
   }

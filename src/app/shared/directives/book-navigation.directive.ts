@@ -1,38 +1,34 @@
-import { Component, AfterViewInit, ElementRef, inject, PLATFORM_ID, HostListener, OnDestroy, signal } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnDestroy, OnInit, AfterViewInit, inject, output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BookService } from '../services/book.service';
-import { PocketbaseService } from '../services/pocketbase.service';
-import { I18nService } from '../services/i18n.service';
-import { StateService } from '../services/state.service';
-import { PageType } from '../../shared/types/page-type.enum';
-import { parseLocationToNumber } from '../../shared/utils/location.utils';
+import { BookService } from '../../core/services/book.service';
+import { StateService } from '../../core/services/state.service';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
-@Component({
-  template: ''
+@Directive({
+  selector: '[appBookNavigation]',
+  standalone: true
 })
-export abstract class BasePage implements AfterViewInit, OnDestroy {
-  protected readonly route = inject(ActivatedRoute);
-  protected readonly router = inject(Router);
-  protected readonly elRef = inject(ElementRef);
-  protected readonly bookService = inject(BookService);
-  protected readonly pbService = inject(PocketbaseService);
-  protected readonly i18n = inject(I18nService);
-  protected readonly stateService = inject(StateService);
-  
-  protected destroy$ = new Subject<void>();
-  public isBrowser = this.stateService.isBrowser;
+export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy {
+  private readonly elRef = inject(ElementRef);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly bookService = inject(BookService);
+  private readonly stateService = inject(StateService);
 
-  public isTransitioning = false;
-  protected isScrolling = false;
-  protected lastTouchY = 0;
-  protected anchorTarget = '';
+  public readonly pageMeasured = output<number>();
 
-  protected readonly sections = signal<any[]>([]);
-  protected readonly pageData = signal<any>(null);
+  private readonly destroy$ = new Subject<void>();
+  private readonly isBrowser = this.stateService.isBrowser;
 
-  get hostEl(): HTMLElement { return this.elRef.nativeElement; }
+  private isTransitioning = false;
+  private isScrolling = false;
+  private lastTouchY = 0;
+  private anchorTarget = '';
+
+  get hostEl(): HTMLElement {
+    return this.elRef.nativeElement;
+  }
 
   get currentSlug(): string {
     const url = this.router.url.split('?')[0].split('#')[0];
@@ -60,9 +56,8 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     return (idx > 0) ? routes[idx - 1] : null;
   }
 
-  constructor() {
+  ngOnInit() {
     this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
-      this.pageData.set(data);
       if (data && data['location']) {
         this.anchorTarget = data['location'];
         this.triggerScroll();
@@ -109,7 +104,32 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     }
   }
 
-  protected handleNavigation(direction: number) {
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent) {
+    if (this.isBrowser && Math.abs(event.deltaY) > 30 && !this.isScrolling && !this.isTransitioning) {
+      this.handleNavigation(event.deltaY > 0 ? 1 : -1);
+    }
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    if (this.isBrowser) {
+      this.lastTouchY = event.touches[0].clientY;
+    }
+  }
+
+  @HostListener('touchmove', ['$event'])
+  onTouchMove(event: TouchEvent) {
+    if (this.isBrowser && !this.isScrolling && !this.isTransitioning) {
+      const deltaY = this.lastTouchY - event.touches[0].clientY;
+      if (Math.abs(deltaY) > 30) {
+        this.handleNavigation(deltaY > 0 ? 1 : -1);
+        this.lastTouchY = event.touches[0].clientY;
+      }
+    }
+  }
+
+  public handleNavigation(direction: number) {
     const el = this.hostEl;
     if (!el || this.isScrolling || this.isTransitioning) return;
     
@@ -141,32 +161,7 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     }
   }
 
-  @HostListener('wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (this.isBrowser && Math.abs(event.deltaY) > 30 && !this.isScrolling && !this.isTransitioning) {
-      this.handleNavigation(event.deltaY > 0 ? 1 : -1);
-    }
-  }
-
-  @HostListener('touchstart', ['$event'])
-  onTouchStart(event: TouchEvent) {
-    if (this.isBrowser) {
-      this.lastTouchY = event.touches[0].clientY;
-    }
-  }
-
-  @HostListener('touchmove', ['$event'])
-  onTouchMove(event: TouchEvent) {
-    if (this.isBrowser && !this.isScrolling && !this.isTransitioning) {
-      const deltaY = this.lastTouchY - event.touches[0].clientY;
-      if (Math.abs(deltaY) > 30) {
-        this.handleNavigation(deltaY > 0 ? 1 : -1);
-        this.lastTouchY = event.touches[0].clientY;
-      }
-    }
-  }
-
-  protected triggerScroll() {
+  public triggerScroll() {
     if (!this.isBrowser || !this.anchorTarget) return;
     setTimeout(() => {
       const el = document.getElementById(this.anchorTarget);
@@ -180,31 +175,19 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
     }, 100);
   }
 
-  protected measurePage() {
+  public measurePage() {
     if (!this.isBrowser) return;
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
       const isDesktop = window.innerWidth >= 768;
       const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
       const totalCols = Math.round(el.scrollWidth / colWidth);
-      this.onPageMeasured(totalCols);
+      this.pageMeasured.emit(totalCols);
       this.updateCurrentPage();
     }
   }
 
-  protected onPageMeasured(totalCols: number) {
-    const el = this.hostEl;
-    let effectiveCols = totalCols;
-    if (this.currentSlug === '') {
-      const cover = el.querySelector('.book-cover-page');
-      if (cover && window.innerWidth >= 768) {
-      }
-    }
-    
-    this.bookService.setPageCount(this.currentSlug, effectiveCols);
-  }
-
-  protected updateCurrentPage() {
+  public updateCurrentPage() {
     if (!this.isBrowser) return;
     const el = this.hostEl;
     if (el && el.clientWidth > 0) {
@@ -219,45 +202,15 @@ export abstract class BasePage implements AfterViewInit, OnDestroy {
         current = Math.round(el.scrollLeft / colWidth) + 1;
       }
       
-      this.bookService.currentPageInChapter.set(current);
+      this.bookService.currentChapterPage.set(current);
     }
   }
 
-  protected scrollToStart() {
+  public scrollToStart() {
     if (!this.isBrowser) return;
     const el = this.hostEl;
     if (el && typeof el.scrollTo === 'function') {
       el.scrollTo({ left: 0, behavior: 'instant' });
-    }
-  }
-
-  protected async loadAllSections(type: PageType, lang: string, sortFn?: (a: any, b: any) => number) {
-    try {
-      let filter = `type = '${type}' && lang = '${lang}'`;
-      const records = await this.pbService.pb.collection('pages').getFullList({
-        filter: filter,
-        sort: type === PageType.Home ? 'metadata.location' : ''
-      });
-
-      // Secondary sorting in JS to handle Roman numerals and string numbers correctly
-      const effectiveSortFn = sortFn || ((a: any, b: any) => {
-        const orderA = parseLocationToNumber(a.metadata?.location);
-        const orderB = parseLocationToNumber(b.metadata?.location);
-        return orderA - orderB;
-      });
-
-      records.sort(effectiveSortFn);
-      
-      this.sections.set(records);
-      
-      if (this.isBrowser) {
-        setTimeout(() => {
-          this.measurePage();
-          this.triggerScroll();
-        }, 100);
-      }
-    } catch (e) {
-      console.error(`Failed to load sections for ${type}`, e);
     }
   }
 }

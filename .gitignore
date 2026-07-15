@@ -45,5 +45,10 @@ Thumbs.db
 
 # PocketBase (CMS Backend)
 /pocketbase/pb_data/
+/pocketbase/backups/
 /pocketbase/pocketbase
+
+# Environments & Credentials
+/src/environments/environment.ts
+
 

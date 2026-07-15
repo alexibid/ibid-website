@@ -16,8 +16,7 @@ export class GlobalAlertComponent {
     const errType = this.uiService.currentError();
     if (!errType) return null;
     
-    // O service já devolve a folha de traduções inteira para o idioma detetado via Signal.
-    const uiTranslations = this.i18nService.ui();
+    const uiTranslations = this.i18nService.ui() as Record<string, any>;
     return uiTranslations[errType] ?? uiTranslations['error-generic'];
   });
 

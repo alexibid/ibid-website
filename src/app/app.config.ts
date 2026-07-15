@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
           ['link', 'image']
         ]
       },
-      placeholder: 'Escreva algo aqui...'
+      placeholder: 'Write something here...'
     }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),

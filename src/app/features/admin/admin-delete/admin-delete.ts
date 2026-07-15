@@ -55,11 +55,6 @@ export default class AdminDelete implements OnInit {
     const id = this.page()?.id;
     if (id) {
       try {
-        // PocketBase deletes related records if configured with Cascade (usually requires manual or specific rule)
-        // For simplicity, we delete the page.
-        // If URLs are linked via 'page_id', they should be handled too.
-        
-        // Let's find URLs for this page first
         const urls = await this.adminService.getUrls();
         const relatedUrls = urls.filter(u => u.page_id === id);
         

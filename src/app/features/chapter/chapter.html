@@ -1,10 +1,10 @@
-@if (pageData()) {
+@if (pageData(); as data) {
 <header class="page-header">
-  <div class="page-number">{{ 'chapter' | translate }} {{ pageData().metadata.location }}</div>
-  <h1 class="page-title">{{ pageData().title }}</h1>
+  <div class="page-number">{{ 'chapter' | translate }} {{ data.metadata?.location }}</div>
+  <h1 class="page-title">{{ data.title }}</h1>
 </header>
 
-<article class="page-body" [innerHTML]="pageData().content"></article>
+<article class="page-body" [innerHTML]="data.content"></article>
 
 @if (needsBlankPage()) {
 <div class="page-blank"></div>

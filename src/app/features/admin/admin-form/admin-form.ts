@@ -4,11 +4,10 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { QuillModule } from 'ngx-quill';
 import { AdminService } from '../../../core/services/admin.service';
 import { PageType } from '../../../shared/types/page-type.enum';
-import { CmsPage } from '../../../shared/types/cms.interface';
-import { parseLocationToNumber, intToRoman } from '../../../shared/utils/location.utils';
+import { CmsPage, CmsPagePayload } from '../../../shared/types/cms.interface';
+import { locationToInt, intToRoman } from '../../../shared/utils/location.utils';
 import Quill from 'quill';
 
-// Extend Image format
 const ImageFormat = Quill.import('formats/image') as any;
 class CustomImage extends ImageFormat {
   static create(value: any) {
@@ -244,7 +243,7 @@ export class AdminForm implements OnInit {
   private adminService = inject(AdminService);
 
   initialData = input<CmsPage | null>(null);
-  save = output<any>();
+  save = output<CmsPagePayload>();
   cancel = output<void>();
 
   public PageType = PageType;
@@ -253,10 +252,9 @@ export class AdminForm implements OnInit {
   public isEdit = computed(() => !!this.initialData());
   public locationOptions = signal<string[]>([]);
 
-  // Image Modal State
   public selectedImage = signal<HTMLImageElement | null>(null);
   public imageProps = { alt: '', class: '', width: '', align: '' };
-  private activeQuill: any;
+  private activeQuill: Quill | null = null;
 
   quillModules = {
     toolbar: [
@@ -298,7 +296,6 @@ export class AdminForm implements OnInit {
 
     this.updateLocationOptions();
 
-    // Watch for type/lang changes to update options and suggestion
     this.form.get('type')?.valueChanges.subscribe(() => {
       this.updateLocationOptions();
       this.suggestNextLocation();
@@ -329,11 +326,10 @@ export class AdminForm implements OnInit {
           .filter((l): l is string => !!l && !options.includes(l));
         options.push(...existing);
         
-        // Add next Roman if it's a chapter and not there
         if (type === PageType.Chapter) {
           let max = 0;
           pages.forEach(p => {
-            const n = parseLocationToNumber(p.metadata?.location);
+            const n = locationToInt(p.metadata?.location);
             if (n > max) max = n;
           });
           const next = intToRoman(max + 1);
@@ -342,8 +338,7 @@ export class AdminForm implements OnInit {
       } catch (err) {}
     }
 
-    // Sort options
-    options.sort((a, b) => parseLocationToNumber(a) - parseLocationToNumber(b));
+    options.sort((a, b) => locationToInt(a) - locationToInt(b));
     this.locationOptions.set(options);
   }
 
@@ -358,7 +353,7 @@ export class AdminForm implements OnInit {
         const chapters = await this.adminService.getPagesByType(PageType.Chapter, lang);
         let maxOrder = 0;
         chapters.forEach(c => {
-          const order = parseLocationToNumber(c.metadata?.location);
+          const order = locationToInt(c.metadata?.location);
           if (order > maxOrder) maxOrder = order;
         });
         
@@ -368,19 +363,19 @@ export class AdminForm implements OnInit {
         console.error('Failed to suggest next location', err);
       }
     } else if (type === PageType.Home) {
-      // Default suggested locations for Home type
       if (!this.form.get('location')?.value) {
          this.form.patchValue({ location: 'front-cover' }, { emitEvent: false });
       }
     }
   }
 
-  onEditorCreated(quill: any) {
+  onEditorCreated(quill: Quill) {
     this.activeQuill = quill;
-    const toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', () => this.imageHandler(quill));
+    const toolbar = quill.getModule('toolbar') as Record<string, any>;
+    if (toolbar && typeof toolbar['addHandler'] === 'function') {
+      toolbar['addHandler']('image', () => this.imageHandler(quill));
+    }
 
-    // Listen for image clicks
     quill.root.addEventListener('click', (ev: MouseEvent) => {
       const target = ev.target as HTMLElement;
       if (target && target.tagName === 'IMG') {
@@ -393,7 +388,6 @@ export class AdminForm implements OnInit {
   private openImageModal(img: HTMLImageElement) {
     this.selectedImage.set(img);
     
-    // Detect alignment from classes
     let align = '';
     if (img.classList.contains('align-center')) align = 'center';
     else if (img.classList.contains('align-right')) align = 'right';
@@ -417,7 +411,6 @@ export class AdminForm implements OnInit {
       img.setAttribute('alt', this.imageProps.alt);
       img.setAttribute('width', this.imageProps.width);
       
-      // Handle Alignment classes and styles
       img.classList.remove('align-left', 'align-center', 'align-right');
       img.style.display = '';
       img.style.marginLeft = '';
@@ -440,7 +433,6 @@ export class AdminForm implements OnInit {
         img.style.marginRight = 'auto';
       }
 
-      // Re-apply base class
       img.setAttribute('class', this.imageProps.class);
       if (this.imageProps.align) img.classList.add(`align-${this.imageProps.align}`);
 
@@ -464,8 +456,9 @@ export class AdminForm implements OnInit {
     }
   }
 
-  public async onReplaceFile(event: any) {
-    const file = event.target.files?.[0];
+  public async onReplaceFile(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     const img = this.selectedImage();
     if (file && img) {
       try {
@@ -474,7 +467,9 @@ export class AdminForm implements OnInit {
         const url = this.adminService.getFileUrl(record, fileName);
         
         img.setAttribute('src', url);
-        this.activeQuill.update();
+        if (this.activeQuill) {
+          this.activeQuill.update();
+        }
       } catch (error) {
         console.error('Failed to replace image', error);
         alert('Error uploading new file.');
@@ -487,12 +482,14 @@ export class AdminForm implements OnInit {
     if (img && confirm('Do you want to delete this image?')) {
       const blot = Quill.find(img);
       if (blot) (blot as any).remove();
-      this.activeQuill.update();
+      if (this.activeQuill) {
+        this.activeQuill.update();
+      }
       this.closeImageModal();
     }
   }
 
-  async imageHandler(quill: any) {
+  async imageHandler(quill: Quill) {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -537,12 +534,10 @@ export class AdminForm implements OnInit {
       const oldLocation = this.initialData()?.metadata?.location;
 
       try {
-        // SWAP LOGIC
         if (this.isEdit() && newLocation && newLocation !== oldLocation) {
           const targetPage = await this.adminService.getPageByLocation(val.type, val.lang, newLocation);
           
           if (targetPage && targetPage.id !== this.initialData()?.id) {
-            // Swap: Update the other page to our current old position
             await this.adminService.updatePage(targetPage.id, {
               metadata: { ...targetPage.metadata, location: oldLocation || '' }
             });

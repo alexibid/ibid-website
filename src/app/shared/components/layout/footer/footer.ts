@@ -19,14 +19,14 @@ export class Footer {
   public pageTurn = input.required<PageTurn>();
 
   public canGoPrev = computed(() => {
-    const page = this.bookService.currentPageInChapter();
+    const page = this.bookService.currentChapterPage();
     return page > 1 || !!this.globalState.prevLink();
   });
 
   public canGoNext = computed(() => {
-    const page = this.bookService.currentPageInChapter();
+    const page = this.bookService.currentChapterPage();
     const slug = this.bookService.activeChapterSlug();
-    const total = this.bookService.getChapterPageCount(slug);
+    const total = this.bookService.getChapterPages(slug);
     return page < total || !!this.globalState.nextLink();
   });
 

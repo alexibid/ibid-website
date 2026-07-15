@@ -1,9 +1,8 @@
-export function parseLocationToNumber(location: string | number | undefined): number {
+export function locationToInt(location: string | number | undefined): number {
   if (location === undefined || location === null || location === '') return 0;
   
   const s = String(location).trim().toUpperCase();
   
-  // Tentar numeração romana
   const romanMap: Record<string, number> = {
     'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000
   };
@@ -23,10 +22,8 @@ export function parseLocationToNumber(location: string | number | undefined): nu
     return total;
   }
   
-  // Se for um número normal
   if (/^\d+$/.test(s)) return parseInt(s, 10);
   
-  // Fallback para 0 para localizações fixas de texto (serão tratadas pelo código)
   return 0;
 }
 

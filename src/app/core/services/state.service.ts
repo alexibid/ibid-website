@@ -53,27 +53,27 @@ export class StateService {
     this.bookService.pageCountsUpdated();
     const type = this.bookService.activePageType();
     const slug = this.bookService.activeChapterSlug() || '';
-    const page = this.bookService.currentPageInChapter();
+    const page = this.bookService.currentChapterPage();
 
     // Na Home, a página 1 é a Capa que ocupa o spread total (livro fechado)
     if (type === PageType.Home && page === 1) return true;
     
     // No Exit, a última página é a contracapa (que ocupa 2 colunas em desktop)
     if (type === PageType.Exit) {
-      const total = this.bookService.getChapterPageCount(slug);
+      const total = this.bookService.getChapterPages(slug);
       return this.isDesktop() ? (page >= total - 1) : (page === total);
     }
 
     return false;
   });
 
-  public isGoingToCover = computed(() => {
+  public approachingCover = computed(() => {
     const type = this.bookService.activePageType();
     if (type !== PageType.Chapter) return false;
 
     const slug = this.bookService.activeChapterSlug() || '';
-    const page = this.bookService.currentPageInChapter();
-    const total = this.bookService.getChapterPageCount(slug);
+    const page = this.bookService.currentChapterPage();
+    const total = this.bookService.getChapterPages(slug);
 
     const routes = this.bookService.dynamicRouteOrder();
     const idx = routes.indexOf(slug);
@@ -100,7 +100,7 @@ export class StateService {
   public currentState = computed(() => {
     const slug = this.bookService.activeChapterSlug();
     const type = this.bookService.activePageType();
-    const pageInChapter = this.bookService.currentPageInChapter();
+    const pageInChapter = this.bookService.currentChapterPage();
 
     let absoluteColumnIndex = 0;
     if (type === PageType.Chapter) {
@@ -122,7 +122,7 @@ export class StateService {
       adminLang: this.adminLang(),
       adminAction: this.adminAction(),
       isOnCover: this.isOnCover(),
-      isGoingToCover: this.isGoingToCover()
+      isGoingToCover: this.approachingCover()
     };
   });
 

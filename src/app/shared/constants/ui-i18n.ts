@@ -1,4 +1,4 @@
-export const UI_I18N: Record<string, any> = {
+export const UI_I18N: Record<string, unknown> = {
   pt: {
     'not-found': { title: '404 - Página não encontrada', message: 'O conteúdo que procura não existe ou foi movido.', back: 'Voltar ao início' },
     'error-network': { title: 'Erro de Ligação', message: 'Não foi possível contactar o servidor. Verifique a sua internet.' },

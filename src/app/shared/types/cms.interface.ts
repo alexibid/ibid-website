@@ -3,15 +3,17 @@ import { PageType } from './page-type.enum';
 
 export type PageLocation = 'front-cover' | 'index' | 'preface' | 'about' | 'contact-form' | 'back-cover' | string;
 
+export interface CmsPageMetadata {
+  location?: PageLocation;
+  [key: string]: unknown;
+}
+
 export interface CmsPage extends RecordModel {
   title: string;
-  content: any;
+  content: string;
   type: PageType;
   lang: string;
-  metadata?: {
-    location?: PageLocation;
-    [key: string]: any;
-  };
+  metadata?: CmsPageMetadata;
 }
 
 export interface CmsUrl extends RecordModel {
@@ -28,8 +30,18 @@ export interface CmsRouteData {
   title: string;
   lang: string;
   type: PageType;
-  content: any;
-  metadata?: any;
+  content: string;
+  metadata?: CmsPageMetadata;
   scrollTo?: string;
   location?: string;
+}
+
+export interface CmsPagePayload {
+  title: string;
+  type: PageType;
+  lang: string;
+  content: string;
+  metadata: {
+    location: string;
+  };
 }

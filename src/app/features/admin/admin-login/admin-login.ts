@@ -24,7 +24,7 @@ export class AdminLogin {
     if (this.globalState.login(this.password)) {
       this.router.navigate(['/admin']);
     } else {
-      this.error.set('Password incorrecta. Dica: 123');
+      this.error.set('Incorrect password.');
     }
   }
 }

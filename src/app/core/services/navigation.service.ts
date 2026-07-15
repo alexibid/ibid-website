@@ -7,15 +7,16 @@ import { filter } from 'rxjs/operators';
 })
 export class NavigationService {
   private router = inject(Router);
-  public history = signal<string[]>([]);
+  public history = signal<readonly string[]>([]);
   public previousUrl = signal<string | null>(null);
   public currentUrl = signal<string | null>(null);
 
   constructor() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      const url = event.urlAfterRedirects;
+    ).subscribe((event) => {
+      const navEvent = event as NavigationEnd;
+      const url = navEvent.urlAfterRedirects;
       const currentHistory = this.history();
       
       if (this.currentUrl() !== url) {

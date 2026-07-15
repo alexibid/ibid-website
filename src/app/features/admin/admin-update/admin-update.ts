@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { AdminForm } from '../admin-form/admin-form';
-import { CmsPage } from '../../../shared/types/cms.interface';
+import { CmsPage, CmsPagePayload } from '../../../shared/types/cms.interface';
 
 @Component({
   selector: 'app-admin-update',
@@ -61,7 +61,7 @@ export default class AdminUpdate implements OnInit {
     }
   }
 
-  async onSave(data: any) {
+  async onSave(data: CmsPagePayload) {
     const id = this.page()?.id;
     if (id) {
       this.isSaving.set(true);
