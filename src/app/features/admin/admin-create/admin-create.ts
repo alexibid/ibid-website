@@ -23,10 +23,8 @@ export default class AdminCreate {
 
   async onSave(data: any) {
     try {
-      // 1. Create the Page
       const page = await this.adminService.createPage(data);
       
-      // 2. Create the corresponding URL (Simple logic: slug = transformed title)
       const slug = data.title.toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9]/g, '-');

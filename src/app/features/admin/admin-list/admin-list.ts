@@ -4,7 +4,7 @@ import { UpperCasePipe } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { CmsUrl } from '../../../shared/types/cms.interface';
 import { PageType } from '../../../shared/types/page-type.enum';
-import { parseLocationToNumber } from '../../../shared/utils/location.utils';
+import { locationToInt } from '../../../shared/utils/location.utils';
 
 @Component({
   selector: 'app-admin-list',
@@ -17,14 +17,11 @@ export default class AdminList implements OnInit {
   private readonly adminService = inject(AdminService);
   private readonly route = inject(ActivatedRoute);
 
-  // Língua selecionada
   public lang = signal<string>('');
 
-  // Estado global dos dados e de loading
   public isLoading = signal(true);
   private allUrls = signal<CmsUrl[]>([]);
 
-  // Sinais computados para separar a informação de forma limpa pelo 'type' do Model
   private filteredUrls = computed(() => 
     this.allUrls().filter(u => u.lang === this.lang())
   );
@@ -32,19 +29,19 @@ export default class AdminList implements OnInit {
   public homeUrls = computed(() => 
     this.filteredUrls()
       .filter(u => u.expand?.page_id?.type === PageType.Home)
-      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+      .sort((a, b) => locationToInt(a.expand?.page_id?.metadata?.location) - locationToInt(b.expand?.page_id?.metadata?.location))
   );
 
   public chapterUrls = computed(() => 
     this.filteredUrls()
       .filter(u => u.expand?.page_id?.type === PageType.Chapter)
-      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+      .sort((a, b) => locationToInt(a.expand?.page_id?.metadata?.location) - locationToInt(b.expand?.page_id?.metadata?.location))
   );
 
   public exitUrls = computed(() => 
     this.filteredUrls()
       .filter(u => u.expand?.page_id?.type === PageType.Exit)
-      .sort((a, b) => parseLocationToNumber(a.expand?.page_id?.metadata?.location) - parseLocationToNumber(b.expand?.page_id?.metadata?.location))
+      .sort((a, b) => locationToInt(a.expand?.page_id?.metadata?.location) - locationToInt(b.expand?.page_id?.metadata?.location))
   );
 
   async ngOnInit() {
@@ -55,7 +52,6 @@ export default class AdminList implements OnInit {
   async loadData() {
     this.isLoading.set(true);
     try {
-      // Pedimos ao Pocketbase a lista completa de URLs cruzada logo com as propriedades da Página final (Title, Type)
       const records = await this.adminService.getUrls();
       this.allUrls.set(records);
     } catch (err) {

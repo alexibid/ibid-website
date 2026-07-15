@@ -54,16 +54,12 @@ app.use((req, res, next) => {
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('🔥 CRITICAL SSR ERROR CAUGHT:', err);
   
-  // TODO: Futuro Sistema de Monitorização
-  // Sentry.captureException(err);
-
   try {
     const fallbackPath = join(browserDistFolder, '500-fatal.html');
     const html = readFileSync(fallbackPath, 'utf8');
     res.status(500).send(html);
   } catch (e) {
-    // Escudo final caso até a página de segurança estática tenha sido apagada
-    res.status(500).send('<h1>500 - Erro Interno (Falha Crítica)</h1>');
+    res.status(500).send('<h1>500 - Internal Server Error (Critical Failure)</h1>');
   }
 });
 

@@ -40,7 +40,7 @@ export class MetaService {
         const pageTitle = routeData?.title ? `${routeData.title} | IBID` : 'IBID Architecture';
         this.titleService.setTitle(pageTitle);
         this.cleanupSeoTags();
-        this.generateCanonicalAndHreflangTags(routeData);
+        this.generateMetaTags(routeData);
       });
   }
 
@@ -50,7 +50,7 @@ export class MetaService {
     links.forEach(link => head.removeChild(link));
   }
 
-  private generateCanonicalAndHreflangTags(routeData: CmsRouteData) {
+  private generateMetaTags(routeData: CmsRouteData) {
     if (!routeData) return;
     const baseOrigin = 'https://ibid.pt';
     const currentPath = this.router.url.split('?')[0];

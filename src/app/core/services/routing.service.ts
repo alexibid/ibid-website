@@ -7,7 +7,7 @@ import { UiErrorService } from './ui-error.service';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';
 import { FrontofficeLayout } from '../layouts/frontoffice-layout/frontoffice-layout';
-import { parseLocationToNumber } from '../../shared/utils/location.utils';
+import { locationToInt } from '../../shared/utils/location.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +39,8 @@ export class RoutingService {
       const chapterRecords = langRecords
         .filter(r => r.expand?.page_id?.type === PageType.Chapter)
         .sort((a, b) => {
-          const orderA = parseLocationToNumber(a.expand?.page_id?.metadata?.location);
-          const orderB = parseLocationToNumber(b.expand?.page_id?.metadata?.location);
+          const orderA = locationToInt(a.expand?.page_id?.metadata?.location);
+          const orderB = locationToInt(b.expand?.page_id?.metadata?.location);
           return orderA - orderB;
         });
 
@@ -81,7 +81,7 @@ export class RoutingService {
           continue;
         }
 
-        let componentLoader: any;
+        let componentLoader: Route['loadComponent'];
         const location = page.metadata?.location;
 
         let path = record.url;
@@ -152,9 +152,10 @@ export class RoutingService {
 
       this.router.resetConfig(newConfig);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to initialize dynamic CMS routes', error);
-      if (error.status === 0 || error.isAbort) {
+      const pbError = error as { status?: number; isAbort?: boolean };
+      if (pbError.status === 0 || pbError.isAbort) {
         this.uiErrorService.showError('error-network');
       } else {
         this.uiErrorService.showError('error-generic');

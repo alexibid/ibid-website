@@ -17,7 +17,7 @@ export const routes: Routes = [
   {
     path: '',
     component: FrontofficeLayout,
-    children: [] // Will be populated dynamically by RoutingService
+    children: []
   },
   {
     path: '**',

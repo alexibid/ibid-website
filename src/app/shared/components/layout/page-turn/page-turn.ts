@@ -51,7 +51,7 @@ export class PageTurn {
   }
 
   @HostBinding('class.page-turn--to-cover') get isToCover() {
-    return this.stateService.isGoingToCover();
+    return this.stateService.approachingCover();
   }
 
   @HostBinding('class.page-turn--from-cover') get isFromCover() {

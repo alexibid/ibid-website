@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { PocketbaseService } from './pocketbase.service';
 import { CmsPage, CmsUrl } from '../../shared/types/cms.interface';
+import { RecordModel } from 'pocketbase';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +43,6 @@ export class AdminService {
     ).catch(() => null);
   }
 
-  // CRUD for URLs
   async getUrls() {
     return this.pb.collection('urls').getFullList<CmsUrl>({
       expand: 'page_id',
@@ -74,7 +74,7 @@ export class AdminService {
     return this.pb.collection('media').create(formData);
   }
 
-  getFileUrl(record: any, fileName: string) {
+  getFileUrl(record: RecordModel, fileName: string) {
     return this.pb.files.getURL(record, fileName);
   }
 }

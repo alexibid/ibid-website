@@ -11,16 +11,16 @@ export class TranslatePipe implements PipeTransform {
 
   transform(path: string): string {
     const keys = path.split('.');
-    let currentObject: any = this.i18nService.ui();
+    let currentObject: unknown = this.i18nService.ui();
 
     for (const key of keys) {
-      if (currentObject && typeof currentObject === 'object' && key in currentObject) {
-        currentObject = currentObject[key];
+      if (currentObject && typeof currentObject === 'object' && key in (currentObject as Record<string, unknown>)) {
+        currentObject = (currentObject as Record<string, unknown>)[key];
       } else {
         return path;
       }
     }
 
-    return currentObject;
+    return typeof currentObject === 'string' ? currentObject : path;
   }
 }

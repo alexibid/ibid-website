@@ -13,7 +13,7 @@ export class BookService {
   public pageCountsUpdated = signal<number>(0);
   public activeChapterSlug = signal<string>('');
   public activePageType = signal<PageType | null>(null);
-  public currentPageInChapter = signal<number>(1);
+  public currentChapterPage = signal<number>(1);
   public isFlipping = signal<boolean>(false);
   public flipDirection = signal<number>(1);
   public dynamicRouteOrder = signal<string[]>([]);
@@ -48,7 +48,7 @@ export class BookService {
     }
   }
 
-  getChapterPageCount(slug: string): number {
+  getChapterPages(slug: string): number {
     return this.chapterPageCounts.get(slug) || 1;
   }
 
@@ -78,7 +78,7 @@ export class BookService {
     let total = 0;
     for (const route of this.dynamicRouteOrder()) {
       if (this.routeTypes.get(route) === PageType.Chapter) {
-        total += this.chapterPageCounts.get(route) || 1; // Default to 1
+        total += this.chapterPageCounts.get(route) || 1;
       }
     }
     return total;

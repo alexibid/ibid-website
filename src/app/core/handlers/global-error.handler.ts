@@ -5,9 +5,9 @@ import { UiErrorService } from '../services/ui-error.service';
 export class GlobalErrorHandler implements ErrorHandler {
   private readonly uiErrorService = inject(UiErrorService);
 
-  handleError(error: any): void {
-    const message = error.message ? error.message : error.toString();
-    console.error('Um erro fatal evadido pelo Global Guard:', message);
+  handleError(error: unknown): void {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Fatal error caught by Global Error Handler:', message);
     this.uiErrorService.showError('error-generic');
   }
 }

@@ -23,5 +23,5 @@ export interface ContentEntry {
   slug: string;
   title: string;
   subtitle?: string;
-  content: (string | any)[];
+  content: unknown[];
 }
