@@ -1,22 +1,10 @@
 @if (sections().length > 0) {
 <article class="page-body">
-  <section class="page-section">
-    @for (section of sections(); track section.id) {
-    @if (section.metadata?.location === 'about') {
+  @for (section of sections(); track section.id) {
+  @if (section.metadata?.location === 'contact-form') {
+  <section class="page-section" [id]="section.metadata?.location">
     <header class="page-header">
-      <div class="page-number">{{ 'chapter' | translate }} VIII</div>
-      <h1 class="page-title">{{ section.title }}</h1>
-    </header>
-    <div [innerHTML]="section.content"></div>
-    }
-    }
-  </section>
-
-  <section class="page-section">
-    @for (section of sections(); track section.id) {
-    @if (section.metadata?.location === 'contact-form') {
-    <header class="page-header">
-      <h1 class="page-title">{{ section.title }}</h1>
+      <h2 class="page-title">{{ section.title }}</h2>
     </header>
     <div [innerHTML]="section.content"></div>
 
@@ -35,10 +23,23 @@
       </div>
       <button type="submit" class="submit-btn">{{ 'contacts.submit' | translate }}</button>
     </form>
-    }
-    }
   </section>
+  }
+  @if (section.metadata?.location === 'about') {
+  <section class="page-section" [id]="section.metadata?.location">
+    <header class="page-header">
+      <div class="page-number">{{ 'chapter' | translate }} VIII</div>
+      <h1 class="page-title">{{ section.title }}</h1>
+    </header>
+    <div [innerHTML]="section.content"></div>
+  </section>
+  }
+  }
 </article>
+
+@if (needsBlankPage()) {
+<div class="page-blank"></div>
+}
 
 @for (section of sections(); track section.id) {
 @if (section.metadata?.location === 'back-cover') {

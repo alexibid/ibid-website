@@ -70,8 +70,13 @@ export default class AdminUpdate implements OnInit {
         
         if (this.shouldViewAfterSave) {
           const urls = await this.adminService.getUrls();
-          const pageUrl = urls.find(u => u.page_id === id)?.url || '';
-          window.open('/' + pageUrl, '_blank');
+          const urlRecord = urls.find(u => u.page_id === id);
+          if (urlRecord) {
+            const pageUrl = urlRecord.url;
+            const pageLang = urlRecord.lang;
+            const fullUrl = '/' + pageLang + (pageUrl ? '/' + pageUrl : '');
+            window.open(fullUrl, '_blank');
+          }
           this.shouldViewAfterSave = false;
         } else {
           this.router.navigate(['/admin', data.lang]);

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LangSelector } from '../lang-selector/lang-selector';
 import { Settings } from '../settings/settings';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-header',
@@ -11,4 +12,6 @@ import { Settings } from '../settings/settings';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
-export class Header {}
+export class Header {
+  public i18n = inject(I18nService);
+}

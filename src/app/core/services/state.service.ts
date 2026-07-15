@@ -180,7 +180,7 @@ export class StateService {
       let index = routes.indexOf(slug);
 
       if (index === -1) {
-        const langRoute = this.i18n.currentLangCode() === 'pt' ? '' : this.i18n.currentLangCode();
+        const langRoute = this.i18n.currentLangCode();
         index = routes.indexOf(langRoute);
       }
 

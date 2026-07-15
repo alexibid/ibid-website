@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { RoutingService } from './core/services/routing.service';
+import { MetaService } from './core/services/meta.service';
 import { GlobalErrorHandler } from './core/handlers/global-error.handler';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { provideQuillConfig } from 'ngx-quill';
@@ -31,6 +32,8 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideAppInitializer(() => {
       const routingService = inject(RoutingService);
+      const metaService = inject(MetaService);
+      metaService.init();
       return routingService.setupRoutes();
     })
   ]

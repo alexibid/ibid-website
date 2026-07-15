@@ -55,10 +55,14 @@ export class Home extends BasePage implements OnDestroy {
 
   protected override onPageMeasured(totalCols: number) {
     const isDesktop = window.innerWidth >= 768;
-    if (isDesktop && totalCols % 2 !== 0 && !this.needsBlankPage()) {
-      this.needsBlankPage.set(true);
-      setTimeout(() => this.measurePage(), 50);
-      return;
+    if (isDesktop) {
+      const colsWithoutBlank = this.needsBlankPage() ? (totalCols - 1) : totalCols;
+      const naturalIsOdd = colsWithoutBlank % 2 !== 0;
+      if (naturalIsOdd !== this.needsBlankPage()) {
+        this.needsBlankPage.set(naturalIsOdd);
+        setTimeout(() => this.measurePage(), 50);
+        return;
+      }
     }
     super.onPageMeasured(totalCols);
   }

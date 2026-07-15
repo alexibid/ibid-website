@@ -52,8 +52,9 @@ export class RoutingService {
       const routes = finalRecords.map(r => {
         let path = r.url;
         if (path.startsWith('/')) path = path.slice(1);
+        const prefixedPath = r.lang + (path ? '/' + path : '');
         return {
-          slug: path,
+          slug: prefixedPath,
           title: r.expand?.page_id?.title || '',
           type: r.expand?.page_id?.type as PageType
         };
@@ -88,9 +89,11 @@ export class RoutingService {
           path = path.slice(1);
         }
 
+        const prefixedPath = record.lang + (path ? '/' + path : '');
+
         if (location) {
           const links = this.translationMap.get(location) || [];
-          links.push({ lang: record.lang, url: '/' + path });
+          links.push({ lang: record.lang, url: '/' + prefixedPath });
           this.translationMap.set(location, links);
         }
 
@@ -118,7 +121,7 @@ export class RoutingService {
         }
 
         dynamicRoutes.push({
-          path: path,
+          path: prefixedPath,
           loadComponent: componentLoader,
           data: routeData
         });
@@ -133,6 +136,14 @@ export class RoutingService {
           path: '',
           component: FrontofficeLayout,
           children: [
+            {
+              path: '',
+              pathMatch: 'full',
+              redirectTo: () => {
+                const i18nService = inject(I18nService);
+                return i18nService.currentLangCode();
+              }
+            },
             ...dynamicRoutes,
             { path: '**', loadComponent: async () => (await import('../../features/not-found/not-found')).NotFound }
           ]
