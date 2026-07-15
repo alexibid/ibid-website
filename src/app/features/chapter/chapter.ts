@@ -1,6 +1,12 @@
-import { Component, OnDestroy, signal, effect } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, effect, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-import { BasePage } from '../../core/base/base-page';
+import { BookNavigationDirective } from '../../shared/directives/book-navigation.directive';
+import { BookService } from '../../core/services/book.service';
+import { StateService } from '../../core/services/state.service';
+import { CmsRouteData } from '../../shared/types/cms.interface';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chapter',
@@ -8,30 +14,54 @@ import { BasePage } from '../../core/base/base-page';
   imports: [TranslatePipe],
   templateUrl: './chapter.html',
   styleUrl: './chapter.scss',
+  hostDirectives: [{
+    directive: BookNavigationDirective,
+    outputs: ['pageMeasured']
+  }],
+  host: {
+    '(pageMeasured)': 'onPageMeasured($event)'
+  }
 })
-export class Chapter extends BasePage implements OnDestroy {
+export class Chapter implements OnInit, OnDestroy {
+  private readonly nav = inject(BookNavigationDirective);
+  private readonly bookService = inject(BookService);
+  private readonly route = inject(ActivatedRoute);
+  public readonly stateService = inject(StateService);
+
+  public readonly pageData = signal<CmsRouteData | null>(null);
   protected readonly needsBlankPage = signal<boolean>(false);
+  private readonly destroy$ = new Subject<void>();
 
   constructor() {
-    super();
     effect(() => {
-      if (this.pageData() && this.isBrowser) {
+      if (this.pageData() && this.stateService.isBrowser) {
         this.needsBlankPage.set(false);
         setTimeout(() => {
-          this.scrollToStart();
-          this.measurePage();
+          this.nav.scrollToStart();
+          this.nav.measurePage();
         }, 100);
       }
     });
   }
 
-  protected override onPageMeasured(totalCols: number) {
+  ngOnInit() {
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      this.pageData.set(data as CmsRouteData);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  protected onPageMeasured(totalCols: number) {
     const isDesktop = window.innerWidth >= 768;
     if (isDesktop && totalCols % 2 !== 0 && !this.needsBlankPage()) {
       this.needsBlankPage.set(true);
-      setTimeout(() => this.measurePage(), 50);
+      setTimeout(() => this.nav.measurePage(), 50);
       return;
     }
-    super.onPageMeasured(totalCols);
+    this.bookService.setPageCount(this.nav.currentSlug, totalCols);
   }
 }
