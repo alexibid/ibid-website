@@ -20,14 +20,6 @@
     .page-subheader p {
       font-size: 0.75rem;
       margin-bottom: 1rem;
-
-      &:first-of-type::first-letter {
-        float: none;
-        font-family: var(--font-serif);
-        font-size: 1.2rem;
-        padding-top: 0;
-        padding-right: 0;
-      }
     }
   }
 }
@@ -67,18 +59,8 @@
       text-align: left;
       break-inside: avoid-column;
 
-      &:first-child { 
+      &:first-child {
         margin-top: 0;
-      }
-      &:first-of-type::first-letter {
-        float: left;
-        font-size: 4.5rem;
-        line-height: 0.7;
-        padding-top: 0.5rem;
-        padding-right: 0.75rem;
-        font-family: var(--font-serif);
-        font-weight: 400;
-        color: var(--color-text);
       }
     }
 

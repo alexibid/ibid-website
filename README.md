@@ -11,6 +11,17 @@
 
 ---
 
+## 🌐 Supported Languages / Idiomas Suportados
+
+The application supports internationalization (i18n) with the following languages:
+
+*   **Portuguese (`pt`)** (Default)
+*   **English (`en`)**
+*   **Spanish (`es`)**
+*   **French (`fr`)**
+
+---
+
 ## 🏛️ Directory Layout (CFS Pattern)
 
 *   **Core**: Houses global singletons, router initialization, dynamic meta headers, interceptors, and layouts.

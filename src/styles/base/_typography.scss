@@ -45,14 +45,10 @@ p {
   font-family: var(--font-body);
 }
 
+@use "../abstracts/mixins" as *;
+
 .drop-cap::first-letter {
-  float: left;
-  font-size: 5rem;
-  line-height: 0.8;
-  padding-top: 0.1rem;
-  padding-right: 0.5rem;
-  font-weight: 400;
-  font-family: var(--font-serif);
+  @include drop-cap;
 }
 
 .font-sans {

@@ -1,0 +1,9 @@
+@mixin drop-cap {
+  float: left;
+  font-size: 4rem;
+  line-height: 0.8;
+  padding-top: 0.1rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  font-family: var(--font-serif);
+}

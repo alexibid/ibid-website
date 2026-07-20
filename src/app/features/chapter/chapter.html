@@ -4,7 +4,7 @@
   <h1 class="page-title">{{ data.title }}</h1>
 </header>
 
-<article class="page-body" [innerHTML]="data.content"></article>
+<article class="page-body drop-cap" [innerHTML]="data.content"></article>
 
 @if (needsBlankPage()) {
 <div class="page-blank"></div>
