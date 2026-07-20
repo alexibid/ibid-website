@@ -1,3 +1,4 @@
+@use "../abstracts/mixins" as *;
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Work+Sans:wght@300;400;500;600&family=Noto+Rashi+Hebrew:wght@400;500;700&display=swap');
 
 :root {
@@ -45,7 +46,6 @@ p {
   font-family: var(--font-body);
 }
 
-@use "../abstracts/mixins" as *;
 
 .drop-cap::first-letter {
   @include drop-cap;
