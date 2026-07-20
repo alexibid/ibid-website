@@ -87,6 +87,80 @@
       border-radius: 2px;
       margin: 32px 0;
       break-inside: avoid-column;
+
+      &.img-landscape-a {
+        height: auto;
+        max-height: 50vh;
+        object-fit: cover;
+        margin-top: 24px;
+        margin-bottom: 24px;
+        border-radius: 0;
+
+        // Horizontal Bleed Mobile
+        margin-left: -40px;
+        margin-right: calc(0px - var(--book-padding-w-mobile));
+        width: calc(100% + 40px + var(--book-padding-w-mobile));
+
+        @media (min-width: 768px) {
+          // Horizontal Bleed Desktop
+          margin-left: calc(0px - var(--book-padding-w-desktop));
+          margin-right: calc(0px - var(--book-padding-w-desktop));
+          width: calc(100% + (2 * var(--book-padding-w-desktop)));
+          max-height: 55vh;
+        }
+      }
+
+      &.img-landscape-b {
+        height: auto;
+        max-height: 65vh;
+        object-fit: cover;
+        margin-top: 32px;
+        margin-bottom: 32px;
+        border-radius: 0;
+
+        // Horizontal Bleed Mobile
+        margin-left: -40px;
+        margin-right: calc(0px - var(--book-padding-w-mobile));
+        width: calc(100% + 40px + var(--book-padding-w-mobile));
+
+        @media (min-width: 768px) {
+          // Horizontal Bleed Desktop
+          margin-left: calc(0px - var(--book-padding-w-desktop));
+          margin-right: calc(0px - var(--book-padding-w-desktop));
+          width: calc(100% + (2 * var(--book-padding-w-desktop)));
+          max-height: 70vh;
+        }
+      }
+
+      &.img-feature {
+        break-before: column;
+        break-after: column;
+        display: block;
+        object-fit: cover;
+        border-radius: 0;
+
+        // Mobile Full Bleed
+        margin-top: calc(0px - var(--book-padding-h-mobile));
+        margin-bottom: calc(0px - var(--book-padding-h-mobile));
+        margin-left: -40px;
+        margin-right: calc(0px - var(--book-padding-w-mobile));
+        
+        width: calc(100% + 40px + var(--book-padding-w-mobile));
+        height: calc(100% + (2 * var(--book-padding-h-mobile)));
+        max-height: calc(100% + (2 * var(--book-padding-h-mobile)));
+
+        @media (min-width: 768px) {
+          // Desktop Full Bleed
+          margin-top: calc(0px - var(--book-padding-h-desktop));
+          margin-bottom: calc(0px - var(--book-padding-h-desktop));
+          margin-left: calc(0px - var(--book-padding-w-desktop));
+          margin-right: calc(0px - var(--book-padding-w-desktop));
+          
+          width: calc(100% + (2 * var(--book-padding-w-desktop)));
+          height: calc(100% + (2 * var(--book-padding-h-desktop)));
+          max-height: calc(100% + (2 * var(--book-padding-h-desktop)));
+        }
+      }
     }
   }
 }
