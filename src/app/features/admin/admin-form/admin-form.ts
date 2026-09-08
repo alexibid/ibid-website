@@ -102,6 +102,10 @@ Quill.register(CustomImage, true);
       <div class="form-group editor-group">
         <label>Content</label>
         <p class="editor-hint">Tip: Click on an image to open the property manager.</p>
+        <div class="editor-buttons-bar" style="margin-bottom: 12px; display: flex; gap: 8px;">
+          <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer;" (click)="triggerImageUpload('landscape')">📷 Inserir Imagem Landscape</button>
+          <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer;" (click)="triggerImageUpload('feature')">🖼️ Inserir Imagem Feature</button>
+        </div>
         <quill-editor 
           formControlName="content"
           [modules]="quillModules"
@@ -487,6 +491,42 @@ export class AdminForm implements OnInit {
       }
       this.closeImageModal();
     }
+  }
+
+  public async triggerImageUpload(type: 'landscape' | 'feature') {
+    if (!this.activeQuill) return;
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (file) {
+        try {
+          const record = await this.adminService.uploadImage(file);
+          const fileName = (record as any).file;
+          const url = this.adminService.getFileUrl(record, fileName);
+          
+          const quill = this.activeQuill!;
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', url);
+          
+          const [leaf] = quill.getLeaf(range.index);
+          if (leaf && (leaf as any).domNode) {
+            const img = (leaf as any).domNode as HTMLImageElement;
+            const className = type === 'feature' ? 'cms-image img-feature' : 'cms-image img-landscape-a';
+            img.setAttribute('class', className);
+            img.setAttribute('data-retina', 'true');
+            img.setAttribute('loading', 'lazy');
+          }
+          quill.update();
+        } catch (error) {
+          console.error('Image upload failed', error);
+          alert('Error uploading image.');
+        }
+      }
+    };
   }
 
   async imageHandler(quill: Quill) {
