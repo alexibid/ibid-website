@@ -11,10 +11,6 @@ export class I18nService {
 
   currentLangCode = signal<string>('pt');
   ui = computed(() => UI_I18N[this.currentLangCode()] || UI_I18N['en']);
-  getTranslation(section: string) {
-    return computed(() => (this.ui() as Record<string, any>)[section]);
-  }
-
   constructor() {
     this.detectLanguage();
   }

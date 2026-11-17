@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { CmsPage } from '../../shared/types/cms.interface';
 
 /**
  * Cover view for front and back covers.
@@ -10,7 +11,7 @@ import { Component, input } from '@angular/core';
   styleUrl: './cover.scss'
 })
 export class Cover {
-  public data = input.required<any>();
+  public data = input.required<CmsPage>();
   public isBack = input<boolean>(false);
   public fullSpread = input<boolean>(false);
 }

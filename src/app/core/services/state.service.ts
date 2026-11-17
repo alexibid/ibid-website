@@ -1,11 +1,11 @@
-import { Injectable, computed, inject, signal, PLATFORM_ID, effect, isDevMode } from '@angular/core';
+import { Injectable, computed, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';
 import { PageType } from '../../shared/types/page-type.enum';
-import { CmsRouteData } from '../../shared/types/cms.interface';
+import { CmsPage, CmsRouteData } from '../../shared/types/cms.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,8 @@ export class StateService {
   public prevLink = signal<string | null>(null);
   public nextLink = signal<string | null>(null);
 
-  public coverData = signal<any>(null);
-  public backCoverData = signal<any>(null);
+  public coverData = signal<CmsPage | null>(null);
+  public backCoverData = signal<CmsPage | null>(null);
 
   public login(password: string): boolean {
     if (password === '123') {
@@ -136,18 +136,12 @@ export class StateService {
         this.isDesktop.set(window.innerWidth >= 768);
       });
     }
-
-    effect(() => {
-      if (isDevMode()) {
-        // console.log('[Global State Update]:', this.currentState());
-      }2
-    });
   }
 
   private initNavigationListener() {
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event) => {
       const url = event.urlAfterRedirects.split('?')[0].split('#')[0];
       const slug = (url === '/' || url === '') ? '' : url.substring(1);
 

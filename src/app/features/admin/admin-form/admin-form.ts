@@ -7,51 +7,9 @@ import { PageType } from '../../../shared/types/page-type.enum';
 import { CmsPage, CmsPagePayload } from '../../../shared/types/cms.interface';
 import { locationToInt, intToRoman } from '../../../shared/utils/location.utils';
 import Quill from 'quill';
+import Toolbar from 'quill/modules/toolbar';
+import { CustomImage, cssWidthOf } from './custom-image';
 
-const ImageFormat = Quill.import('formats/image') as any;
-class CustomImage extends ImageFormat {
-  static create(value: any) {
-    const node = super.create(value);
-    if (typeof value === 'string') {
-      node.setAttribute('src', value);
-    } else if (typeof value === 'object') {
-      node.setAttribute('src', value.url || value.src);
-      if (value.alt) node.setAttribute('alt', value.alt);
-      if (value.class) node.setAttribute('class', value.class);
-      if (value.width) {
-        node.setAttribute('width', value.width);
-        node.style.width = value.width.endsWith('%') || value.width.endsWith('px') ? value.width : value.width + 'px';
-      }
-    }
-    return node;
-  }
-
-  static value(node: HTMLElement) {
-    return {
-      url: node.getAttribute('src'),
-      alt: node.getAttribute('alt'),
-      class: node.getAttribute('class'),
-      width: node.getAttribute('width')
-    };
-  }
-
-  format(name: string, value: any) {
-    if (['alt', 'class', 'width'].includes(name)) {
-      if (value) {
-        (this as any).domNode.setAttribute(name, value);
-        if (name === 'width') {
-           (this as any).domNode.style.width = value.endsWith('%') || value.endsWith('px') ? value : value + 'px';
-        }
-      } else {
-        (this as any).domNode.removeAttribute(name);
-        if (name === 'width') (this as any).domNode.style.width = '';
-      }
-    } else {
-      super.format(name, value);
-    }
-  }
-}
-Quill.register(CustomImage, true);
 
 @Component({
   selector: 'app-admin-form',
@@ -287,8 +245,8 @@ export class AdminForm implements OnInit {
   }
 
   ngOnInit() {
-    if (this.initialData()) {
-      const data = this.initialData()!;
+    const data = this.initialData();
+    if (data) {
       this.form.patchValue({
         title: data.title,
         type: data.type,
@@ -339,7 +297,9 @@ export class AdminForm implements OnInit {
           const next = intToRoman(max + 1);
           if (!options.includes(next)) options.push(next);
         }
-      } catch (err) {}
+      } catch (error) {
+        console.error('Failed to load location options', error);
+      }
     }
 
     options.sort((a, b) => locationToInt(a) - locationToInt(b));
@@ -375,9 +335,9 @@ export class AdminForm implements OnInit {
 
   onEditorCreated(quill: Quill) {
     this.activeQuill = quill;
-    const toolbar = quill.getModule('toolbar') as Record<string, any>;
-    if (toolbar && typeof toolbar['addHandler'] === 'function') {
-      toolbar['addHandler']('image', () => this.imageHandler(quill));
+    const toolbar = quill.getModule('toolbar');
+    if (toolbar instanceof Toolbar) {
+      toolbar.addHandler('image', () => this.imageHandler(quill));
     }
 
     quill.root.addEventListener('click', (ev: MouseEvent) => {
@@ -441,18 +401,16 @@ export class AdminForm implements OnInit {
       if (this.imageProps.align) img.classList.add(`align-${this.imageProps.align}`);
 
       if (this.imageProps.width) {
-        img.style.width = this.imageProps.width.endsWith('%') || this.imageProps.width.endsWith('px') 
-          ? this.imageProps.width 
-          : this.imageProps.width + 'px';
+        img.style.width = cssWidthOf(this.imageProps.width);
       } else {
         img.style.width = '';
       }
 
       const blot = Quill.find(img);
-      if (blot && (blot as any).format) {
-        (blot as any).format('alt', this.imageProps.alt);
-        (blot as any).format('class', img.getAttribute('class'));
-        (blot as any).format('width', this.imageProps.width);
+      if (blot instanceof CustomImage) {
+        blot.format('alt', this.imageProps.alt);
+        blot.format('class', img.getAttribute('class') ?? '');
+        blot.format('width', this.imageProps.width);
       }
       
       this.activeQuill.update();
@@ -466,9 +424,7 @@ export class AdminForm implements OnInit {
     const img = this.selectedImage();
     if (file && img) {
       try {
-        const record = await this.adminService.uploadImage(file);
-        const fileName = (record as any).file;
-        const url = this.adminService.getFileUrl(record, fileName);
+        const url = await this.adminService.uploadImageUrl(file);
         
         img.setAttribute('src', url);
         if (this.activeQuill) {
@@ -485,7 +441,7 @@ export class AdminForm implements OnInit {
     const img = this.selectedImage();
     if (img && confirm('Do you want to delete this image?')) {
       const blot = Quill.find(img);
-      if (blot) (blot as any).remove();
+      if (blot instanceof CustomImage) blot.remove();
       if (this.activeQuill) {
         this.activeQuill.update();
       }
@@ -494,7 +450,8 @@ export class AdminForm implements OnInit {
   }
 
   public async triggerImageUpload(type: 'landscape' | 'feature') {
-    if (!this.activeQuill) return;
+    const quill = this.activeQuill;
+    if (!quill) return;
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -504,17 +461,14 @@ export class AdminForm implements OnInit {
       const file = input.files?.[0];
       if (file) {
         try {
-          const record = await this.adminService.uploadImage(file);
-          const fileName = (record as any).file;
-          const url = this.adminService.getFileUrl(record, fileName);
+          const url = await this.adminService.uploadImageUrl(file);
           
-          const quill = this.activeQuill!;
           const range = quill.getSelection(true);
           quill.insertEmbed(range.index, 'image', url);
           
           const [leaf] = quill.getLeaf(range.index);
-          if (leaf && (leaf as any).domNode) {
-            const img = (leaf as any).domNode as HTMLImageElement;
+          if (leaf instanceof CustomImage) {
+            const img = leaf.domNode;
             const className = type === 'feature' ? 'cms-image img-feature' : 'cms-image img-landscape-a';
             img.setAttribute('class', className);
             img.setAttribute('data-retina', 'true');
@@ -539,16 +493,14 @@ export class AdminForm implements OnInit {
       const file = input.files?.[0];
       if (file) {
         try {
-          const record = await this.adminService.uploadImage(file);
-          const fileName = (record as any).file;
-          const url = this.adminService.getFileUrl(record, fileName);
+          const url = await this.adminService.uploadImageUrl(file);
           
           const range = quill.getSelection(true);
           quill.insertEmbed(range.index, 'image', url);
           
           const [leaf] = quill.getLeaf(range.index);
-          if (leaf && (leaf as any).domNode) {
-            const img = (leaf as any).domNode as HTMLImageElement;
+          if (leaf instanceof CustomImage) {
+            const img = leaf.domNode;
             img.classList.add('cms-image');
             img.setAttribute('data-retina', 'true');
             img.setAttribute('loading', 'lazy');

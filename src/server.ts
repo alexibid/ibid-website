@@ -51,14 +51,14 @@ app.use((req, res, next) => {
 /**
  * Global SSR Crash Fallback Middleware (500)
  */
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('🔥 CRITICAL SSR ERROR CAUGHT:', err);
   
   try {
     const fallbackPath = join(browserDistFolder, '500-fatal.html');
     const html = readFileSync(fallbackPath, 'utf8');
     res.status(500).send(html);
-  } catch (e) {
+  } catch {
     res.status(500).send('<h1>500 - Internal Server Error (Critical Failure)</h1>');
   }
 });

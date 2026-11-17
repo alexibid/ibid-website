@@ -1,4 +1,3 @@
-/// <reference path="../pb_data/types.d.ts" />
 migrate((db) => {
   const dao = new Dao(db);
 
@@ -17,5 +16,5 @@ migrate((db) => {
     page.set("metadata", metadata);
     dao.saveRecord(page);
   }
-}, (db) => {
+}, () => {
 })

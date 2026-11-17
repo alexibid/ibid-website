@@ -77,4 +77,13 @@ export class AdminService {
   getFileUrl(record: RecordModel, fileName: string) {
     return this.pb.files.getURL(record, fileName);
   }
+
+  async uploadImageUrl(file: File): Promise<string> {
+    const record = await this.uploadImage(file);
+    const fileName: unknown = record['file'];
+    if (typeof fileName !== 'string' || fileName === '') {
+      throw new Error('The uploaded image record has no file name.');
+    }
+    return this.getFileUrl(record, fileName);
+  }
 }

@@ -45,7 +45,7 @@ export default class AdminDelete implements OnInit {
       try {
         const data = await this.adminService.getPage(id);
         this.page.set(data);
-      } catch (error) {
+      } catch {
         this.router.navigate(['/admin']);
       }
     }
