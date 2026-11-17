@@ -122,7 +122,7 @@ npm run dev
 
 ### Run CMS Backend
 ```bash
-cd pocketbase && ./pocketbase serve
+npm run bd
 ```
 
 ### Run Unit Tests

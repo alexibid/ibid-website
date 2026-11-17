@@ -1,7 +1,7 @@
 @if (sections().length > 0) {
 <div class="page-body">
-  @if (stateService.coverData()) {
-  <app-cover id="cover" class="book-cover-page" [data]="stateService.coverData()"></app-cover>
+  @if (stateService.coverData(); as cover) {
+  <app-cover id="cover" class="book-cover-page" [data]="cover"></app-cover>
   <div class="page-break-spacer"></div>
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { AdminForm } from '../admin-form/admin-form';

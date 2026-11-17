@@ -2,6 +2,24 @@ import { Component, computed, inject } from '@angular/core';
 import { UiErrorService } from '../../../../core/services/ui-error.service';
 import { I18nService } from '../../../../core/services/i18n.service';
 
+interface AlertText {
+  readonly title: string;
+  readonly message: string;
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isAlertText(value: unknown): value is AlertText {
+  return isRecord(value) && typeof value['title'] === 'string' && typeof value['message'] === 'string';
+}
+
+function textOf(translations: unknown, key: string): AlertText | undefined {
+  const entry = isRecord(translations) ? translations[key] : undefined;
+  return isAlertText(entry) ? entry : undefined;
+}
+
 @Component({
   selector: 'app-global-alert',
   imports: [],
@@ -16,8 +34,12 @@ export class GlobalAlertComponent {
     const errType = this.uiService.currentError();
     if (!errType) return null;
     
-    const uiTranslations = this.i18nService.ui() as Record<string, any>;
-    return uiTranslations[errType] ?? uiTranslations['error-generic'];
+    const translations = this.i18nService.ui();
+    const message = textOf(translations, errType) ?? textOf(translations, 'error-generic');
+    if (!message) return null;
+
+    const close = isRecord(translations) && typeof translations['close'] === 'string' ? translations['close'] : '';
+    return { ...message, close };
   });
 
   protected closeAlert(): void {

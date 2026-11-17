@@ -1,4 +1,3 @@
-/// <reference path="../pb_data/types.d.ts" />
 migrate((db) => {
   const collection = new Collection({
     "id": "media_collection_id",
