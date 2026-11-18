@@ -1,3 +1,9 @@
+## 0.0.3 (2026-11-18)
+
+### 🚀 Features
+
+- **ibid-website:** migrate to ddd architecture and remove pocketbase (42335ca)
+
 ## 0.0.2 (2026-11-18)
 
 ### 🐛 Bug Fixes
