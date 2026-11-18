@@ -1,3 +1,16 @@
+## 0.0.2 (2026-11-18)
+
+### 🐛 Bug Fixes
+
+- **ibid-website:** add node types to functions tsconfig (fe975d7)
+- **ibid-website:** add api controllers and configure secretlint ignores (92b6f14)
+- **ibid-website:** add api controllers and configure secretlint ignores (d535383)
+- **ibid-website:** add api specifications and update documentation (2191332)
+
+### 🚀 Features
+
+- **ibid-website:** complete site migration with e2e journeys and architecture section (d314bb3)
+
 ## 0.0.1 (2026-11-18)
 
 ### 🐛 Bug Fixes
