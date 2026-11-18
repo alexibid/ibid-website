@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Inject, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
-import type { Response, Request } from 'express';
-import { API_CONFIG, type ApiConfig } from '../config/api-config.module.js';
+import { API_CONFIG } from '../config/api-config.module.js';
 import { verifyPassword } from './password-hash.js';
 import { createSessionToken, isValidSessionToken, SESSION_TTL_MS } from './session-token.js';
 

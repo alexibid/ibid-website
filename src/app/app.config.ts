@@ -8,11 +8,14 @@ import { MetaService } from './core/services/meta.service';
 import { GlobalErrorHandler } from './core/handlers/global-error.handler';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { provideQuillConfig } from 'ngx-quill';
+import { CONTENT_REPOSITORY } from './core/services/content-repository.token';
+import { SnapshotContentRepository } from './core/services/snapshot-content.repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
+    { provide: CONTENT_REPOSITORY, useClass: SnapshotContentRepository },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideHttpClient(
       withInterceptors([errorInterceptor])

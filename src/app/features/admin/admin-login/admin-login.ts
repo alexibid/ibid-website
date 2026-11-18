@@ -19,12 +19,17 @@ export class AdminLogin {
   public password = '';
   public error = signal<string | null>(null);
 
-  public onSubmit() {
+  public async onSubmit(): Promise<void> {
     this.error.set(null);
-    if (this.globalState.login(this.password)) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.error.set('Incorrect password.');
+    try {
+      const ok = await this.globalState.login(this.password);
+      if (ok) {
+        this.router.navigate(['/admin']);
+      } else {
+        this.error.set('Incorrect password.');
+      }
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Cannot reach API.');
     }
   }
 }

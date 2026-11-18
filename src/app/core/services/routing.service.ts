@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
 import { Router, Route } from '@angular/router';
-import { PocketbaseService } from './pocketbase.service';
+import { CONTENT_REPOSITORY } from './content-repository.token';
 import { PageType } from '../../shared/types/page-type.enum';
 import { CmsUrl, CmsRouteData } from '../../shared/types/cms.interface';
 import { UiErrorService } from './ui-error.service';
@@ -13,7 +13,7 @@ import { locationToInt } from '../../shared/utils/location.utils';
   providedIn: 'root'
 })
 export class RoutingService {
-  private readonly pbService = inject(PocketbaseService);
+  private readonly repo = inject(CONTENT_REPOSITORY);
   private readonly router = inject(Router);
   private readonly uiErrorService = inject(UiErrorService);
   private readonly bookService = inject(BookService);
@@ -66,9 +66,7 @@ export class RoutingService {
 
   public async setupRoutes(): Promise<void> {
     try {
-      const records = await this.pbService.pb.collection('urls').getFullList<CmsUrl>({
-        expand: 'page_id',
-      });
+      const records = (await this.repo.getUrls()) as CmsUrl[];
 
       this.allUrlRecords.set(records);
 
