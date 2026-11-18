@@ -58,4 +58,12 @@ describe('SnapshotWriter', () => {
     expect(files.writeFile).not.toHaveBeenCalled();
     expect(files.copyFile).not.toHaveBeenCalled();
   });
+
+  it('should fail with clear error message when content export has no pages or urls', async () => {
+    await expect(writer.write({ version: 1, pages: [], urls: [], media: [] })).rejects.toThrow(
+      'Content export failed: Cannot reach API or content database is empty'
+    );
+    expect(files.writeFile).not.toHaveBeenCalled();
+    expect(files.rename).not.toHaveBeenCalled();
+  });
 });

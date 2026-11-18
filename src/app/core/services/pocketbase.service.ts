@@ -9,7 +9,7 @@ import { CONTENT_REPOSITORY } from './content-repository.token';
 export class PocketbaseService {
   private readonly repo = inject(CONTENT_REPOSITORY);
 
-  async loadSections(type: PageType, lang: string): Promise<readonly CmsPage[]> {
+  async loadSections(type: PageType, lang: string): Promise<CmsPage[]> {
     return this.repo.loadSections(type, lang);
   }
 }

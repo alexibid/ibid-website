@@ -28,14 +28,13 @@ interface SnapshotFile {
 export class SnapshotContentRepository implements ContentRepository {
   private readonly snapshot = snapshotData as unknown as SnapshotFile;
 
-  async loadSections(type: PageType, lang: string): Promise<readonly CmsPage[]> {
-    const pages = this.snapshot.pages
+  async loadSections(type: PageType, lang: string): Promise<CmsPage[]> {
+    return this.snapshot.pages
       .filter((p) => p.type === type && p.lang === lang)
       .map((p) => this.toCmsPage(p));
-    return pages;
   }
 
-  async getUrls(): Promise<readonly CmsUrl[]> {
+  async getUrls(): Promise<CmsUrl[]> {
     const pageMap = new Map<string, CmsPage>();
     for (const p of this.snapshot.pages) {
       pageMap.set(p.id, this.toCmsPage(p));
@@ -52,7 +51,7 @@ export class SnapshotContentRepository implements ContentRepository {
     }));
   }
 
-  async getPages(query?: { type?: string; lang?: string }): Promise<readonly CmsPage[]> {
+  async getPages(query?: { type?: string; lang?: string }): Promise<CmsPage[]> {
     return this.snapshot.pages
       .filter((p) => {
         if (query?.type !== undefined && p.type !== query.type) {

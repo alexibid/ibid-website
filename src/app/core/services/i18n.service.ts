@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, PLATFORM_ID, inject } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { UI_I18N } from '../../shared/constants/ui-i18n';
+import { SUPPORTED_LANGUAGES } from '../tokens/api.tokens';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,11 @@ import { UI_I18N } from '../../shared/constants/ui-i18n';
 export class I18nService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly document = inject(DOCUMENT);
+  private readonly supportedLanguages = inject(SUPPORTED_LANGUAGES);
 
   currentLangCode = signal<string>('pt');
   ui = computed(() => UI_I18N[this.currentLangCode()] || UI_I18N['en']);
+
   constructor() {
     this.detectLanguage();
   }
@@ -34,7 +37,6 @@ export class I18nService {
       return;
     }
     const browserLang = navigator.language.split('-')[0];
-    const supportedLangs = ['pt', 'en', 'es', 'fr'];
-    this.currentLangCode.set(supportedLangs.includes(browserLang) ? browserLang : 'en');
+    this.currentLangCode.set(this.supportedLanguages.includes(browserLang) ? browserLang : 'en');
   }
 }

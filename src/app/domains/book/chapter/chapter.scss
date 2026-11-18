@@ -1,0 +1,51 @@
+@use "../../../../styles/abstracts/page-layout" as *;
+@use "../../../../styles/components/book-base" as *;
+
+:host {
+  @include book-page-layout;
+}
+
+.page-body {
+  ::ng-deep {
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+
+      li {
+        font-family: var(--font-serif);
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        opacity: 0.9;
+
+        &::after {
+          content: "";
+          flex-grow: 1;
+          border-bottom: 1px dotted rgba(0,0,0,0.1);
+          margin: 0 10px;
+          order: 2;
+        }
+
+        .page-num {
+          order: 3;
+          font-family: var(--font-sans);
+          font-size: 0.8rem;
+          opacity: 0.5;
+        }
+
+        span:first-child {
+          order: 1;
+        }
+      }
+    }
+  }
+}
+
+.page-blank {
+  break-before: column;
+  height: 1px;
+  width: 100%;
+}

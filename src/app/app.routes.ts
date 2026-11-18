@@ -6,13 +6,13 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: 'admin/login',
-    loadComponent: async () => (await import('./features/admin/admin-login/admin-login')).AdminLogin
+    loadComponent: async () => (await import('./domains/content-management/admin/admin-login/admin-login')).AdminLogin
   },
   {
     path: 'admin',
     component: AdminLayout,
     canActivate: [authGuard],
-    loadChildren: () => import('./features/admin/admin.routes')
+    loadChildren: () => import('./domains/content-management/admin/admin.routes')
   },
   {
     path: '',
@@ -21,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: async () => (await import('./features/not-found/not-found')).NotFound
+    loadComponent: async () => (await import('./shared/components/not-found/not-found')).NotFound
   }
 ];
+

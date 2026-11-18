@@ -1,44 +1,45 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import type { CmsPage, CmsUrl } from '../../shared/types/cms.interface';
 import { PageType } from '../../shared/types/page-type.enum';
 import type { ContentRepository } from './content-repository.token';
-
-const API_BASE = 'http://127.0.0.1:4510/api/v1';
+import { API_BASE_URL } from '../tokens/api.tokens';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiContentRepository implements ContentRepository {
-  async loadSections(type: PageType, lang: string): Promise<readonly CmsPage[]> {
+  private readonly baseUrl = inject(API_BASE_URL);
+
+  async loadSections(type: PageType, lang: string): Promise<CmsPage[]> {
     return this.getPages({ type, lang });
   }
 
-  async getUrls(): Promise<readonly CmsUrl[]> {
+  async getUrls(): Promise<CmsUrl[]> {
     try {
-      const response = await fetch(`${API_BASE}/urls`);
+      const response = await fetch(`${this.baseUrl}/urls`);
       if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`);
       }
-      return (await response.json()) as readonly CmsUrl[];
+      return (await response.json()) as CmsUrl[];
     } catch {
       throw new Error('Cannot reach API: please verify the backend service is running');
     }
   }
 
-  async getPages(query?: { type?: string; lang?: string }): Promise<readonly CmsPage[]> {
+  async getPages(query?: { type?: string; lang?: string }): Promise<CmsPage[]> {
     const params = new URLSearchParams();
     if (query?.type) params.set('type', query.type);
     if (query?.lang) params.set('lang', query.lang);
 
     const queryString = params.toString();
-    const url = `${API_BASE}/pages${queryString ? '?' + queryString : ''}`;
+    const url = `${this.baseUrl}/pages${queryString ? '?' + queryString : ''}`;
 
     try {
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`);
       }
-      return (await response.json()) as readonly CmsPage[];
+      return (await response.json()) as CmsPage[];
     } catch {
       throw new Error('Cannot reach API: please verify the backend service is running');
     }
@@ -46,7 +47,7 @@ export class ApiContentRepository implements ContentRepository {
 
   async getPage(id: string): Promise<CmsPage> {
     try {
-      const response = await fetch(`${API_BASE}/pages/${id}`);
+      const response = await fetch(`${this.baseUrl}/pages/${id}`);
       if (!response.ok) {
         throw new Error(`Page ${id} not found`);
       }
@@ -58,7 +59,7 @@ export class ApiContentRepository implements ContentRepository {
 
   async createPage(data: Partial<CmsPage>): Promise<CmsPage> {
     try {
-      const response = await fetch(`${API_BASE}/pages`, {
+      const response = await fetch(`${this.baseUrl}/pages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -74,7 +75,7 @@ export class ApiContentRepository implements ContentRepository {
 
   async updatePage(id: string, data: Partial<CmsPage>): Promise<CmsPage> {
     try {
-      const response = await fetch(`${API_BASE}/pages/${id}`, {
+      const response = await fetch(`${this.baseUrl}/pages/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -90,7 +91,7 @@ export class ApiContentRepository implements ContentRepository {
 
   async deletePage(id: string): Promise<void> {
     try {
-      const response = await fetch(`${API_BASE}/pages/${id}`, {
+      const response = await fetch(`${this.baseUrl}/pages/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -103,7 +104,7 @@ export class ApiContentRepository implements ContentRepository {
 
   async login(password: string): Promise<boolean> {
     try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
+      const response = await fetch(`${this.baseUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
@@ -121,7 +122,7 @@ export class ApiContentRepository implements ContentRepository {
   async uploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await fetch(`${API_BASE}/media`, {
+    const response = await fetch(`${this.baseUrl}/media`, {
       method: 'POST',
       body: formData,
     });

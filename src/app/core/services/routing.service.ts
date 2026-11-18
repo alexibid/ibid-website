@@ -107,14 +107,14 @@ export class RoutingService {
 
         switch (page.type) {
           case PageType.Home:
-            componentLoader = async () => (await import('../../features/home/home')).Home;
+            componentLoader = async () => (await import('../../domains/book/home/home')).Home;
             break;
           case PageType.Exit:
-            componentLoader = async () => (await import('../../features/exit/exit')).Exit;
+            componentLoader = async () => (await import('../../domains/contact/exit/exit')).Exit;
             break;
           case PageType.Chapter:
           default:
-            componentLoader = async () => (await import('../../features/chapter/chapter')).Chapter;
+            componentLoader = async () => (await import('../../domains/book/chapter/chapter')).Chapter;
             break;
         }
 
@@ -143,7 +143,7 @@ export class RoutingService {
               }
             },
             ...dynamicRoutes,
-            { path: '**', loadComponent: async () => (await import('../../features/not-found/not-found')).NotFound }
+            { path: '**', loadComponent: async () => (await import('../../shared/components/not-found/not-found')).NotFound }
           ]
         }
       ];

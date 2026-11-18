@@ -23,6 +23,10 @@ export class SnapshotWriter {
   ) {}
 
   async write(snapshot: ContentSnapshot): Promise<void> {
+    if (snapshot.pages.length === 0 && snapshot.urls.length === 0) {
+      throw new SnapshotWriteError('Content export failed: Cannot reach API or content database is empty');
+    }
+
     for (const name of snapshot.media) {
       if (typeof name !== 'string' || !SAFE_MEDIA_NAME.test(name) || name.includes('..')) {
         throw new SnapshotWriteError(`Unsafe media filename: ${name}`);
