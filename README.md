@@ -1,136 +1,59 @@
-# IBID Web Application
+# ibid-website
 
----
+ibid's public website. It reads like a book: a cover, chapters with numbered pages and an exit
+page, with the content managed in PocketBase and edited from an admin area.
 
-## 🛠️ Technology Stack & Frameworks
+This app is a submodule of [ibid-workspace](https://github.com/alexibid/ibid-workspace), but it
+does not use the workspace's shared build: it keeps its own `package.json`, `angular.json` and
+dependencies.
 
-*   **Frontend Framework**: **Angular v19** (utilizing Zoneless Change Detection, reactive state signals, standalone component architecture, and Server-Side Rendering / SSR).
-*   **Database & CMS**: **PocketBase** (a headless, Go-based CMS running on an embedded SQLite database for lightweight, real-time dynamic content mapping).
-*   **Unit Testing**: **Vitest** (for high-speed testing execution).
-*   **Styling**: **SCSS** (for modular, vanilla CSS stylesheet compilation).
+## Stack
 
----
+- Angular 21 with standalone components, signals, zoneless change detection and SSR (Express)
+- PocketBase as the headless CMS, on its embedded SQLite
+- Vitest through `@angular/build:unit-test`
+- SCSS
 
-## 🌐 Supported Languages / Idiomas Suportados
+Languages: Portuguese (default), English, Spanish and French.
 
-The application supports internationalization (i18n) with the following languages:
+## Structure
 
-*   **Portuguese (`pt`)** (Default)
-*   **English (`en`)**
-*   **Spanish (`es`)**
-*   **French (`fr`)**
-
----
-
-## 🏛️ Directory Layout (CFS Pattern)
-
-*   **Core**: Houses global singletons, router initialization, dynamic meta headers, interceptors, and layouts.
-*   **Features**: Isolates page-level views and administrative modules.
-*   **Shared**: Exposes stateless UI widgets, utility functions, directives, and types.
-
-**Why CFS**: This layout ensures clean boundary control, prevents state pollution, and allows individual feature pages to be modified or deprecated independently without side-effects.
-
----
-
-## 💾 Database Strategy (PocketBase + SQLite)
-
-We use PocketBase as a headless CMS with an embedded SQLite database.
-
-**Why PocketBase**: Decoupling content from compiled bundles allows runtime content changes and route metadata updates without requiring frontend redeployments.
-
-**⚠️ Database Alteration Rule**: A database backup must be created (via PocketBase Admin Settings -> Backups, or by duplicating `pb_data/`) before any database alteration or schema changes.
-
----
-
-## 💎 Clean Code & Development Standards
-
-The codebase must strictly follow:
-
-*   **Composition over Inheritance**
-*   **OOP**
-*   **SOLID**
-
-### Meaningful Names
-*   Use intention-revealing names.
-*   Avoid disinformation and confusing abbreviations.
-*   Make meaningful distinctions between names.
-*   Use pronounceable names.
-*   Use searchable names.
-*   Avoid mental mapping (such as single-letter variables: i, j, x).
-*   Use nouns for classes and types.
-*   Use verbs for functions and methods.
-
-### Functions
-*   Keep functions as small as possible.
-*   Do one thing (Single Responsibility).
-*   Keep only one level of abstraction per function.
-*   Write code that reads from top to bottom (The Stepdown Rule).
-*   Limit the number of arguments to 0, 1, or 2 (avoid more than 3).
-*   Do not use flag arguments (boolean parameters that change the function's behavior).
-*   Avoid any side effects.
-*   Separate commands from queries (Command Query Separation).
-*   Treat error handling as "one thing" within the function.
-*   Avoid duplicate code (DRY - Don't Repeat Yourself).
-
-### Comments
-*   Explain decisions through readable code, not comments.
-*   Remove any commented-out code (Dead Code).
-*   Avoid redundant, noisy, or obvious comments.
-*   Use comments only to explain complex architectural decisions or warnings of consequences.
-
-### Formatting and Organization
-*   Keep files small (maximum of 200 to 300 lines).
-*   Use vertical spacing to separate concepts and blocks of code.
-*   Keep related concepts physically close in the file.
-*   Declare variables as close as possible to where they are used.
-*   Keep lines of code short (maximum of 100-120 characters).
-*   Use consistent and automated indentation (Prettier/ESLint).
-
-### Objects, Classes, and Data Structures
-*   Hide internal implementation details through abstraction.
-*   Clearly differentiate Objects (expose behavior, hide data) from Data Structures (expose data, have no behavior).
-*   Respect the Law of Demeter (a method of an object should only call methods of the object itself or of objects it creates/receives).
-*   Keep classes small and focused on a single responsibility.
-
-### Error Handling
-*   Use exceptions (throw errors) instead of returning error codes.
-*   Write try-catch blocks first when structuring logic prone to failure.
-*   Do not return null or undefined if it can be avoided.
-*   Do not pass null or undefined as arguments to functions.
-
-### TypeScript Best Practices
-*   Strictly forbid the use of the any type (use unknown or Generics).
-*   Use readonly to ensure the immutability of arrays and properties.
-*   Avoid numeric enums (prefer union types or as const).
-*   Use Optional Chaining (?.) and Nullish Coalescing (??) for null-safety.
-*   Prefer Interfaces for public APIs and Type Aliases for unions and intersections.
-*   Use Type Guards instead of manual type assertions (as Type).
-
----
-
-## 🚀 Development & Build Commands
-
-### Setup
-```bash
-npm install
+```
+apps/ibid-website/
+  src/app/
+    core/        layouts (front office, admin), guards, interceptors, error handler and the
+                 services: PocketBase, book, i18n, meta, navigation, routing, state, admin
+    features/    cover, home, chapter, exit, not-found, and admin (login, list, create, read,
+                 update, delete per language)
+    shared/      components, constants, directives, pipes, types and utils
+  src/environments/environment.template.ts   PocketBase URL and admin password placeholders
+  pocketbase/    the PocketBase binary and its migrations (pb_migrations)
+  public/        images, favicon and the fatal error page
 ```
 
-### Run Frontend Client
-```bash
-npm run dev
-```
+`core` holds the singletons, `features` the pages, and `shared` the stateless pieces, so a page
+can change or go without touching another.
 
-### Run CMS Backend
-```bash
-npm run bd
-```
+## Content
 
-### Run Unit Tests
-```bash
-npm run test
-```
+PocketBase keeps its data outside the repository, in `~/.ibid-website/pb_data`. The schema lives
+in `pocketbase/pb_migrations`.
 
-### Build Production
-```bash
-npm run build
-```
+Back up `pb_data` before changing the schema or the data — from the PocketBase admin
+(Settings → Backups) or by copying the folder.
+
+## Commands
+
+Run inside `apps/ibid-website`.
+
+| For                 | Command                          |
+| :------------------ | :------------------------------- |
+| Install             | `npm install`                    |
+| PocketBase          | `npm run bd`                     |
+| Serve               | `npm start`                      |
+| Unit tests          | `npm test`                       |
+| Production build    | `npm run build`                  |
+| Serve the SSR build | `npm run serve:ssr:ibid-website` |
+
+From the workspace root, Nx runs the same scripts: `npx nx build ibid-website`,
+`npx nx test ibid-website`.
