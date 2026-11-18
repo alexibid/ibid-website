@@ -1,18 +1,18 @@
 import { Routes } from '@angular/router';
-import { AdminLayout } from './core/layouts/admin-layout/admin-layout';
-import { FrontofficeLayout } from './core/layouts/frontoffice-layout/frontoffice-layout';
-import { authGuard } from './core/guards/auth.guard';
+import { AdminLayout } from './ui/layouts/admin-layout/admin-layout';
+import { FrontofficeLayout } from './ui/layouts/frontoffice-layout/frontoffice-layout';
+import { authGuard } from './infrastructure/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'admin/login',
-    loadComponent: async () => (await import('./domains/content-management/admin/admin-login/admin-login')).AdminLogin
+    loadComponent: async () => (await import('./ui/pages/admin/admin-login/admin-login')).AdminLogin
   },
   {
     path: 'admin',
     component: AdminLayout,
     canActivate: [authGuard],
-    loadChildren: () => import('./domains/content-management/admin/admin.routes')
+    loadChildren: () => import('./ui/pages/admin/admin.routes')
   },
   {
     path: '',
@@ -21,7 +21,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: async () => (await import('./shared/components/not-found/not-found')).NotFound
+    loadComponent: async () => (await import('./ui/components/not-found/not-found')).NotFound
   }
 ];
-

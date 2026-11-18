@@ -1,0 +1,61 @@
+import {Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, UpperCasePipe } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { I18nService } from '../../../../infrastructure/services/i18n.service';
+import { RoutingService } from '../../../../infrastructure/services/routing.service';
+import { CmsRouteData } from '../../../../domain/models/cms.interface';
+import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-lang-selector',
+  standalone: true,
+  imports: [CommonModule, UpperCasePipe, ClickOutsideDirective],
+  templateUrl: './lang-selector.html',
+  styleUrl: './lang-selector.scss'
+})
+export class LangSelector {
+  public i18n = inject(I18nService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private routingService = inject(RoutingService);
+
+  public isLangMenuOpen = signal<boolean>(false);
+
+  public toggleLangMenu() {
+    this.isLangMenuOpen.update(v => !v);
+  }
+
+  public closeMenu() {
+    this.isLangMenuOpen.set(false);
+  }
+
+  changeLanguage(targetLang: string): void {
+    this.i18n.setLanguage(targetLang);
+
+    let currentRoute = this.activatedRoute;
+    while (currentRoute.firstChild) {
+      currentRoute = currentRoute.firstChild;
+    }
+
+    const routeData = currentRoute.snapshot.data as CmsRouteData;
+    const currentLocation = routeData?.location;
+
+    if (currentLocation) {
+      const translations = this.routingService.translationMap.get(currentLocation);
+      if (translations) {
+        const matchedTranslation = translations.find(t => t.lang === targetLang);
+        if (matchedTranslation) {
+          this.router.navigate([matchedTranslation.url]);
+          this.isLangMenuOpen.set(false);
+          return;
+        }
+      }
+    }
+
+    if (targetLang === 'pt') this.router.navigate(['/']);
+    else this.router.navigate(['/' + targetLang]);
+
+    this.isLangMenuOpen.set(false);
+  }
+}

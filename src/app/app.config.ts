@@ -3,13 +3,13 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { RoutingService } from './core/services/routing.service';
-import { MetaService } from './core/services/meta.service';
-import { GlobalErrorHandler } from './core/handlers/global-error.handler';
-import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { RoutingService } from './infrastructure/services/routing.service';
+import { MetaService } from './infrastructure/services/meta.service';
+import { GlobalErrorHandler } from './infrastructure/handlers/global-error.handler';
+import { errorInterceptor } from './infrastructure/interceptors/error.interceptor';
 import { provideQuillConfig } from 'ngx-quill';
-import { CONTENT_REPOSITORY } from './core/services/content-repository.token';
-import { SnapshotContentRepository } from './core/services/snapshot-content.repository';
+import { CONTENT_REPOSITORY } from './infrastructure/tokens/content-repository.token';
+import { SnapshotContentRepository } from './infrastructure/repositories/snapshot-content.repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
