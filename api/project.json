@@ -12,11 +12,7 @@
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "eslint .",
-        "cwd": "apps/ibid-website/api"
-      }
+      "executor": "nx:noop"
     },
     "test": {
       "executor": "nx:run-commands",

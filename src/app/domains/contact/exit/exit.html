@@ -1,34 +1,34 @@
 @if (facade.sections().length > 0) {
 <article class="page-body">
   @for (section of facade.sections(); track section.id) {
-  @if (section.metadata?.location === 'contact-form') {
-  <section class="page-section" [id]="section.metadata?.location">
+  @if (section.metadata && section.metadata.location === 'contact-form') {
+  <section class="page-section" [id]="section.metadata.location">
     <header class="page-header">
       <h2 class="page-title">{{ section.title }}</h2>
     </header>
     <div [innerHTML]="section.content"></div>
 
     <form class="contact-form" (submit)="onSubmit($event)">
-      @if (facade.errorMessage()) {
+      @if (facade.submitStatus() === 'error' && facade.errorMessage()) {
       <div class="form-error-global" role="alert">{{ facade.errorMessage() }}</div>
       }
       <div class="form-group">
         <label for="name">{{ 'contacts.name' | translate }}</label>
-        <span id="name" role="textbox" contenteditable="true" class="form-input" [attr.aria-placeholder]="'contacts.name-placeholder' | translate"></span>
+        <span id="name" role="textbox" contenteditable="true" class="form-input" [attr.aria-placeholder]="'contacts.name-placeholder' | translate" (input)="facade.name.set($any($event.target).innerText || '')"></span>
         @if (facade.errors().name) {
         <span class="field-error">{{ facade.errors().name }}</span>
         }
       </div>
       <div class="form-group">
         <label for="email">{{ 'contacts.email' | translate }}</label>
-        <span id="email" role="textbox" contenteditable="true" class="form-input" [attr.aria-placeholder]="'contacts.email-placeholder' | translate"></span>
+        <span id="email" role="textbox" contenteditable="true" class="form-input" [attr.aria-placeholder]="'contacts.email-placeholder' | translate" (input)="facade.email.set($any($event.target).innerText || '')"></span>
         @if (facade.errors().email) {
         <span class="field-error">{{ facade.errors().email }}</span>
         }
       </div>
       <div class="form-group">
         <label for="message">{{ 'contacts.message' | translate }}</label>
-        <span id="message" role="textbox" contenteditable="true" class="form-textarea" [attr.aria-placeholder]="'contacts.message-placeholder' | translate"></span>
+        <span id="message" role="textbox" contenteditable="true" class="form-textarea" [attr.aria-placeholder]="'contacts.message-placeholder' | translate" (input)="facade.message.set($any($event.target).innerText || '')"></span>
         @if (facade.errors().message) {
         <span class="field-error">{{ facade.errors().message }}</span>
         }
@@ -39,8 +39,8 @@
     </form>
   </section>
   }
-  @if (section.metadata?.location === 'about') {
-  <section class="page-section" [id]="section.metadata?.location">
+  @if (section.metadata && section.metadata.location === 'about') {
+  <section class="page-section" [id]="section.metadata.location">
     <header class="page-header">
       <div class="page-number">{{ 'chapter' | translate }} VIII</div>
       <h1 class="page-title">{{ section.title }}</h1>
@@ -56,9 +56,9 @@
 }
 
 @for (section of facade.sections(); track section.id) {
-@if (section.metadata?.location === 'back-cover') {
+@if (section.metadata && section.metadata.location === 'back-cover') {
 <website-cover class="book-cover-page" [data]="section" [isBack]="true" [fullSpread]="true" #thankYouSection
-  [id]="section.metadata?.location"></website-cover>
+  [id]="section.metadata.location"></website-cover>
 }
 }
 } @else {

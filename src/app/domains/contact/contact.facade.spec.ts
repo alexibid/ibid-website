@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ContactFacade } from './contact.facade';
 import { CONTENT_REPOSITORY } from '../../core/services/content-repository.token';
 import { SnapshotContentRepository } from '../../core/services/snapshot-content.repository';
@@ -9,6 +10,7 @@ describe('ContactFacade', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        provideRouter([]),
         ContactFacade,
         { provide: CONTENT_REPOSITORY, useClass: SnapshotContentRepository }
       ]

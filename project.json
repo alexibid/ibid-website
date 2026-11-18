@@ -82,6 +82,20 @@
       "options": {
         "tsConfig": "apps/ibid-website/tsconfig.spec.json"
       }
+    },
+    "serve-e2e": {
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4201
+      }
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "playwright test",
+        "cwd": "apps/ibid-website"
+      }
     }
   }
 }
