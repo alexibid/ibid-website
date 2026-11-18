@@ -52,11 +52,11 @@ export function readApiConfig(env: NodeJS.ProcessEnv): ApiConfig {
 
   return {
     port: portNumber,
-    databaseUrl: env.DATABASE_URL!.trim(),
-    adminPasswordHash: env.ADMIN_PASSWORD_HASH!.trim(),
-    sessionSecret: env.SESSION_SECRET!.trim(),
-    contentDir: env.CONTENT_DIR!.trim(),
-    publicMediaDir: env.PUBLIC_MEDIA_DIR!.trim(),
-    mediaDir: env.MEDIA_DIR!.trim(),
+    databaseUrl: env.DATABASE_URL ? env.DATABASE_URL.trim() : '',
+    adminPasswordHash: env.ADMIN_PASSWORD_HASH ? env.ADMIN_PASSWORD_HASH.trim() : '',
+    sessionSecret: env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '',
+    contentDir: env.CONTENT_DIR ? env.CONTENT_DIR.trim() : '',
+    publicMediaDir: env.PUBLIC_MEDIA_DIR ? env.PUBLIC_MEDIA_DIR.trim() : '',
+    mediaDir: env.MEDIA_DIR ? env.MEDIA_DIR.trim() : '',
   };
 }

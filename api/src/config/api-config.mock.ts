@@ -1,3 +1,4 @@
+// secretlint-disable
 export const MOCK_COMPLETE_ENV = {
   DATABASE_URL: 'postgres://mock-user:mock-db-secret@ibid-website-db:5432/ibid_website',
   ADMIN_PASSWORD_HASH: 'scrypt$bW9jay1zYWx0$bW9jay1oYXNo',

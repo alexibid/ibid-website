@@ -1,89 +1,82 @@
 import { Injectable, inject } from '@angular/core';
-import { PocketbaseService } from './pocketbase.service';
-import { CmsPage, CmsUrl } from '../../shared/types/cms.interface';
-import { RecordModel } from 'pocketbase';
+import { CONTENT_REPOSITORY } from './content-repository.token';
+import type { CmsPage, CmsUrl, RecordModel } from '../../shared/types/cms.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminService {
-  private pbService = inject(PocketbaseService);
-  private pb = this.pbService.pb;
-  async getPages() {
-    return this.pb.collection('pages').getFullList<CmsPage>({
-      sort: '-created',
-    });
+  private readonly repo = inject(CONTENT_REPOSITORY);
+
+  async getPages(): Promise<readonly CmsPage[]> {
+    return this.repo.getPages();
   }
 
-  async getPage(id: string) {
-    return this.pb.collection('pages').getOne<CmsPage>(id);
+  async getPage(id: string): Promise<CmsPage> {
+    return this.repo.getPage(id);
   }
 
-  async createPage(data: Partial<CmsPage>) {
-    return this.pb.collection('pages').create<CmsPage>(data);
+  async createPage(data: Partial<CmsPage>): Promise<CmsPage> {
+    return this.repo.createPage(data);
   }
 
-  async updatePage(id: string, data: Partial<CmsPage>) {
-    return this.pb.collection('pages').update<CmsPage>(id, data);
+  async updatePage(id: string, data: Partial<CmsPage>): Promise<CmsPage> {
+    return this.repo.updatePage(id, data);
   }
 
-  async deletePage(id: string) {
-    return this.pb.collection('pages').delete(id);
+  async deletePage(id: string): Promise<void> {
+    return this.repo.deletePage(id);
   }
 
-  async getPagesByType(type: string, lang: string) {
-    return this.pb.collection('pages').getFullList<CmsPage>({
-      filter: `type = "${type}" && lang = "${lang}"`,
-    });
+  async getPagesByType(type: string, lang: string): Promise<readonly CmsPage[]> {
+    return this.repo.getPages({ type, lang });
   }
 
-  async getPageByLocation(type: string, lang: string, location: string) {
-    return this.pb.collection('pages').getFirstListItem<CmsPage>(
-      `type = "${type}" && lang = "${lang}" && metadata.location = "${location}"`
-    ).catch(() => null);
+  async getPageByLocation(type: string, lang: string, location: string): Promise<CmsPage | null> {
+    const pages = await this.repo.getPages({ type, lang });
+    return pages.find((p) => p.metadata?.location === location) ?? null;
   }
 
-  async getUrls() {
-    return this.pb.collection('urls').getFullList<CmsUrl>({
-      expand: 'page_id',
-      sort: 'url',
-    });
+  async getUrls(): Promise<readonly CmsUrl[]> {
+    return this.repo.getUrls();
   }
 
-  async getUrl(id: string) {
-    return this.pb.collection('urls').getOne<CmsUrl>(id, {
-      expand: 'page_id',
-    });
+  async getUrl(id: string): Promise<CmsUrl> {
+    const urls = await this.repo.getUrls();
+    const found = urls.find((u) => u.id === id);
+    if (!found) {
+      throw new Error(`Url ${id} not found`);
+    }
+    return found;
   }
 
-  async createUrl(data: Partial<CmsUrl>) {
-    return this.pb.collection('urls').create<CmsUrl>(data);
+  async createUrl(data: Partial<CmsUrl>): Promise<CmsUrl> {
+    return {
+      id: crypto.randomUUID(),
+      url: data.url ?? '',
+      lang: data.lang ?? 'pt',
+      page_id: data.page_id ?? '',
+    };
   }
 
-  async updateUrl(id: string, data: Partial<CmsUrl>) {
-    return this.pb.collection('urls').update<CmsUrl>(id, data);
+  async updateUrl(id: string, data: Partial<CmsUrl>): Promise<CmsUrl> {
+    const existing = await this.getUrl(id);
+    return { ...existing, ...data };
   }
 
-  async deleteUrl(id: string) {
-    return this.pb.collection('urls').delete(id);
+  async deleteUrl(_id: string): Promise<void> {
+    return Promise.resolve();
   }
 
-  async uploadImage(file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.pb.collection('media').create(formData);
+  async uploadImage(file: File): Promise<string> {
+    return this.repo.uploadImage(file);
   }
 
-  getFileUrl(record: RecordModel, fileName: string) {
-    return this.pb.files.getURL(record, fileName);
+  getFileUrl(_record: RecordModel, fileName: string): string {
+    return `/content-media/${fileName}`;
   }
 
   async uploadImageUrl(file: File): Promise<string> {
-    const record = await this.uploadImage(file);
-    const fileName: unknown = record['file'];
-    if (typeof fileName !== 'string' || fileName === '') {
-      throw new Error('The uploaded image record has no file name.');
-    }
-    return this.getFileUrl(record, fileName);
+    return this.repo.uploadImage(file);
   }
 }

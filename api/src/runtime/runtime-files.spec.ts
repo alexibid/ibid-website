@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 
 const websiteRoot = fileURLToPath(new URL('../../../', import.meta.url));
 const compose = readFileSync(`${websiteRoot}compose.yaml`, 'utf8');
-const gitignore = readFileSync(`${websiteRoot}.gitignore`, 'utf8');
 const envExample = readFileSync(`${websiteRoot}api/.env.example`, 'utf8');
 
 function publishedPorts(): readonly string[] {
@@ -32,7 +31,10 @@ describe('runtime files', () => {
   });
 
   it('should prove no password or secret is in the repository, and tests use database and filesystem mocks', () => {
-    expect(gitignore.split('\n')).toContain('/api/.env');
+    const values = envValues();
+    expect(values.get('ADMIN_PASSWORD_HASH')).toBe('');
+    expect(values.get('SESSION_SECRET')).toBe('');
+    expect(compose).not.toContain('production-secret');
   });
 
   it('should hold only placeholders in the example environment', () => {

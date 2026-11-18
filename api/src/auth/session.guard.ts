@@ -11,7 +11,8 @@ export interface Clock {
 
 export interface GuardRequest {
   readonly method: string;
-  readonly url: string;
+  readonly url?: string;
+  readonly originalUrl?: string;
   readonly headers?: {
     readonly cookie?: string;
   };
@@ -35,7 +36,8 @@ export class SessionGuard implements CanActivate {
       return true;
     }
 
-    const path = request.url.split('?')[0] ?? '';
+    const rawUrl = request.originalUrl ?? request.url ?? '';
+    const path = rawUrl.split('?')[0] ?? '';
     if (path === '/api/v1/auth/login') {
       return true;
     }

@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BookService } from './book.service';
 import { I18nService } from './i18n.service';
+import { CONTENT_REPOSITORY } from './content-repository.token';
 import { PageType } from '../../shared/types/page-type.enum';
 import { CmsPage, CmsRouteData } from '../../shared/types/cms.interface';
 
@@ -16,6 +17,7 @@ export class StateService {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
+  private contentRepo = inject(CONTENT_REPOSITORY);
 
   public isBrowser = isPlatformBrowser(this.platformId);
   public isAdmin = signal<boolean>(false);
@@ -30,22 +32,17 @@ export class StateService {
   public coverData = signal<CmsPage | null>(null);
   public backCoverData = signal<CmsPage | null>(null);
 
-  public login(password: string): boolean {
-    if (password === '123') {
+  public async login(password: string): Promise<boolean> {
+    const success = await this.contentRepo.login(password);
+    if (success) {
       this.isAuthenticated.set(true);
-      if (this.isBrowser) {
-        localStorage.setItem('admin_auth', 'true');
-      }
       return true;
     }
     return false;
   }
 
-  public logout() {
+  public logout(): void {
     this.isAuthenticated.set(false);
-    if (this.isBrowser) {
-      localStorage.removeItem('admin_auth');
-    }
     this.router.navigate(['/admin/login']);
   }
 
