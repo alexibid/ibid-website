@@ -86,7 +86,11 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "watch": false
+            "watch": false,
+            "setupFiles": [
+              "../../tools/vitest/forbid-network.ts",
+              "../../tools/vitest/mock-icon-assets.ts"
+            ]
           }
         }
       }
