@@ -8,15 +8,15 @@ export interface CmsPageMetadata {
 }
 
 export interface RecordModel {
-  id: string;
+  id?: string;
   created?: string;
   updated?: string;
   collectionId?: string;
   collectionName?: string;
-  [key: string]: unknown;
 }
 
 export interface CmsPage extends RecordModel {
+  id: string;
   title: string;
   content: string;
   type: PageType;
@@ -25,6 +25,7 @@ export interface CmsPage extends RecordModel {
 }
 
 export interface CmsUrl extends RecordModel {
+  id: string;
   url: string;
   page_id: string;
   lang: string;

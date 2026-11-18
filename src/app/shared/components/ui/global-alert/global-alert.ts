@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UiErrorService } from '../../../../core/services/ui-error.service';
 import { I18nService } from '../../../../core/services/i18n.service';
 
@@ -21,7 +21,8 @@ function textOf(translations: unknown, key: string): AlertText | undefined {
 }
 
 @Component({
-  selector: 'app-global-alert',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-global-alert',
   imports: [],
   templateUrl: './global-alert.html',
   styleUrl: './global-alert.scss'

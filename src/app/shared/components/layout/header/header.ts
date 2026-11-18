@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LangSelector } from '../lang-selector/lang-selector';
@@ -6,7 +6,8 @@ import { Settings } from '../settings/settings';
 import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
-  selector: 'app-header',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-header',
   standalone: true,
   imports: [CommonModule, RouterLink, LangSelector, Settings],
   templateUrl: './header.html',

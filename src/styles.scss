@@ -1,3 +1,8 @@
 @use 'quill/dist/quill.snow.css';
-@use 'styles/base/typography';
+@use 'styles/abstracts/variables';
+@use 'styles/abstracts/mixins';
+@use 'styles/abstracts/page-layout';
 @use 'styles/base/reset';
+@use 'styles/base/typography';
+@use 'styles/components/book-base';
+

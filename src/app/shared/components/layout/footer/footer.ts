@@ -1,4 +1,4 @@
-import { Component, inject, input, computed } from '@angular/core';
+import {Component, inject, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StateService } from '../../../../core/services/state.service';
@@ -6,7 +6,8 @@ import { BookService } from '../../../../core/services/book.service';
 import { PageTurn } from '../page-turn/page-turn';
 
 @Component({
-  selector: 'app-footer',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-footer',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './footer.html',

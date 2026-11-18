@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, provideAppInitializer, inject, ErrorHandler } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
       },
       placeholder: 'Write something here...'
     }),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
     provideAppInitializer(() => {
       const routingService = inject(RoutingService);

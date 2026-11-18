@@ -8,7 +8,7 @@ import type { CmsPage, CmsUrl, RecordModel } from '../../shared/types/cms.interf
 export class AdminService {
   private readonly repo = inject(CONTENT_REPOSITORY);
 
-  async getPages(): Promise<readonly CmsPage[]> {
+  async getPages(): Promise<CmsPage[]> {
     return this.repo.getPages();
   }
 
@@ -28,7 +28,7 @@ export class AdminService {
     return this.repo.deletePage(id);
   }
 
-  async getPagesByType(type: string, lang: string): Promise<readonly CmsPage[]> {
+  async getPagesByType(type: string, lang: string): Promise<CmsPage[]> {
     return this.repo.getPages({ type, lang });
   }
 
@@ -37,7 +37,7 @@ export class AdminService {
     return pages.find((p) => p.metadata?.location === location) ?? null;
   }
 
-  async getUrls(): Promise<readonly CmsUrl[]> {
+  async getUrls(): Promise<CmsUrl[]> {
     return this.repo.getUrls();
   }
 
@@ -66,6 +66,10 @@ export class AdminService {
 
   async deleteUrl(_id: string): Promise<void> {
     return Promise.resolve();
+  }
+
+  async login(password: string): Promise<boolean> {
+    return this.repo.login(password);
   }
 
   async uploadImage(file: File): Promise<string> {

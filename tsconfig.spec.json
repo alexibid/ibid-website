@@ -1,21 +1,16 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "composite": true,
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "noEmit": true
   },
   "include": [
+    "src/**/*.ts",
     "src/**/*.d.ts",
-    "src/**/*.spec.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    }
+    "../../tools/vitest/forbid-network.ts",
+    "../../tools/vitest/mock-icon-assets.ts"
   ]
 }

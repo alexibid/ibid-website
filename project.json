@@ -1,0 +1,87 @@
+{
+  "name": "ibid-website",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "website",
+  "sourceRoot": "apps/ibid-website/src",
+  "tags": ["type:app", "scope:ibid-website"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "defaultConfiguration": "production",
+      "options": {
+        "browser": "apps/ibid-website/src/main.ts",
+        "tsConfig": "apps/ibid-website/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/ibid-website/public"
+          }
+        ],
+        "styles": [
+          "apps/ibid-website/src/styles.scss"
+        ],
+        "server": "apps/ibid-website/src/main.server.ts",
+        "outputMode": "server",
+        "ssr": {
+          "entry": "apps/ibid-website/src/server.ts"
+        },
+        "prerender": {
+          "routesFile": "apps/ibid-website/src/prerender-routes.txt",
+          "discoverRoutes": false
+        },
+        "allowedCommonJsDependencies": [
+          "quill",
+          "quill-delta"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1MB",
+              "maximumError": "2MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "8kB",
+              "maximumError": "16kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "ibid-website:build:production"
+        },
+        "development": {
+          "buildTarget": "ibid-website:build:development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "tsConfig": "apps/ibid-website/tsconfig.spec.json"
+      }
+    }
+  }
+}

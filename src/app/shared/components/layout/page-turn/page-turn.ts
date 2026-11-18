@@ -1,11 +1,12 @@
-import { Component, inject, HostBinding, signal, effect, computed } from '@angular/core';
+import {Component, inject, HostBinding, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookService } from '../../../../core/services/book.service';
 import { PageType } from '../../../../shared/types/page-type.enum';
 import { StateService } from '../../../../core/services/state.service';
 
 @Component({
-  selector: 'app-page-turn',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-page-turn',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './page-turn.html',

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { I18nService } from '../../../../core/services/i18n.service';
@@ -7,7 +7,8 @@ import { CmsRouteData } from '../../../../shared/types/cms.interface';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
 
 @Component({
-  selector: 'app-lang-selector',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'website-lang-selector',
   standalone: true,
   imports: [CommonModule, UpperCasePipe, ClickOutsideDirective],
   templateUrl: './lang-selector.html',

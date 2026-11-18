@@ -6,7 +6,7 @@ import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[appBookNavigation]',
+  selector: '[websiteBookNavigation]',
   standalone: true
 })
 export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy {

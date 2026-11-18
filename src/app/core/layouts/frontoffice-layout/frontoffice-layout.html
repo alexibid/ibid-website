@@ -1,11 +1,11 @@
-<app-header></app-header>
+<website-header></website-header>
 
 <main class="book-pages" #contentVolume>
   <router-outlet></router-outlet>
 </main>
 
-<app-page-turn #pageTurn></app-page-turn>
+<website-page-turn #pageTurn></website-page-turn>
 
-<app-footer [pageTurn]="pageTurn"></app-footer>
+<website-footer [pageTurn]="pageTurn"></website-footer>
 
-<app-global-alert></app-global-alert>
+<website-global-alert></website-global-alert>
