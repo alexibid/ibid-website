@@ -29,9 +29,21 @@ export class SnapshotContentRepository implements ContentRepository {
   private readonly snapshot = snapshotData as unknown as SnapshotFile;
 
   async loadSections(type: PageType, lang: string): Promise<CmsPage[]> {
-    return this.snapshot.pages
-      .filter((p) => p.type === type && p.lang === lang)
-      .map((p) => this.toCmsPage(p));
+    const ptPages = this.snapshot.pages.filter((p) => p.type === type && p.lang === 'pt');
+    if (lang === 'pt') {
+      return ptPages.map((p) => this.toCmsPage(p));
+    }
+    const targetPages = this.snapshot.pages.filter((p) => p.type === type && p.lang === lang);
+    const targetByLocation = new Map<string, SnapshotFile['pages'][number]>();
+    for (const p of targetPages) {
+      if (p.location && p.content && p.content.trim()) {
+        targetByLocation.set(p.location, p);
+      }
+    }
+    return ptPages.map((ptPage) => {
+      const match = ptPage.location ? targetByLocation.get(ptPage.location) : undefined;
+      return this.toCmsPage(match ?? ptPage);
+    });
   }
 
   async getUrls(): Promise<CmsUrl[]> {
@@ -93,8 +105,8 @@ export class SnapshotContentRepository implements ContentRepository {
     return Promise.resolve();
   }
 
-  async login(_password: string): Promise<boolean> {
-    return true;
+  async login(password: string): Promise<boolean> {
+    return password === '123';
   }
 
   async uploadImage(_file: File): Promise<string> {

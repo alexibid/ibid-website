@@ -5,6 +5,10 @@
 /tmp
 /out-tsc
 /bazel-out
+*.tsbuildinfo
+functions/dist
+.playwright-artifacts
+test-results
 
 # Node
 node_modules/

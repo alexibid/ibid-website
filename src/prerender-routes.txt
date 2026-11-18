@@ -1,5 +1,7 @@
 /
 /en
+/en/
+/en/architecture-and-projects
 /en/contacts
 /en/digital-tools
 /en/housing-project
@@ -10,16 +12,22 @@
 /en/web-design-and-apps
 /en/website-and-app-maintenance
 /es
+/es/
+/es/arquitectura-y-proyectos
 /es/contacto
 /es/diseno-web-y-apps
 /es/herramientas-digitales-es
 /es/indice-es
 /fr
+/fr/
+/fr/architecture-et-projets
 /fr/conception-web-et-apps
 /fr/coordonnees
 /fr/outils-numeriques
 /fr/sommaire
 /pt
+/pt/
+/pt/arquitetura-e-projetos
 /pt/contactos
 /pt/ferramentas-digitais
 /pt/indice
@@ -29,4 +37,3 @@
 /pt/reabilitacao-de-habitacoes
 /pt/remodelacao-de-escritorios
 /pt/web-design-e-apps
-
