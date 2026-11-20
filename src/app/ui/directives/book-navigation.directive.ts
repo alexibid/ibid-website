@@ -2,6 +2,8 @@ import { Directive, ElementRef, HostListener, OnDestroy, OnInit, AfterViewInit, 
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../../infrastructure/services/book.service';
 import { StateService } from '../../application/state/state.service';
+import { CoverMotionState } from '../../application/state/cover-motion.state';
+import { PageType } from '../../domain/models/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -15,6 +17,7 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   private readonly route = inject(ActivatedRoute);
   private readonly bookService = inject(BookService);
   private readonly stateService = inject(StateService);
+  private readonly coverMotion = inject(CoverMotionState);
 
   public readonly pageMeasured = output<number>();
 
@@ -74,6 +77,8 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
     this.bookService.navigationRequest.pipe(takeUntil(this.destroy$)).subscribe(dir => {
       this.handleNavigation(dir);
     });
+
+    this.coverMotion.landed.pipe(takeUntil(this.destroy$)).subscribe(() => this.showClosedCover());
   }
 
   ngAfterViewInit() {
@@ -132,7 +137,12 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   public handleNavigation(direction: number) {
     const el = this.hostEl;
     if (!el || this.isScrolling || this.isTransitioning) return;
-    
+
+    if (this.isFrontCoverTurn(direction)) {
+      this.turnFrontCover(direction);
+      return;
+    }
+
     const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
     const isAtStart = el.scrollLeft <= 10;
 
@@ -145,6 +155,7 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
 
     if (direction === -1 && isAtStart && this.prevSlug !== null) {
       this.isTransitioning = true;
+      this.keepCoverOpenWhenEnteringHome(this.prevSlug);
       this.bookService.triggerFlip(direction);
       setTimeout(() => { this.router.navigate(['/' + this.prevSlug]); }, 450);
       return;
@@ -152,13 +163,65 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
 
     if ((direction === 1 && !isAtEnd) || (direction === -1 && !isAtStart)) {
       this.bookService.triggerFlip(direction);
-      this.isScrolling = true;
       el.scrollBy({ left: direction * el.clientWidth, behavior: 'instant' });
-      setTimeout(() => {
-        this.isScrolling = false;
-        this.updateCurrentPage();
-      }, 500);
+      this.lockUntilScrollSettles();
     }
+  }
+
+  private lockUntilScrollSettles(): void {
+    this.isScrolling = true;
+    setTimeout(() => {
+      this.isScrolling = false;
+      this.updateCurrentPage();
+    }, 500);
+  }
+
+  private isCoverStage(): boolean {
+    return this.stateService.isDesktop() && this.bookService.activePageType() === PageType.Home;
+  }
+
+  private isFrontCoverTurn(direction: number): boolean {
+    if (!this.isCoverStage()) return false;
+    const isOpen = this.coverMotion.isOpen();
+    if (direction === 1) return !isOpen;
+    return direction === -1 && (!isOpen || this.hostEl.scrollLeft - this.hostEl.clientWidth < 10);
+  }
+
+  private turnFrontCover(direction: number): void {
+    if (direction === 1) {
+      this.openFrontCover();
+    } else {
+      this.coverMotion.close();
+    }
+    this.lockUntilScrollSettles();
+  }
+
+  private openFrontCover(): void {
+    this.coverMotion.open();
+    this.hostEl.scrollTo({ left: this.hostEl.clientWidth, behavior: 'instant' });
+  }
+
+  private showClosedCover(): void {
+    if (!this.isCoverStage()) return;
+    this.scrollToStart();
+    this.updateCurrentPage();
+  }
+
+  private keepCoverOpenWhenEnteringHome(slug: string): void {
+    const target = this.bookService.routesMetadata().find(route => route.slug === slug);
+    if (target?.type !== PageType.Home) return;
+    this.coverMotion.open();
+  }
+
+  private alignWithCover(): void {
+    if (!this.isCoverStage()) return;
+    const el = this.hostEl;
+    const isOnCoverSpread = el.scrollLeft < 10;
+    if (this.coverMotion.isOpen() && isOnCoverSpread) {
+      el.scrollTo({ left: el.scrollWidth - el.clientWidth, behavior: 'instant' });
+      return;
+    }
+    if (!isOnCoverSpread) this.coverMotion.open();
   }
 
   public triggerScroll() {
@@ -182,6 +245,7 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
       const isDesktop = window.innerWidth >= 768;
       const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
       const totalCols = Math.round(el.scrollWidth / colWidth);
+      this.alignWithCover();
       this.pageMeasured.emit(totalCols);
       this.updateCurrentPage();
     }
