@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import type { CmsPage, CmsUrl } from '../../domain/models/cms.interface';
 import { PageType } from '../../domain/models/page-type.enum';
 import type { ContentRepository } from '../../domain/repositories/content.repository';
+import { decodeStoredContent } from '../../domain/utils/content-encoding.utils';
 import snapshotData from '../../../content/content.snapshot.json';
 
 interface SnapshotFile {
@@ -89,7 +90,7 @@ export class SnapshotContentRepository implements ContentRepository {
     return {
       id: crypto.randomUUID(),
       title: data.title ?? '',
-      content: data.content ?? '',
+      content: decodeStoredContent(data.content ?? ''),
       type: data.type ?? PageType.Chapter,
       lang: data.lang ?? 'pt',
       metadata: data.metadata,
@@ -98,7 +99,7 @@ export class SnapshotContentRepository implements ContentRepository {
 
   async updatePage(id: string, data: Partial<CmsPage>): Promise<CmsPage> {
     const existing = await this.getPage(id);
-    return { ...existing, ...data };
+    return { ...existing, ...this.normaliseContent(data) };
   }
 
   async deletePage(_id: string): Promise<void> {
@@ -113,11 +114,18 @@ export class SnapshotContentRepository implements ContentRepository {
     return '/content-media/uploaded.webp';
   }
 
+  private normaliseContent(data: Partial<CmsPage>): Partial<CmsPage> {
+    if (data.content === undefined) {
+      return data;
+    }
+    return { ...data, content: decodeStoredContent(data.content) };
+  }
+
   private toCmsPage(p: SnapshotFile['pages'][number]): CmsPage {
     return {
       id: p.id,
       title: p.title,
-      content: p.content,
+      content: decodeStoredContent(p.content),
       type: p.type as PageType,
       lang: p.lang,
       metadata: {

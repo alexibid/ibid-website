@@ -1,0 +1,10 @@
+<div class="cover-motion__slide" (transitionend)="settle($event)">
+  <div class="cover-motion__leaf">
+    <div class="cover-motion__face cover-motion__face--front">
+      @if (stateService.coverData(); as cover) {
+      <website-cover [data]="cover"></website-cover>
+      }
+    </div>
+    <div class="cover-motion__face cover-motion__face--back"></div>
+  </div>
+</div>

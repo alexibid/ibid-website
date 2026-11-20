@@ -1,0 +1,104 @@
+:host {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--book-width-desktop);
+  aspect-ratio: var(--book-ratio-desktop);
+  z-index: var(--cover-motion-layer);
+  pointer-events: none;
+  perspective: var(--cover-motion-perspective);
+  opacity: 1;
+  transition: opacity 0s linear 0s;
+}
+
+@media (min-width: 768px) {
+  :host(.cover-motion--home) {
+    display: block;
+  }
+}
+
+:host(.cover-motion--open) {
+  opacity: 0;
+  transition-delay: calc(var(--cover-slide-duration) + var(--cover-turn-duration));
+}
+
+.cover-motion__slide,
+.cover-motion__leaf {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.cover-motion__slide {
+  transform: translateX(0);
+  transition: transform var(--cover-slide-duration) var(--cover-motion-easing) var(--cover-turn-duration);
+}
+
+.cover-motion__leaf {
+  transform-origin: 25% 50%;
+  transform: rotateY(0deg);
+  transition: transform var(--cover-turn-duration) var(--cover-motion-easing) 0s;
+}
+
+:host(.cover-motion--open) .cover-motion__slide {
+  transform: translateX(25%);
+  transition-delay: 0s;
+}
+
+:host(.cover-motion--open) .cover-motion__leaf {
+  transform: rotateY(-180deg);
+  transition-delay: var(--cover-slide-duration);
+}
+
+.cover-motion__face {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.cover-motion__face--front {
+  left: 0;
+  width: 100%;
+}
+
+.cover-motion__face--back {
+  left: 25%;
+  width: 50%;
+  transform: rotateY(180deg);
+  background-color: var(--color-bg);
+  background-image: var(--cover-motion-inner-shade);
+  opacity: 0;
+}
+
+:host(.cover-motion--open) .cover-motion__face--back {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  :host(.cover-motion--open) {
+    opacity: 1;
+    transition: none;
+  }
+
+  .cover-motion__slide,
+  .cover-motion__leaf,
+  :host(.cover-motion--open) .cover-motion__slide,
+  :host(.cover-motion--open) .cover-motion__leaf {
+    transform: none;
+    transition: none;
+  }
+
+  .cover-motion__slide {
+    opacity: 1;
+    transition: opacity var(--cover-turn-duration) var(--cover-motion-easing) 0s;
+  }
+
+  :host(.cover-motion--open) .cover-motion__slide {
+    opacity: 0;
+    transition: opacity var(--cover-turn-duration) var(--cover-motion-easing) 0s;
+  }
+}
