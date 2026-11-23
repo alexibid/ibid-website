@@ -1,61 +1,64 @@
-import {Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, UpperCasePipe } from '@angular/common';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { I18nService } from '../../../../infrastructure/services/i18n.service';
+import { I18nService, SUPPORTED_LANGUAGES } from '../../../../infrastructure/services/i18n.service';
 import { RoutingService } from '../../../../infrastructure/services/routing.service';
-import { CmsRouteData } from '../../../../domain/models/cms.interface';
+import { normalizeLanguageCode } from '../../../../domain/constants/languages';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'website-lang-selector',
   standalone: true,
-  imports: [CommonModule, UpperCasePipe, ClickOutsideDirective],
+  imports: [UpperCasePipe, ClickOutsideDirective],
   templateUrl: './lang-selector.html',
   styleUrl: './lang-selector.scss'
 })
 export class LangSelector {
-  public i18n = inject(I18nService);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private routingService = inject(RoutingService);
+  public readonly i18n = inject(I18nService);
+  public readonly languages = inject(SUPPORTED_LANGUAGES);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly routingService = inject(RoutingService);
 
-  public isLangMenuOpen = signal<boolean>(false);
+  public readonly isLangMenuOpen = signal<boolean>(false);
 
-  public toggleLangMenu() {
-    this.isLangMenuOpen.update(v => !v);
+  public toggleLangMenu(): void {
+    this.isLangMenuOpen.update((open) => !open);
   }
 
-  public closeMenu() {
+  public closeMenu(): void {
     this.isLangMenuOpen.set(false);
   }
 
-  changeLanguage(targetLang: string): void {
-    this.i18n.setLanguage(targetLang);
+  public changeLanguage(targetLang: string): void {
+    const normalized = normalizeLanguageCode(targetLang);
+    if (!this.languages.includes(normalized)) {
+      this.isLangMenuOpen.set(false);
+      return;
+    }
+
+    this.i18n.setLanguage(normalized);
 
     let currentRoute = this.activatedRoute;
     while (currentRoute.firstChild) {
       currentRoute = currentRoute.firstChild;
     }
 
-    const routeData = currentRoute.snapshot.data as CmsRouteData;
-    const currentLocation = routeData?.location;
+    const location = currentRoute.snapshot.data['location'];
+    const currentLocation = typeof location === 'string' ? location : '';
 
     if (currentLocation) {
       const translations = this.routingService.translationMap.get(currentLocation);
-      if (translations) {
-        const matchedTranslation = translations.find(t => t.lang === targetLang);
-        if (matchedTranslation) {
-          this.router.navigate([matchedTranslation.url]);
-          this.isLangMenuOpen.set(false);
-          return;
-        }
+      const matchedTranslation = translations?.find((t) => t.lang === normalized);
+      if (matchedTranslation) {
+        this.router.navigate([matchedTranslation.url]);
+        this.isLangMenuOpen.set(false);
+        return;
       }
     }
 
-    if (targetLang === 'pt') this.router.navigate(['/']);
-    else this.router.navigate(['/' + targetLang]);
-
+    this.router.navigate(['/', normalized]);
     this.isLangMenuOpen.set(false);
   }
 }

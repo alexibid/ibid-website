@@ -1,5 +1,6 @@
-import {Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { I18nService } from '../../../infrastructure/services/i18n.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
@@ -9,4 +10,6 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
   templateUrl: './not-found.html',
   styleUrl: './not-found.scss'
 })
-export class NotFound {}
+export class NotFound {
+  protected readonly i18n = inject(I18nService);
+}

@@ -49,6 +49,13 @@ Thumbs.db
 /pocketbase/pocketbase
 
 # Environments & Credentials
-/src/environments/environment.ts
+api/.env
+api/.env.*
+!api/.env.example
+api/dist/
+api/out-tsc/
+api/node_modules/
+api/coverage/
+api/*.tsbuildinfo
 
 

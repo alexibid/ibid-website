@@ -4,6 +4,7 @@ import { Cover } from '../../components/cover/cover';
 import { BookNavigationDirective } from '../../directives/book-navigation.directive';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { ContactFacade } from '../../../application/facades/contact.facade';
+import { I18nService } from '../../../infrastructure/services/i18n.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,12 +25,13 @@ export class Exit implements OnInit, OnDestroy {
   public readonly lang = input<string>();
   public readonly facade = inject(ContactFacade);
   private readonly nav = inject(BookNavigationDirective);
+  private readonly i18n = inject(I18nService);
 
   protected readonly needsBlankPage = signal<boolean>(false);
 
   constructor() {
     effect(() => {
-      const lang = this.lang() || 'pt';
+      const lang = this.lang() || this.i18n.currentLangCode();
       this.facade.loadExitSections(lang);
     });
 

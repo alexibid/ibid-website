@@ -1,43 +1,61 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, provideAppInitializer, inject, ErrorHandler } from '@angular/core';
+import {
+  ApplicationConfig,
+  EnvironmentProviders,
+  ErrorHandler,
+  inject,
+  makeEnvironmentProviders,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection
+} from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { routes } from './app.routes';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
+import { routes } from './app.routes';
 import { RoutingService } from './infrastructure/services/routing.service';
 import { MetaService } from './infrastructure/services/meta.service';
 import { GlobalErrorHandler } from './infrastructure/handlers/global-error.handler';
 import { errorInterceptor } from './infrastructure/interceptors/error.interceptor';
-import { provideQuillConfig } from 'ngx-quill';
-import { CONTENT_REPOSITORY } from './infrastructure/tokens/content-repository.token';
-import { SnapshotContentRepository } from './infrastructure/repositories/snapshot-content.repository';
+import {
+  ADMIN_CONTENT_REPOSITORY,
+  CONTENT_READ_REPOSITORY
+} from './infrastructure/tokens/content-repository.token';
+import { StaticHtmlContentRepository } from './infrastructure/repositories/static-html-content.repository';
+import { ApiContentRepository } from './infrastructure/repositories/api-content.repository';
+
+export type ContentMode = 'static' | 'api';
+
+export function provideContentRepositories(mode: ContentMode): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    {
+      provide: CONTENT_READ_REPOSITORY,
+      useClass: mode === 'static' ? StaticHtmlContentRepository : ApiContentRepository
+    },
+    {
+      provide: ADMIN_CONTENT_REPOSITORY,
+      useClass: ApiContentRepository
+    }
+  ]);
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    { provide: CONTENT_REPOSITORY, useClass: SnapshotContentRepository },
+    provideContentRepositories(environment.production ? 'static' : 'api'),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideHttpClient(
+      withFetch(),
       withInterceptors([errorInterceptor])
     ),
-    provideQuillConfig({
-      modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          [{ 'header': 1 }, { 'header': 2 }],
-          ['link', 'image']
-        ]
-      },
-      placeholder: 'Write something here...'
-    }),
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
     provideAppInitializer(() => {
       const routingService = inject(RoutingService);
       const metaService = inject(MetaService);
       metaService.init();
-      return routingService.setupRoutes();
+      return routingService.loadRoutes();
     })
   ]
 };

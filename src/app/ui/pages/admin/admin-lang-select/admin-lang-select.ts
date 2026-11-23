@@ -1,7 +1,8 @@
-import {Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UI_I18N } from '../../../../domain/constants/ui-i18n';
 import { UpperCasePipe } from '@angular/common';
+import { SUPPORTED_LANGUAGES } from '../../../../infrastructure/services/i18n.service';
+import { LANGUAGE_LABELS, isSupportedLanguage } from '../../../../domain/constants/languages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,9 +19,9 @@ import { UpperCasePipe } from '@angular/common';
         <table>
           <thead>
             <tr>
-              <th>Language Code</th>
-              <th>Language Name</th>
-              <th>Action</th>
+              <th scope="col">Language Code</th>
+              <th scope="col">Language Name</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -36,7 +37,7 @@ import { UpperCasePipe } from '@angular/common';
           </tbody>
         </table>
       </section>
-      
+
       <div class="global-actions">
         <a routerLink="/admin/create" class="btn-create">+ Create New Page</a>
       </div>
@@ -58,13 +59,13 @@ import { UpperCasePipe } from '@angular/common';
       table {
         width: 100%;
         border-collapse: collapse;
-        
+
         th, td {
           padding: 1rem 1.5rem;
           text-align: left;
           border-bottom: 1px solid #eaeaea;
         }
-        
+
         th {
           background: #f8f9fa;
           font-weight: 600;
@@ -73,7 +74,7 @@ import { UpperCasePipe } from '@angular/common';
           font-size: 0.85rem;
           letter-spacing: 0.5px;
         }
-        
+
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: #fdfdfd; }
       }
@@ -103,15 +104,9 @@ import { UpperCasePipe } from '@angular/common';
   `]
 })
 export class AdminLangSelect {
-  public languages = Object.keys(UI_I18N);
+  public readonly languages = inject(SUPPORTED_LANGUAGES);
 
   getLangName(code: string): string {
-    const names: Record<string, string> = {
-      pt: 'Portuguese',
-      en: 'English',
-      es: 'Spanish',
-      fr: 'French'
-    };
-    return names[code] || code;
+    return isSupportedLanguage(code) ? LANGUAGE_LABELS[code].name : code;
   }
 }

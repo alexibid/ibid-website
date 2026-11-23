@@ -1,6 +1,6 @@
-import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+import { Injectable, PendingTasks, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { CONTENT_REPOSITORY } from '../../infrastructure/tokens/content-repository.token';
+import { CONTENT_READ_REPOSITORY } from '../../infrastructure/tokens/content-repository.token';
 import { BookService } from '../../infrastructure/services/book.service';
 import { StateService } from '../state/state.service';
 import { PageType } from '../../domain/models/page-type.enum';
@@ -16,8 +16,9 @@ export interface ContactFormErrors {
   providedIn: 'root'
 })
 export class ContactFacade {
-  private readonly repo = inject(CONTENT_REPOSITORY);
+  private readonly repo = inject(CONTENT_READ_REPOSITORY);
   private readonly bookService = inject(BookService);
+  private readonly pendingTasks = inject(PendingTasks);
   public readonly stateService = inject(StateService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
@@ -123,20 +124,22 @@ export class ContactFacade {
   }
 
   public async loadExitSections(lang: string): Promise<void> {
+    const done = this.pendingTasks.add();
     this.isLoading.set(true);
     try {
       const records = await this.repo.loadSections(PageType.Exit, lang);
       const structuralOrder = ['contact-form', 'about', 'back-cover'];
-      records.sort((a, b) => {
+      const sorted = [...records].sort((a, b) => {
         const locA = a.metadata?.location;
         const locB = b.metadata?.location;
         const orderA = locA && structuralOrder.indexOf(locA) !== -1 ? structuralOrder.indexOf(locA) : 99;
         const orderB = locB && structuralOrder.indexOf(locB) !== -1 ? structuralOrder.indexOf(locB) : 99;
         return orderA - orderB;
       });
-      this.sections.set(records);
+      this.sections.set(sorted);
     } finally {
       this.isLoading.set(false);
+      done();
     }
   }
 

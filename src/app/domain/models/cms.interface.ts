@@ -11,8 +11,6 @@ export interface RecordModel {
   id?: string;
   created?: string;
   updated?: string;
-  collectionId?: string;
-  collectionName?: string;
 }
 
 export interface CmsPage extends RecordModel {
@@ -53,4 +51,25 @@ export interface CmsPagePayload {
   metadata: {
     location: string;
   };
+}
+
+export interface CmsTranslationLink {
+  readonly lang: string;
+  readonly url: string;
+}
+
+export interface CmsRouteParams {
+  readonly lang: string;
+  readonly slug: string;
+}
+
+export interface CmsRouteTable {
+  readonly pages: ReadonlyMap<string, CmsRouteData>;
+  readonly translations: ReadonlyMap<string, readonly CmsTranslationLink[]>;
+}
+
+export interface CmsRouteOrderEntry {
+  readonly slug: string;
+  readonly title: string;
+  readonly type: PageType;
 }

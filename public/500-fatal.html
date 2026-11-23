@@ -1,47 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 - System Error | IBID</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f8f9fa;
-            color: #333;
-            text-align: center;
-        }
-        .container {
-            max-width: 500px;
-            padding: 3rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        h1 { margin-top: 0; font-size: 2.5rem; color: #1a1a1a; }
-        p { font-size: 1.1rem; color: #666; line-height: 1.6; }
-        .spinner {
-            margin: 2rem auto; width: 40px; height: 40px;
-            border: 4px solid #f3f3f3; border-top: 4px solid #333;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        small { display: block; margin-top: 2rem; color: #aaa; font-size: 0.8rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 - System Error | IBID</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      color: #333;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      padding: 2.5rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 2.5rem;
+      color: #1a1a1a;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    .spinner {
+      margin: 2rem auto;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #333;
+      border-radius: 50%;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .spinner {
+        animation: spin 1s linear infinite;
+      }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    small {
+      display: block;
+      margin-top: 2rem;
+      color: #666;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>500</h1>
-        <p>Encontrámos uma dificuldade técnica a desenhar esta página.</p>
-        <div class="spinner"></div>
-        <p>A nossa equipa já foi notificada. Por favor tenta refrescar a página daqui a alguns segundos.</p>
-        <small>IBID Server Infrastructure</small>
-    </div>
+  <main class="container">
+    <h1 id="error-heading">500</h1>
+    <p id="error-message">We encountered a technical difficulty while rendering this page.</p>
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="error-retry">Our team has been notified. Please try refreshing the page in a few seconds.</p>
+    <small id="error-footer">IBID Server Infrastructure</small>
+  </main>
+  <script>
+    (function () {
+      var translations = {
+        pt: {
+          title: '500 - Erro de Sistema | IBID',
+          heading: '500',
+          message: 'Encontrámos uma dificuldade técnica ao desenhar esta página.',
+          retry: 'A nossa equipa já foi notificada. Por favor, tente atualizar a página dentro de alguns segundos.',
+          footer: 'Infraestrutura de Servidor IBID'
+        },
+        en: {
+          title: '500 - System Error | IBID',
+          heading: '500',
+          message: 'We encountered a technical difficulty while rendering this page.',
+          retry: 'Our team has been notified. Please try refreshing the page in a few seconds.',
+          footer: 'IBID Server Infrastructure'
+        },
+        es: {
+          title: '500 - Error del Sistema | IBID',
+          heading: '500',
+          message: 'Encontramos una dificultad técnica al renderizar esta página.',
+          retry: 'Nuestro equipo ya ha sido notificado. Por favor, intente recargar la página en unos segundos.',
+          footer: 'Infraestructura de Servidor IBID'
+        },
+        fr: {
+          title: '500 - Erreur Système | IBID',
+          heading: '500',
+          message: 'Nous avons rencontré une difficulté technique lors du chargement de cette page.',
+          retry: 'Notre équipe a été informée. Veuillez réessayer d’actualiser la page dans quelques secondes.',
+          footer: 'Infrastructure Serveur IBID'
+        },
+        de: {
+          title: '500 - Systemfehler | IBID',
+          heading: '500',
+          message: 'Beim Laden dieser Seite ist ein technisches Problem aufgetreten.',
+          retry: 'Unser Team wurde benachrichtigt. Bitte laden Sie die Seite in einigen Sekunden neu.',
+          footer: 'IBID Server-Infrastruktur'
+        }
+      };
+
+      function normalize(raw) {
+        return String(raw || '').trim().split('-')[0].toLowerCase();
+      }
+
+      function resolveLang() {
+        var pathParts = window.location.pathname.split('/').filter(Boolean);
+        if (pathParts.length > 0 && pathParts[0] !== 'admin') {
+          var pathLang = pathParts[0].toLowerCase();
+          if (translations[pathLang]) return pathLang;
+        }
+        var cookieMatch = document.cookie.match(/(?:^|; )ibid-lang=([^;]+)/);
+        if (cookieMatch && cookieMatch[1]) {
+          var cookieLang = normalize(cookieMatch[1]);
+          if (translations[cookieLang]) return cookieLang;
+        }
+        var browserLang = normalize(navigator.language);
+        if (translations[browserLang]) return browserLang;
+        return 'en';
+      }
+
+      var lang = resolveLang();
+      var copy = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
+      document.title = copy.title;
+      var headingEl = document.getElementById('error-heading');
+      var messageEl = document.getElementById('error-message');
+      var retryEl = document.getElementById('error-retry');
+      var footerEl = document.getElementById('error-footer');
+      if (headingEl) headingEl.textContent = copy.heading;
+      if (messageEl) messageEl.textContent = copy.message;
+      if (retryEl) retryEl.textContent = copy.retry;
+      if (footerEl) footerEl.textContent = copy.footer;
+    })();
+  </script>
 </body>
 </html>

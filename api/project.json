@@ -1,0 +1,86 @@
+{
+  "name": "ibid-website-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/ibid-website/api/src",
+  "tags": ["type:app", "scope:ibid-website-api"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "npx tsc -p tsconfig.json",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest run -c vitest.config.mts",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx watch src/main.ts",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "sync-portfolio": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx src/cli/sync-portfolio-content.ts",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "db-push": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx drizzle-kit push",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "db-generate": {
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx drizzle-kit generate",
+        "cwd": "apps/ibid-website/api"
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose build",
+        "cwd": "apps/ibid-website"
+      }
+    },
+    "docker-up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d --build",
+        "cwd": "apps/ibid-website"
+      }
+    },
+    "docker-down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose down",
+        "cwd": "apps/ibid-website"
+      }
+    },
+    "docker-logs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose logs -f",
+        "cwd": "apps/ibid-website"
+      }
+    }
+  }
+}

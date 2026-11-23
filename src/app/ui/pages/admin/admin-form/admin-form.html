@@ -1,0 +1,134 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="admin-form">
+  @if (formError()) {
+    <div class="error-message" role="alert">
+      {{ formError() }}
+    </div>
+  }
+
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input id="title" type="text" formControlName="title" placeholder="Page title">
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="type">Type</label>
+      <select id="type" formControlName="type">
+        <option [value]="PageType.Home">Home</option>
+        <option [value]="PageType.Chapter">Chapter</option>
+        <option [value]="PageType.Exit">Exit</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="lang">Language</label>
+      <select id="lang" formControlName="lang">
+        @for (opt of languageOptions; track opt.code) {
+          <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="location">Location</label>
+      <select id="location" formControlName="location">
+        @for (opt of locationOptions(); track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+        <option value="custom">-- Custom / Other --</option>
+      </select>
+      @if (form.get('location')?.value === 'custom') {
+        <input
+          id="customLocation"
+          type="text"
+          class="custom-location-input"
+          formControlName="customLocation"
+          placeholder="Enter custom location"
+          aria-label="Custom location"
+        >
+      }
+      <small class="form-hint">Swaps positions automatically if location is already taken.</small>
+    </div>
+  </div>
+  <div class="form-group editor-group">
+    <label for="content-editor">Content</label>
+    <p class="editor-hint">Tip: Click on an image to open the property manager.</p>
+    <div class="editor-buttons-bar">
+      <button type="button" class="btn-secondary btn-insert-image" (click)="triggerImageUpload('landscape')">Insert Landscape Image</button>
+      <button type="button" class="btn-secondary btn-insert-image" (click)="triggerImageUpload('feature')">Insert Feature Image</button>
+    </div>
+    <quill-editor
+      id="content-editor"
+      formControlName="content"
+      [modules]="quillModules"
+      (onEditorCreated)="onEditorCreated($event)"
+      placeholder="Write content here..."
+    ></quill-editor>
+  </div>
+  <div class="form-actions">
+    <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="btn-primary" [disabled]="form.invalid || isSubmitting()">{{ isEdit() ? 'Save Changes' : 'Create Page' }}</button>
+  </div>
+</form>
+
+@if (selectedImage()) {
+  <div class="modal-backdrop" (click)="closeImageModal()">
+    <div class="image-modal" role="dialog" aria-modal="true" aria-labelledby="image-modal-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <h3 id="image-modal-title">Image Properties</h3>
+        <button type="button" class="close-x" aria-label="Close image properties" (click)="closeImageModal()">&times;</button>
+      </header>
+      <div class="modal-body">
+        @if (modalError()) {
+          <div class="error-message" role="alert">
+            {{ modalError() }}
+          </div>
+        }
+        <div class="modal-field">
+          <label for="image-replace-file">Replace File</label>
+          <input id="image-replace-file" class="file-input" type="file" (change)="onReplaceFile($event)" accept="image/*">
+        </div>
+        <div class="modal-field">
+          <label for="image-alt">Alternative Text (SEO/Alt)</label>
+          <input id="image-alt" type="text" [(ngModel)]="imageProps.alt" placeholder="Image description">
+        </div>
+        <div class="modal-field">
+          <label for="image-class">CSS Classes</label>
+          <input id="image-class" type="text" [(ngModel)]="imageProps.class" placeholder="cms-image img-landscape-a">
+        </div>
+        <div class="modal-field">
+          <label for="image-width">Width</label>
+          <div class="quick-sizes">
+            <button type="button" (click)="imageProps.width = '100%'">100%</button>
+            <button type="button" (click)="imageProps.width = '75%'">75%</button>
+            <button type="button" (click)="imageProps.width = '50%'">50%</button>
+            <button type="button" (click)="imageProps.width = 'auto'">Original</button>
+          </div>
+          <input id="image-width" type="text" [(ngModel)]="imageProps.width" placeholder="e.g. 500px, 100%, 300">
+        </div>
+        <div class="modal-field">
+          <span class="field-label">Alignment / Justification</span>
+          <div class="alignment-buttons">
+            <button type="button" [class.active]="imageProps.align === 'left'" (click)="imageProps.align = 'left'">Left</button>
+            <button type="button" [class.active]="imageProps.align === 'center'" (click)="imageProps.align = 'center'">Center</button>
+            <button type="button" [class.active]="imageProps.align === 'right'" (click)="imageProps.align = 'right'">Right</button>
+          </div>
+        </div>
+        <div class="image-preview">
+          <img class="image-preview__img" [src]="selectedImage()?.src" alt="Image preview">
+        </div>
+      </div>
+      <footer class="modal-footer">
+        @if (confirmImageDelete()) {
+          <div class="delete-confirm-inline">
+            <button type="button" class="btn-danger" (click)="deleteSelectedImage()">Confirm Delete</button>
+            <button type="button" class="btn-secondary" (click)="cancelDeleteImage()">Keep Image</button>
+          </div>
+        } @else {
+          <button type="button" class="btn-danger-outline" (click)="requestDeleteImage()">Delete Image</button>
+        }
+        <div class="footer-main-actions">
+          <button type="button" class="btn-secondary" (click)="closeImageModal()">Cancel</button>
+          <button type="button" class="btn-primary" (click)="saveImageProps()">Apply Changes</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+}

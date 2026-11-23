@@ -82,5 +82,39 @@ export const UI_I18N: Record<string, unknown> = {
       'submit': 'Envoyer le message',
       'info-title': 'Informations'
     }
+  },
+  de: {
+    'not-found': {
+      title: '404 - Seite nicht gefunden',
+      message: 'Der gesuchte Inhalt existiert nicht oder wurde verschoben.',
+      back: 'Zurück zur Startseite'
+    },
+    'error-network': {
+      title: 'Verbindungsfehler',
+      message: 'Der Server konnte nicht erreicht werden. Bitte überprüfen Sie Ihre Internetverbindung.'
+    },
+    'error-server': {
+      title: 'Serverfehler',
+      message: 'Unser System hat ein technisches Problem festgestellt. Bitte versuchen Sie es später erneut.'
+    },
+    'error-generic': {
+      title: 'Unerwarteter Fehler',
+      message: 'Etwas ist schiefgelaufen. Bitte laden Sie die Seite neu.'
+    },
+    'close': 'Schließen',
+    'chapter': 'Kapitel',
+    'return': 'Zurück',
+    'contacts': {
+      'socials': 'Soziale Netzwerke',
+      'maps': 'Auf Google Maps ansehen',
+      'name': 'Name',
+      'name-placeholder': 'Ihr Name',
+      'email': 'E-Mail',
+      'email-placeholder': 'Ihre E-Mail-Adresse',
+      'message': 'Nachricht',
+      'message-placeholder': 'Wie können wir Ihnen helfen?',
+      'submit': 'Nachricht senden',
+      'info-title': 'Informationen'
+    }
   }
 };

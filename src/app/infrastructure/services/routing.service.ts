@@ -1,163 +1,98 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
-import { Router, Route } from '@angular/router';
-import { CONTENT_REPOSITORY } from '../tokens/content-repository.token';
+import { CONTENT_READ_REPOSITORY } from '../tokens/content-repository.token';
 import { PageType } from '../../domain/models/page-type.enum';
-import { CmsUrl, CmsRouteData } from '../../domain/models/cms.interface';
+import {
+  CmsRouteData,
+  CmsRouteParams,
+  CmsRouteTable,
+  CmsUrl
+} from '../../domain/models/cms.interface';
+import { buildCmsRouteTable, buildRouteOrder } from '../../domain/utils/cms-route-table.utils';
 import { UiErrorService } from './ui-error.service';
 import { BookService } from './book.service';
-import { I18nService } from './i18n.service';
-import { FrontofficeLayout } from '../../ui/layouts/frontoffice-layout/frontoffice-layout';
-import { locationToInt } from '../../domain/utils/location.utils';
+import { I18nService, SUPPORTED_LANGUAGES } from './i18n.service';
+
+const EMPTY_TABLE: CmsRouteTable = { pages: new Map(), translations: new Map() };
+
+function isNetworkError(error: unknown): error is { readonly status?: number; readonly isAbort?: boolean } {
+  return typeof error === 'object' && error !== null;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoutingService {
-  private readonly repo = inject(CONTENT_REPOSITORY);
-  private readonly router = inject(Router);
+  private readonly repo = inject(CONTENT_READ_REPOSITORY);
   private readonly uiErrorService = inject(UiErrorService);
   private readonly bookService = inject(BookService);
   private readonly i18n = inject(I18nService);
-  private allUrlRecords = signal<CmsUrl[]>([]);
-  public readonly translationMap = new Map<string, { lang: string, url: string }[]>();
+  private readonly supportedLanguages = inject(SUPPORTED_LANGUAGES);
+  private readonly allUrlRecords = signal<readonly CmsUrl[]>([]);
+  private table: CmsRouteTable = EMPTY_TABLE;
+  private initialLoad?: Promise<void>;
+  public readonly translationMap = new Map<string, { lang: string; url: string }[]>();
 
   constructor() {
     effect(() => {
       const records = this.allUrlRecords();
       if (records.length === 0) return;
-
-      const lang = this.i18n.currentLangCode();
-      const langRecords = records.filter(r => r.lang === lang);
-      const homeRecord = langRecords
-        .filter(r => r.expand?.page_id?.type === PageType.Home)
-        .sort((a, b) => a.url.length - b.url.length)[0];
-
-      const exitRecord = langRecords
-        .filter(r => r.expand?.page_id?.type === PageType.Exit)
-        .sort((a, b) => a.url.length - b.url.length)[0];
-
-      const chapterRecords = langRecords
-        .filter(r => r.expand?.page_id?.type === PageType.Chapter)
-        .sort((a, b) => {
-          const orderA = locationToInt(a.expand?.page_id?.metadata?.location);
-          const orderB = locationToInt(b.expand?.page_id?.metadata?.location);
-          return orderA - orderB;
-        });
-
-      const finalRecords = [];
-      if (homeRecord) finalRecords.push(homeRecord);
-      finalRecords.push(...chapterRecords);
-      if (exitRecord) finalRecords.push(exitRecord);
-
-      const routes = finalRecords.map(r => {
-        let path = r.url;
-        if (path.startsWith('/')) path = path.slice(1);
-        const prefixedPath = r.lang + (path ? '/' + path : '');
-        return {
-          slug: prefixedPath,
-          title: r.expand?.page_id?.title || '',
-          type: r.expand?.page_id?.type as PageType
-        };
-      });
-
-      this.bookService.setRouteOrder(routes);
+      this.bookService.setRouteOrder(buildRouteOrder(records, this.i18n.currentLangCode()));
     });
   }
 
-  public async setupRoutes(): Promise<void> {
+  public loadRoutes(): Promise<void> {
+    this.initialLoad ??= this.refreshRoutes();
+    return this.initialLoad;
+  }
+
+  public async refreshRoutes(): Promise<void> {
     try {
-      const records = (await this.repo.getUrls()) as CmsUrl[];
-
-      this.allUrlRecords.set(records);
-
-      const dynamicRoutes: Route[] = [];
-
-      for (const record of records) {
-        const page = record.expand?.page_id;
-
-        if (!page) {
-          continue;
-        }
-
-        let componentLoader: Route['loadComponent'];
-        const location = page.metadata?.location;
-
-        let path = record.url;
-        if (path.startsWith('/')) {
-          path = path.slice(1);
-        }
-
-        const prefixedPath = record.lang + (path ? '/' + path : '');
-
-        if (location) {
-          const links = this.translationMap.get(location) || [];
-          links.push({ lang: record.lang, url: '/' + prefixedPath });
-          this.translationMap.set(location, links);
-        }
-
-        const routeData: CmsRouteData = {
-          pageId: page.id,
-          title: page.title,
-          lang: record.lang,
-          type: page.type,
-          content: page.content,
-          metadata: page.metadata,
-          location: location,
-        };
-
-        switch (page.type) {
-          case PageType.Home:
-            componentLoader = async () => (await import('../../ui/pages/home/home')).Home;
-            break;
-          case PageType.Exit:
-            componentLoader = async () => (await import('../../ui/pages/exit/exit')).Exit;
-            break;
-          case PageType.Chapter:
-          default:
-            componentLoader = async () => (await import('../../ui/pages/chapter/chapter')).Chapter;
-            break;
-        }
-
-        dynamicRoutes.push({
-          path: prefixedPath,
-          loadComponent: componentLoader,
-          data: routeData
-        });
-      }
-
-      const currentConfig = this.router.config;
-      const staticRoutes = currentConfig.filter(r => r.path !== '' && r.path !== '**');
-
-      const newConfig: Route[] = [
-        ...staticRoutes,
-        {
-          path: '',
-          component: FrontofficeLayout,
-          children: [
-            {
-              path: '',
-              pathMatch: 'full',
-              redirectTo: () => {
-                const i18nService = inject(I18nService);
-                return i18nService.currentLangCode();
-              }
-            },
-            ...dynamicRoutes,
-            { path: '**', loadComponent: async () => (await import('../../ui/components/not-found/not-found')).NotFound }
-          ]
-        }
-      ];
-
-      this.router.resetConfig(newConfig);
-
+      this.applyRecords(await this.repo.getUrls());
     } catch (error: unknown) {
-      console.error('Failed to initialize dynamic CMS routes', error);
-      const networkError = error as { status?: number; isAbort?: boolean };
-      if (networkError.status === 0 || networkError.isAbort) {
-        this.uiErrorService.showError('error-network');
-      } else {
-        this.uiErrorService.showError('error-generic');
-      }
+      this.applyRecords([]);
+      this.reportFailure(error);
     }
   }
+
+  public hasPage(path: string, type: PageType): boolean {
+    return this.table.pages.get(path)?.type === type;
+  }
+
+  public getPage(path: string): CmsRouteData {
+    const page = this.table.pages.get(path);
+    if (!page) {
+      throw new Error(`Unknown CMS page: ${path}`);
+    }
+    return page;
+  }
+
+  public async listRouteParams(): Promise<readonly CmsRouteParams[]> {
+    await this.loadRoutes();
+    return [...this.table.pages.keys()].map(toRouteParams);
+  }
+
+  private applyRecords(records: readonly CmsUrl[]): void {
+    this.table = buildCmsRouteTable(records, this.supportedLanguages);
+    this.translationMap.clear();
+    for (const [location, links] of this.table.translations) {
+      this.translationMap.set(location, [...links]);
+    }
+    this.allUrlRecords.set(records);
+  }
+
+  private reportFailure(error: unknown): void {
+    console.error('Failed to load CMS routes', error);
+    if (isNetworkError(error) && (error.status === 0 || error.isAbort)) {
+      this.uiErrorService.showError('error-network');
+    } else {
+      this.uiErrorService.showError('error-generic');
+    }
+  }
+}
+
+function toRouteParams(key: string): CmsRouteParams {
+  const separator = key.indexOf('/');
+  return separator === -1
+    ? { lang: key, slug: '' }
+    : { lang: key.slice(0, separator), slug: key.slice(separator + 1) };
 }

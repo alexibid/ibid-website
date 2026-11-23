@@ -1,8 +1,8 @@
-import {Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminFacade } from '../../../../application/facades/admin.facade';
-import { AdminForm } from '../admin-form/admin-form';
 import { CmsPagePayload } from '../../../../domain/models/cms.interface';
+import { AdminForm } from '../admin-form/admin-form';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,39 +12,71 @@ import { CmsPagePayload } from '../../../../domain/models/cms.interface';
   template: `
     <div class="admin-page">
       <h2>Create New Page</h2>
+      @if (error()) {
+        <div class="error-message" role="alert">{{ error() }}</div>
+      }
       <website-admin-form (save)="onSave($event)" (cancel)="onCancel()"></website-admin-form>
     </div>
   `,
   styles: [`
-    h2 { margin-bottom: 20px; color: #333; }
+    .admin-page {
+      padding: 0;
+    }
+    h2 {
+      margin: 0 0 20px;
+      color: #0f172a;
+      font-size: 1.5rem;
+    }
+    .error-message {
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+    @media (min-width: 768px) {
+      h2 {
+        font-size: 1.75rem;
+      }
+    }
   `]
 })
 export default class AdminCreate {
-  private adminService = inject(AdminFacade);
-  private router = inject(Router);
+  private readonly adminService = inject(AdminFacade);
+  private readonly router = inject(Router);
 
-  async onSave(data: CmsPagePayload) {
+  public readonly error = signal<string | null>(null);
+
+  public async onSave(data: CmsPagePayload): Promise<void> {
+    this.error.set(null);
     try {
       const page = await this.adminService.createPage(data);
-      
-      const slug = data.title.toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, '-');
-      
+      const slug = data.title
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
       await this.adminService.createUrl({
         url: slug,
         page_id: page.id,
         lang: data.lang
       });
 
-      this.router.navigate(['/admin', data.lang]);
-    } catch (error) {
-      console.error('Failed to create page', error);
-      alert('Error creating page. Please check the console.');
+      await this.router.navigate(['/admin', data.lang]);
+    } catch (err) {
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : 'Error creating page. Please try again.';
+      this.error.set(message);
     }
   }
 
-  onCancel() {
-    this.router.navigate(['/admin']);
+  public onCancel(): void {
+    void this.router.navigate(['/admin']);
   }
 }
