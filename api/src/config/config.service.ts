@@ -54,7 +54,7 @@ export class ConfigService {
     this.staticPagesDir =
       env['STATIC_PAGES_DIR']?.trim() || resolve(this.workspaceRoot, 'public/pages');
     this.mediaDir =
-      env['MEDIA_DIR']?.trim() || resolve(this.workspaceRoot, 'public/content-media');
+      env['MEDIA_DIR']?.trim() || resolve(this.workspaceRoot, 'public/images');
     this.prerenderRoutesPath =
       env['PRERENDER_ROUTES_PATH']?.trim() ||
       resolve(this.workspaceRoot, 'src/prerender-routes.txt');

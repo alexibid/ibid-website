@@ -22,7 +22,7 @@ export class MediaStorageService {
     await this.fs.writeFile(destPath, buffer);
     return {
       filename: safeFilename,
-      url: `/content-media/${safeFilename}`,
+      url: `/images/${safeFilename}`,
     };
   }
 

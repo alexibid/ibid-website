@@ -10,10 +10,10 @@ import { AdminForm } from '../admin-form/admin-form';
   standalone: true,
   imports: [AdminForm],
   template: `
-    <div class="admin-page">
+    <div class="admin-update">
       <header class="admin-header">
-        <h2>Edit Page</h2>
-        <div class="header-actions">
+        <h2 class="admin-header__title">Edit Page</h2>
+        <div class="admin-header__actions">
           <button
             type="button"
             class="btn-view"
@@ -37,7 +37,7 @@ import { AdminForm } from '../admin-form/admin-form';
           (cancel)="onCancel()"
         ></website-admin-form>
       } @else if (!error()) {
-        <p class="loading-text">Loading page data...</p>
+        <p class="admin-update__loading">Loading page data...</p>
       }
     </div>
   `,
@@ -47,60 +47,77 @@ import { AdminForm } from '../admin-form/admin-form';
       flex-direction: column;
       align-items: stretch;
       gap: 12px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      margin: 0;
-      color: #0f172a;
-      font-size: 1.5rem;
-    }
-    .header-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      margin-bottom: 16px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &__title {
+        margin: 0;
+        font-family: var(--font-sans);
+        color: #0f172a;
+        font-size: 1.5rem;
+        font-weight: 600;
+
+        @media (min-width: 768px) {
+          font-size: 1.75rem;
+        }
+      }
+
+      &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
     }
     .btn-view {
       background: #1d4ed8;
       color: #ffffff;
       border: none;
-      padding: 10px 20px;
-      min-height: 44px;
-      min-width: 44px;
-      border-radius: 4px;
+      padding: 0.375rem 0.875rem;
+      min-height: 36px;
+      min-width: auto;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      line-height: 1.25;
       font-weight: 600;
       cursor: pointer;
-    }
-    .btn-view:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .btn-view:hover:not(:disabled) {
-      background: #1e40af;
-    }
-    .btn-view:focus-visible {
-      outline: 2px solid #1d4ed8;
-      outline-offset: 2px;
+      transition: background-color 0.2s ease;
+
+      &:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background: #1e40af;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #1d4ed8;
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
     }
     .error-message {
       color: #b91c1c;
       background: #fef2f2;
       border: 1px solid #fecaca;
       padding: 12px;
-      border-radius: 4px;
+      border-radius: 6px;
       margin-bottom: 16px;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
     }
-    .loading-text {
-      color: #475569;
-    }
-    @media (min-width: 768px) {
-      .admin-header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      h2 {
-        font-size: 1.75rem;
+    .admin-update {
+      &__loading {
+        color: #475569;
       }
     }
   `]

@@ -7,6 +7,7 @@ import { AdminFacade } from '../../../../application/facades/admin.facade';
 import { LANGUAGE_LABELS, isSupportedLanguage } from '../../../../domain/constants/languages';
 import { CmsPage, CmsPagePayload } from '../../../../domain/models/cms.interface';
 import { PageType } from '../../../../domain/models/page-type.enum';
+import { normalizeEditorHtml } from '../../../../domain/utils/editor-html.utils';
 import { intToRoman, locationToInt } from '../../../../domain/utils/location.utils';
 import { SUPPORTED_LANGUAGES } from '../../../../infrastructure/services/i18n.service';
 import { CustomImage, cssWidthOf } from './custom-image';
@@ -226,7 +227,7 @@ export class AdminForm implements OnInit {
   private pickAndInsertImage(quill: Quill, imageClass: string): void {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
+    input.setAttribute('accept', 'image/webp');
     input.click();
     input.onchange = async () => {
       const file = input.files?.[0];
@@ -240,8 +241,6 @@ export class AdminForm implements OnInit {
         if (leaf instanceof CustomImage) {
           const img = leaf.domNode;
           img.setAttribute('class', imageClass);
-          img.setAttribute('data-retina', 'true');
-          img.setAttribute('loading', 'lazy');
         }
         quill.update();
       } catch (err) {
@@ -270,7 +269,7 @@ export class AdminForm implements OnInit {
         title: val.title,
         type: val.type,
         lang: val.lang,
-        content: val.content,
+        content: normalizeEditorHtml(val.content),
         metadata: { location: newLocation }
       });
     } catch (err) {

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdminFacade } from '../../../../application/facades/admin.facade';
 import { CmsPagePayload } from '../../../../domain/models/cms.interface';
 import { AdminForm } from '../admin-form/admin-form';
@@ -10,8 +10,8 @@ import { AdminForm } from '../admin-form/admin-form';
   standalone: true,
   imports: [AdminForm],
   template: `
-    <div class="admin-page">
-      <h2>Create New Page</h2>
+    <div class="admin-create">
+      <h2 class="admin-create__title">Create New Page</h2>
       @if (error()) {
         <div class="error-message" role="alert">{{ error() }}</div>
       }
@@ -19,35 +19,45 @@ import { AdminForm } from '../admin-form/admin-form';
     </div>
   `,
   styles: [`
-    .admin-page {
+    .admin-create {
       padding: 0;
-    }
-    h2 {
-      margin: 0 0 20px;
-      color: #0f172a;
-      font-size: 1.5rem;
+
+      &__title {
+        margin: 0 0 16px;
+        font-family: var(--font-sans);
+        color: #0f172a;
+        font-size: 1.5rem;
+        font-weight: 600;
+
+        @media (min-width: 768px) {
+          font-size: 1.75rem;
+        }
+      }
     }
     .error-message {
       color: #b91c1c;
       background: #fef2f2;
       border: 1px solid #fecaca;
       padding: 12px;
-      border-radius: 4px;
+      border-radius: 6px;
       margin-bottom: 16px;
-      font-size: 0.9rem;
-    }
-    @media (min-width: 768px) {
-      h2 {
-        font-size: 1.75rem;
-      }
+      font-size: 0.875rem;
     }
   `]
 })
-export default class AdminCreate {
+export default class AdminCreate implements OnInit {
   private readonly adminService = inject(AdminFacade);
+  private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly router = inject(Router);
 
   public readonly error = signal<string | null>(null);
+
+  public ngOnInit(): void {
+    const routeLang = this.route?.snapshot.paramMap.get('lang');
+    if (routeLang) {
+      this.adminService.lang.set(routeLang);
+    }
+  }
 
   public async onSave(data: CmsPagePayload): Promise<void> {
     this.error.set(null);

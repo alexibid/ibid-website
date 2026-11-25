@@ -1,34 +1,34 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="admin-form">
   @if (formError()) {
-    <div class="error-message" role="alert">
+    <div class="error-message form-error" role="alert">
       {{ formError() }}
     </div>
   }
 
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input id="title" type="text" formControlName="title" placeholder="Page title">
+  <div class="admin-form__group">
+    <label class="admin-form__label" for="title">Title</label>
+    <input class="admin-form__input" id="title" type="text" formControlName="title" placeholder="Page title">
   </div>
-  <div class="form-row">
-    <div class="form-group">
-      <label for="type">Type</label>
-      <select id="type" formControlName="type">
+  <div class="admin-form__row">
+    <div class="admin-form__group">
+      <label class="admin-form__label" for="type">Type</label>
+      <select class="admin-form__input" id="type" formControlName="type">
         <option [value]="PageType.Home">Home</option>
         <option [value]="PageType.Chapter">Chapter</option>
         <option [value]="PageType.Exit">Exit</option>
       </select>
     </div>
-    <div class="form-group">
-      <label for="lang">Language</label>
-      <select id="lang" formControlName="lang">
+    <div class="admin-form__group">
+      <label class="admin-form__label" for="lang">Language</label>
+      <select class="admin-form__input" id="lang" formControlName="lang">
         @for (opt of languageOptions; track opt.code) {
           <option [value]="opt.code">{{ opt.label }}</option>
         }
       </select>
     </div>
-    <div class="form-group">
-      <label for="location">Location</label>
-      <select id="location" formControlName="location">
+    <div class="admin-form__group">
+      <label class="admin-form__label" for="location">Location</label>
+      <select class="admin-form__input" id="location" formControlName="location">
         @for (opt of locationOptions(); track opt) {
           <option [value]="opt">{{ opt }}</option>
         }
@@ -38,21 +38,23 @@
         <input
           id="customLocation"
           type="text"
-          class="custom-location-input"
+          class="admin-form__input admin-form__input--custom-location"
           formControlName="customLocation"
           placeholder="Enter custom location"
           aria-label="Custom location"
         >
       }
-      <small class="form-hint">Swaps positions automatically if location is already taken.</small>
+      <small class="admin-form__hint">Swaps positions automatically if location is already taken.</small>
     </div>
   </div>
-  <div class="form-group editor-group">
-    <label for="content-editor">Content</label>
-    <p class="editor-hint">Tip: Click on an image to open the property manager.</p>
-    <div class="editor-buttons-bar">
-      <button type="button" class="btn-secondary btn-insert-image" (click)="triggerImageUpload('landscape')">Insert Landscape Image</button>
-      <button type="button" class="btn-secondary btn-insert-image" (click)="triggerImageUpload('feature')">Insert Feature Image</button>
+  <div class="admin-form__group admin-form__editor">
+    <label class="admin-form__label" for="content-editor">Content</label>
+    <p class="admin-form__hint admin-form__hint--editor">Tip: Click on an image to open the property manager.</p>
+    <div class="admin-form__toolbar-bar">
+      <button type="button" class="form-button form-button--secondary form-button--compact"
+        (click)="triggerImageUpload('landscape')">Insert Landscape Image</button>
+      <button type="button" class="form-button form-button--secondary form-button--compact"
+        (click)="triggerImageUpload('feature')">Insert Feature Image</button>
     </div>
     <quill-editor
       id="content-editor"
@@ -62,71 +64,88 @@
       placeholder="Write content here..."
     ></quill-editor>
   </div>
-  <div class="form-actions">
-    <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
-    <button type="submit" class="btn-primary" [disabled]="form.invalid || isSubmitting()">{{ isEdit() ? 'Save Changes' : 'Create Page' }}</button>
+  <div class="admin-form__actions">
+    <button type="button" class="form-button form-button--secondary" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="form-button form-button--primary"
+      [disabled]="form.invalid || isSubmitting()">{{ isEdit() ? 'Save Changes' : 'Create Page' }}</button>
   </div>
 </form>
 
 @if (selectedImage()) {
   <div class="modal-backdrop" (click)="closeImageModal()">
-    <div class="image-modal" role="dialog" aria-modal="true" aria-labelledby="image-modal-title" (click)="$event.stopPropagation()">
-      <header class="modal-header">
-        <h3 id="image-modal-title">Image Properties</h3>
-        <button type="button" class="close-x" aria-label="Close image properties" (click)="closeImageModal()">&times;</button>
+    <div class="image-modal" role="dialog" aria-modal="true"
+      aria-labelledby="image-modal-title"
+      (click)="$event.stopPropagation()">
+      <header class="image-modal__header">
+        <h3 class="image-modal__title" id="image-modal-title">Image Properties</h3>
+        <button type="button" class="image-modal__close" aria-label="Close image properties"
+          (click)="closeImageModal()">&times;</button>
       </header>
-      <div class="modal-body">
+      <div class="image-modal__body">
         @if (modalError()) {
-          <div class="error-message" role="alert">
+          <div class="error-message form-error" role="alert">
             {{ modalError() }}
           </div>
         }
-        <div class="modal-field">
-          <label for="image-replace-file">Replace File</label>
-          <input id="image-replace-file" class="file-input" type="file" (change)="onReplaceFile($event)" accept="image/*">
+        <div class="image-modal__field">
+          <label class="admin-form__label admin-form__label--modal" for="image-replace-file">Replace File</label>
+          <input id="image-replace-file" class="admin-form__input admin-form__input--file" type="file"
+            (change)="onReplaceFile($event)" accept="image/webp">
         </div>
-        <div class="modal-field">
-          <label for="image-alt">Alternative Text (SEO/Alt)</label>
-          <input id="image-alt" type="text" [(ngModel)]="imageProps.alt" placeholder="Image description">
+        <div class="image-modal__field">
+          <label class="admin-form__label admin-form__label--modal" for="image-alt">Alternative Text (SEO/Alt)</label>
+          <input class="admin-form__input" id="image-alt" type="text"
+            [(ngModel)]="imageProps.alt"
+            placeholder="Image description">
         </div>
-        <div class="modal-field">
-          <label for="image-class">CSS Classes</label>
-          <input id="image-class" type="text" [(ngModel)]="imageProps.class" placeholder="cms-image img-landscape-a">
+        <div class="image-modal__field">
+          <label class="admin-form__label admin-form__label--modal" for="image-class">CSS Classes</label>
+          <input class="admin-form__input" id="image-class" type="text"
+            [(ngModel)]="imageProps.class"
+            placeholder="cms-image img-landscape-a">
         </div>
-        <div class="modal-field">
-          <label for="image-width">Width</label>
-          <div class="quick-sizes">
-            <button type="button" (click)="imageProps.width = '100%'">100%</button>
-            <button type="button" (click)="imageProps.width = '75%'">75%</button>
-            <button type="button" (click)="imageProps.width = '50%'">50%</button>
-            <button type="button" (click)="imageProps.width = 'auto'">Original</button>
+        <div class="image-modal__field">
+          <label class="admin-form__label admin-form__label--modal" for="image-width">Width</label>
+          <div class="image-modal__quick-sizes">
+            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '100%'">100%</button>
+            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '75%'">75%</button>
+            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '50%'">50%</button>
+            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = 'auto'">Original</button>
           </div>
-          <input id="image-width" type="text" [(ngModel)]="imageProps.width" placeholder="e.g. 500px, 100%, 300">
+          <input class="admin-form__input" id="image-width" type="text"
+            [(ngModel)]="imageProps.width"
+            placeholder="e.g. 500px, 100%, 300">
         </div>
-        <div class="modal-field">
-          <span class="field-label">Alignment / Justification</span>
-          <div class="alignment-buttons">
-            <button type="button" [class.active]="imageProps.align === 'left'" (click)="imageProps.align = 'left'">Left</button>
-            <button type="button" [class.active]="imageProps.align === 'center'" (click)="imageProps.align = 'center'">Center</button>
-            <button type="button" [class.active]="imageProps.align === 'right'" (click)="imageProps.align = 'right'">Right</button>
+        <div class="image-modal__field">
+          <span class="admin-form__label admin-form__label--modal">Alignment / Justification</span>
+          <div class="image-modal__alignment">
+            <button type="button" class="image-modal__alignment-btn"
+              [class.image-modal__alignment-btn--active]="imageProps.align === 'left'"
+              (click)="imageProps.align = 'left'">Left</button>
+            <button type="button" class="image-modal__alignment-btn"
+              [class.image-modal__alignment-btn--active]="imageProps.align === 'center'"
+              (click)="imageProps.align = 'center'">Center</button>
+            <button type="button" class="image-modal__alignment-btn"
+              [class.image-modal__alignment-btn--active]="imageProps.align === 'right'"
+              (click)="imageProps.align = 'right'">Right</button>
           </div>
         </div>
         <div class="image-preview">
           <img class="image-preview__img" [src]="selectedImage()?.src" alt="Image preview">
         </div>
       </div>
-      <footer class="modal-footer">
+      <footer class="image-modal__footer">
         @if (confirmImageDelete()) {
-          <div class="delete-confirm-inline">
-            <button type="button" class="btn-danger" (click)="deleteSelectedImage()">Confirm Delete</button>
-            <button type="button" class="btn-secondary" (click)="cancelDeleteImage()">Keep Image</button>
+          <div class="image-modal__delete-confirm">
+            <button type="button" class="btn-danger form-button form-button--danger" (click)="deleteSelectedImage()">Confirm Delete</button>
+            <button type="button" class="form-button form-button--secondary" (click)="cancelDeleteImage()">Keep Image</button>
           </div>
         } @else {
-          <button type="button" class="btn-danger-outline" (click)="requestDeleteImage()">Delete Image</button>
+          <button type="button" class="form-button form-button--danger-outline" (click)="requestDeleteImage()">Delete Image</button>
         }
-        <div class="footer-main-actions">
-          <button type="button" class="btn-secondary" (click)="closeImageModal()">Cancel</button>
-          <button type="button" class="btn-primary" (click)="saveImageProps()">Apply Changes</button>
+        <div class="image-modal__footer-actions">
+          <button type="button" class="form-button form-button--secondary" (click)="closeImageModal()">Cancel</button>
+          <button type="button" class="form-button form-button--primary" (click)="saveImageProps()">Apply Changes</button>
         </div>
       </footer>
     </div>

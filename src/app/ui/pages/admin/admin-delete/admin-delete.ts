@@ -9,15 +9,15 @@ import { CmsPage, CmsUrl } from '../../../../domain/models/cms.interface';
   standalone: true,
   template: `
     <div class="delete-confirm">
-      <h2>Delete Page</h2>
+      <h2 class="delete-confirm__title">Delete Page</h2>
       @if (error()) {
         <div class="error-message" role="alert">{{ error() }}</div>
       }
       @if (page()) {
-        <p>Are you sure you want to delete the page <strong>"{{ page()?.title }}"</strong>?</p>
-        <p class="warning">Warning: This action will also delete all URLs associated with this page.</p>
+        <p class="delete-confirm__message">Are you sure you want to delete the page <strong>"{{ page()?.title }}"</strong>?</p>
+        <p class="delete-confirm__warning">Warning: This action will also delete all URLs associated with this page.</p>
 
-        <div class="actions">
+        <div class="delete-confirm__actions">
           <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
           <button
             type="button"
@@ -29,7 +29,7 @@ import { CmsPage, CmsUrl } from '../../../../domain/models/cms.interface';
           </button>
         </div>
       } @else if (!error()) {
-        <p class="loading-text">Loading data...</p>
+        <p class="delete-confirm__loading">Loading data...</p>
       }
     </div>
   `,
@@ -41,10 +41,41 @@ import { CmsPage, CmsUrl } from '../../../../domain/models/cms.interface';
       background: #ffffff;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
-    }
-    h2 {
-      color: #b91c1c;
-      margin: 0 0 16px;
+
+      @media (min-width: 768px) {
+        margin: 40px auto;
+        padding: 30px;
+      }
+
+      &__title {
+        color: #b91c1c;
+        margin: 0 0 16px;
+      }
+
+      &__message {
+        margin: 0;
+      }
+
+      &__warning {
+        color: #475569;
+        font-size: 0.95rem;
+        margin: 16px 0;
+        padding: 12px;
+        background: #fef2f2;
+        border-left: 4px solid #b91c1c;
+      }
+
+      &__loading {
+        color: #475569;
+      }
+
+      &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+      }
     }
     .error-message {
       color: #b91c1c;
@@ -55,54 +86,37 @@ import { CmsPage, CmsUrl } from '../../../../domain/models/cms.interface';
       margin-bottom: 16px;
       font-size: 0.9rem;
     }
-    .warning {
-      color: #475569;
-      font-size: 0.95rem;
-      margin: 16px 0;
-      padding: 12px;
-      background: #fef2f2;
-      border-left: 4px solid #b91c1c;
-    }
-    .loading-text {
-      color: #475569;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 24px;
-    }
-    button {
-      padding: 10px 20px;
-      min-height: 44px;
-      min-width: 44px;
-      border-radius: 4px;
+    @mixin delete-action-btn {
+      padding: 0.375rem 0.875rem;
+      min-height: 36px;
+      min-width: auto;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      line-height: 1.25;
       font-weight: 600;
       cursor: pointer;
       border: none;
-    }
-    button:focus-visible {
-      outline: 2px solid #1d4ed8;
-      outline-offset: 2px;
+
+      &:focus-visible {
+        outline: 2px solid #1d4ed8;
+        outline-offset: 2px;
+      }
     }
     .btn-cancel {
+      @include delete-action-btn;
       background: #f8fafc;
       color: #0f172a;
       border: 1px solid #cbd5e1;
     }
     .btn-danger {
+      @include delete-action-btn;
       background: #b91c1c;
       color: #ffffff;
-    }
-    .btn-danger:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    @media (min-width: 768px) {
-      .delete-confirm {
-        margin: 40px auto;
-        padding: 30px;
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
     }
   `]

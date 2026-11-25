@@ -69,6 +69,13 @@ export class PortfolioContentService {
     let pagesRepaired = 0;
 
     await this.db.transaction(async (tx) => {
+      for (const row of existingMediaRows) {
+        const mediaId = typeof row['id'] === 'string' ? row['id'] : '';
+        const mediaUrl = typeof row['url'] === 'string' ? row['url'] : '';
+        if (mediaId && mediaUrl.startsWith('/content-media/')) {
+          await tx.delete(media).where(eq(media.id, mediaId));
+        }
+      }
       const existingPages = await tx.select().from(pages);
       pagesRepaired = await repairPageRows(tx, existingPages);
       await tx.delete(urls).where(sql`1 = 1`);
@@ -99,6 +106,8 @@ export class PortfolioContentService {
       );
     });
 
+    const remainingMediaRows = await this.db.select().from(media);
+
     if (exportStatic) {
       const exporter =
         this.staticExport ??
@@ -110,7 +119,7 @@ export class PortfolioContentService {
       pagesRepaired,
       pagesSynced: entries.length,
       urlsSynced: entries.length,
-      mediaPreserved: existingMediaRows.length,
+      mediaPreserved: remainingMediaRows.length,
       staticExported: exportStatic,
       countsByTypeAndLang: countEntriesByTypeAndLang(entries),
     };

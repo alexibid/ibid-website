@@ -16,7 +16,7 @@ export const CONFIG_MOCK_ENVS: Record<
     CORS_ORIGINS: 'http://localhost:4200,http://127.0.0.1:4200',
     WORKSPACE_ROOT: '/workspace/apps/ibid-website',
     STATIC_PAGES_DIR: '/workspace/apps/ibid-website/public/pages',
-    MEDIA_DIR: '/workspace/apps/ibid-website/public/content-media',
+    MEDIA_DIR: '/workspace/apps/ibid-website/public/images',
     PRERENDER_ROUTES_PATH: '/workspace/apps/ibid-website/src/prerender-routes.txt'
   },
   invalidPort: {
@@ -137,7 +137,7 @@ const BASE_MEDIA = [
   {
     id: 'media-seed-1',
     filename: 'seed-hero.png',
-    url: '/content-media/seed-hero.png',
+    url: '/images/seed-hero.png',
     mimeType: 'image/png',
     sizeBytes: 128
   }
@@ -231,7 +231,7 @@ export const URL_MOCK_FIXTURES = {
 };
 
 export const MEDIA_MOCK_FIXTURES = {
-  validPngUpload: {
+  pngUpload: {
     originalname: 'hero-banner.png',
     mimetype: 'image/png',
     size: 16,
@@ -243,9 +243,21 @@ export const MEDIA_MOCK_FIXTURES = {
     size: 12,
     buffer: Buffer.from('RIFF\x00\x00\x00\x00WEBP', 'latin1')
   },
+  jpegUpload: {
+    originalname: 'photo.jpg',
+    mimetype: 'image/jpeg',
+    size: 4,
+    buffer: Buffer.from([0xff, 0xd8, 0xff, 0xe0])
+  },
+  mislabelledPngUpload: {
+    originalname: 'photo.png',
+    mimetype: 'image/webp',
+    size: 8,
+    buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+  },
   traversalUpload: {
-    originalname: '../../../etc/passwd.png',
-    mimetype: 'image/png',
+    originalname: '../../../etc/passwd.webp',
+    mimetype: 'image/webp',
     size: 8,
     buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
   },
@@ -256,14 +268,14 @@ export const MEDIA_MOCK_FIXTURES = {
     buffer: Buffer.from('<script>alert(1)</script>')
   },
   oversizedUpload: {
-    originalname: 'giant.png',
-    mimetype: 'image/png',
+    originalname: 'giant.webp',
+    mimetype: 'image/webp',
     size: 20 * 1024 * 1024,
     buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47])
   },
   emptyUpload: {
-    originalname: 'empty.png',
-    mimetype: 'image/png',
+    originalname: 'empty.webp',
+    mimetype: 'image/webp',
     size: 0,
     buffer: Buffer.alloc(0)
   },

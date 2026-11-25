@@ -25,12 +25,14 @@ const routes: Routes = [
       })
     ],
     children: [
-      { path: '',            loadComponent: ADMIN_LANG_SELECT },
-      { path: 'create',      loadComponent: ADMIN_CREATE },
-      { path: 'read/:id',    loadComponent: ADMIN_READ },
-      { path: 'update/:id',  loadComponent: ADMIN_UPDATE },
-      { path: 'delete/:id',  loadComponent: ADMIN_DELETE },
-      { path: ':lang',       loadComponent: ADMIN_LIST }
+      { path: '',               loadComponent: ADMIN_LANG_SELECT },
+      { path: 'create',         loadComponent: ADMIN_CREATE },
+      { path: 'read/:id',       loadComponent: ADMIN_READ },
+      { path: 'update/:id',     loadComponent: ADMIN_UPDATE },
+      { path: 'delete/:id',     loadComponent: ADMIN_DELETE },
+      { path: ':lang/new',      loadComponent: ADMIN_CREATE },
+      { path: ':lang/edit/:id', loadComponent: ADMIN_UPDATE },
+      { path: ':lang',          loadComponent: ADMIN_LIST }
     ]
   }
 ];

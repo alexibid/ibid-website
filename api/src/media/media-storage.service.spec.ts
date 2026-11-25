@@ -10,13 +10,13 @@ describe('MediaStorageService', () => {
     const storage = new MediaStorageService(fs, config);
 
     const saved = await storage.saveFile(
-      MEDIA_MOCK_FIXTURES.validPngUpload.originalname,
+      MEDIA_MOCK_FIXTURES.validWebpUpload.originalname,
       MEDIA_MOCK_FIXTURES.targetMediaId,
-      MEDIA_MOCK_FIXTURES.validPngUpload.buffer
+      MEDIA_MOCK_FIXTURES.validWebpUpload.buffer
     );
 
-    expect(saved.filename).toContain('.png');
-    expect(saved.url).toBe(`/content-media/${saved.filename}`);
+    expect(saved.filename).toContain('.webp');
+    expect(saved.url).toBe(`/images/${saved.filename}`);
     expect(fs.mkdir).toHaveBeenCalledWith(config.mediaDir);
     expect(fs.getWrittenFiles()).toContain(`${config.mediaDir}/${saved.filename}`);
   });
@@ -41,7 +41,7 @@ describe('MediaStorageService', () => {
     const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
     const targetFilename = MEDIA_MOCK_FIXTURES.existingMedia[0].filename;
     const fs = createMockFileSystem({
-      [`${config.mediaDir}/${targetFilename}`]: MEDIA_MOCK_FIXTURES.validPngUpload.buffer
+      [`${config.mediaDir}/${targetFilename}`]: MEDIA_MOCK_FIXTURES.validWebpUpload.buffer
     });
     const storage = new MediaStorageService(fs, config);
 

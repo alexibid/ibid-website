@@ -8,17 +8,17 @@
   overflow-y: hidden;
 
   column-fill: auto;
-  column-width: calc(100vw - 60px);
-  column-gap: 60px;
+  column-width: calc(var(--book-width-mobile) - 40px - var(--book-padding-w-mobile));
+  column-gap: calc(40px + var(--book-padding-w-mobile));
 
   @media (min-width: 768px) {
-    width: calc(100% + 40px);
-    margin-left: -20px;
-    padding: var(--book-padding-h-desktop) var(--book-padding-w-desktop); 
-    
+    width: 100%;
+    margin-left: 0;
+    padding: var(--book-padding-h-desktop) var(--book-padding-w-desktop);
+
     column-count: 2;
     column-width: auto;
-    column-gap: 140px;
+    column-gap: calc(2 * var(--book-padding-w-desktop));
     column-fill: auto;
   }
 }

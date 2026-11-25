@@ -3,7 +3,9 @@
 
 :root {
   --color-bg: #f4f0e6;
+  --desk-bg: #f4f0e6;
   --color-text: #2f302b;
+  --color-grey-700: #525049;
   --color-spine: rgba(0, 0, 0, 0.05);
   --logo-size: 1.5rem;
 
@@ -17,38 +19,14 @@
   --margin-mobile: 24px;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-weight: 400;
-}
-
-h1 {
-  font-size: 2.75rem;
-  line-height: 1.1;
-  font-family: var(--font-title);
-}
-
-h2 {
-  font-size: 2.25rem;
-  line-height: 1.2;
-  font-family: var(--font-title);
-}
-
-h3 {
-  font-size: 1.75rem;
-  line-height: 1.3;
-  font-family: var(--font-title);
+  font-weight: 600;
 }
 
 p {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  font-family: var(--font-body);
-}
-
-
-.drop-cap::first-letter {
-  @include drop-cap;
+  margin: 0;
+  font-weight: 400;
 }
 
 .font-sans {

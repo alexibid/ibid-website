@@ -1,11 +1,13 @@
-import { Directive, ElementRef, HostListener, OnDestroy, OnInit, AfterViewInit, inject, output } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import {
+  AfterViewInit, Directive, ElementRef, HostListener, OnDestroy, OnInit, inject, output, signal
+} from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BookService } from '../../infrastructure/services/book.service';
 import { StateService } from '../../application/state/state.service';
 import { CoverMotionState } from '../../application/state/cover-motion.state';
 import { PageType } from '../../domain/models/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 @Directive({
   selector: '[websiteBookNavigation]',
@@ -20,191 +22,183 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   private readonly coverMotion = inject(CoverMotionState);
 
   public readonly pageMeasured = output<number>();
+  public readonly needsBlankPage = signal<boolean>(false);
 
   private readonly destroy$ = new Subject<void>();
   private readonly isBrowser = this.stateService.isBrowser;
 
-  private isTransitioning = false;
   private isScrolling = false;
   private lastTouchY = 0;
   private anchorTarget = '';
+  private scrollLockTimer: ReturnType<typeof setTimeout> | undefined;
+  private anchorScrollTimer: ReturnType<typeof setTimeout> | undefined;
+  private remeasureTimer: ReturnType<typeof setTimeout> | undefined;
 
   get hostEl(): HTMLElement {
     return this.elRef.nativeElement;
   }
 
+  get hasFragment(): boolean {
+    return this.anchorTarget.length > 0;
+  }
+
   get currentSlug(): string {
-    const url = this.router.url.split('?')[0].split('#')[0];
-    let slug = (url === '/' || url === '') ? '' : url.substring(1);
-    if (slug.startsWith('/')) slug = slug.substring(1);
-    return slug;
+    return this.stateService.resolveSlugFromUrl(this.router.url);
   }
 
   get nextSlug(): string | null {
-    const routes = this.bookService.dynamicRouteOrder();
-    const current = this.currentSlug;
-    const idx = routes.indexOf(current);
-    
-    if (idx === -1 && current === '') {
-      return routes.length > 1 ? routes[1] : null;
-    }
-    
-    return (idx !== -1 && idx < routes.length - 1) ? routes[idx + 1] : null;
+    const link = this.stateService.nextLink();
+    return link === null ? null : this.stateService.resolveSlugFromUrl(link);
   }
 
   get prevSlug(): string | null {
-    const routes = this.bookService.dynamicRouteOrder();
-    const current = this.currentSlug;
-    const idx = routes.indexOf(current);
-    return (idx > 0) ? routes[idx - 1] : null;
+    const link = this.stateService.prevLink();
+    return link === null ? null : this.stateService.resolveSlugFromUrl(link);
   }
 
-  ngOnInit() {
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
-      if (data && data['location']) {
-        this.anchorTarget = data['location'];
-        this.triggerScroll();
-      }
-    });
-
+  ngOnInit(): void {
     this.route.fragment.pipe(takeUntil(this.destroy$)).subscribe(fragment => {
-      if (fragment) {
-        this.anchorTarget = fragment;
-        this.triggerScroll();
-      }
+      this.anchorTarget = fragment ?? '';
+      if (fragment) this.triggerScroll();
     });
 
-    this.bookService.navigationRequest.pipe(takeUntil(this.destroy$)).subscribe(dir => {
-      this.handleNavigation(dir);
+    const isNavEnd = (event: unknown): event is NavigationEnd => event instanceof NavigationEnd;
+    this.router.events.pipe(filter(isNavEnd), takeUntil(this.destroy$)).subscribe(() => {
+      this.onNavigationEnd();
     });
 
-    this.coverMotion.landed.pipe(takeUntil(this.destroy$)).subscribe(() => this.showClosedCover());
+    this.bookService.navigationRequest
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(direction => this.handleNavigation(direction));
+    this.coverMotion.landed.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.stateService.isDesktopCoverStage()) this.scrollToStart();
+    });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (!this.isBrowser) return;
-    
     this.bookService.activeChapterSlug.set(this.currentSlug);
-    
-    this.measurePage();
     fromEvent(window, 'resize')
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => this.measurePage());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    this.clearTimers();
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  private clearTimers(): void {
+    clearTimeout(this.scrollLockTimer);
+    clearTimeout(this.anchorScrollTimer);
+    clearTimeout(this.remeasureTimer);
+    this.stateService.cancelScheduledNavigation();
+  }
+
+  private onNavigationEnd(): void {
+    this.clearTimers();
+    this.isScrolling = false;
+    const slug = this.currentSlug;
+    this.bookService.activeChapterSlug.set(slug);
+    const total = this.bookService.getChapterPages(slug);
+    const offset = this.stateService.isDesktop() && total % 2 === 0 ? 1 : 0;
+    this.bookService.currentChapterPage.set(this.isTurningBack() ? Math.max(1, total - offset) : 1);
+  }
+
+  public isTurningBack(): boolean {
+    return typeof this.router.lastSuccessfulNavigation === 'function'
+      && this.router.lastSuccessfulNavigation()?.extras.state?.['turnDirection'] === -1;
+  }
+
   @HostListener('window:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (!this.isBrowser || this.isScrolling || this.isTransitioning) return;
+  onKeyDown(event: KeyboardEvent): void {
+    if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
     let direction = 0;
     if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) direction = 1;
     else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) direction = -1;
-    if (direction !== 0) {
-      event.preventDefault();
-      this.handleNavigation(direction);
-    }
+    if (direction === 0) return;
+    event.preventDefault();
+    this.handleNavigation(direction);
   }
 
   @HostListener('wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (this.isBrowser && Math.abs(event.deltaY) > 30 && !this.isScrolling && !this.isTransitioning) {
-      this.handleNavigation(event.deltaY > 0 ? 1 : -1);
-    }
+  onWheel(event: WheelEvent): void {
+    if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
+    if (Math.abs(event.deltaY) > 30) this.handleNavigation(event.deltaY > 0 ? 1 : -1);
   }
 
   @HostListener('touchstart', ['$event'])
-  onTouchStart(event: TouchEvent) {
-    if (this.isBrowser) {
+  onTouchStart(event: TouchEvent): void {
+    if (this.isBrowser) this.lastTouchY = event.touches[0].clientY;
+  }
+
+  @HostListener('touchmove', ['$event'])
+  onTouchMove(event: TouchEvent): void {
+    if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
+    const deltaY = this.lastTouchY - event.touches[0].clientY;
+    if (Math.abs(deltaY) > 30) {
+      this.handleNavigation(deltaY > 0 ? 1 : -1);
       this.lastTouchY = event.touches[0].clientY;
     }
   }
 
-  @HostListener('touchmove', ['$event'])
-  onTouchMove(event: TouchEvent) {
-    if (this.isBrowser && !this.isScrolling && !this.isTransitioning) {
-      const deltaY = this.lastTouchY - event.touches[0].clientY;
-      if (Math.abs(deltaY) > 30) {
-        this.handleNavigation(deltaY > 0 ? 1 : -1);
-        this.lastTouchY = event.touches[0].clientY;
-      }
-    }
-  }
+  public handleNavigation(direction: number): void {
+    const hostElement = this.hostEl;
+    if (!hostElement || this.isScrolling || this.stateService.isTransitioning()) return;
 
-  public handleNavigation(direction: number) {
-    const el = this.hostEl;
-    if (!el || this.isScrolling || this.isTransitioning) return;
+    if (this.isFrontCoverTurn(direction)) return this.turnFrontCover(direction);
 
-    if (this.isFrontCoverTurn(direction)) {
-      this.turnFrontCover(direction);
-      return;
-    }
-
-    const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
-    const isAtStart = el.scrollLeft <= 10;
+    const isAtEnd = hostElement.scrollLeft + hostElement.clientWidth >= hostElement.scrollWidth - 10;
+    const isAtStart = hostElement.scrollLeft <= 10;
 
     if (direction === 1 && isAtEnd && this.nextSlug !== null) {
-      this.isTransitioning = true;
-      this.bookService.triggerFlip(direction);
-      setTimeout(() => { this.router.navigate(['/' + this.nextSlug]); }, 450);
-      return;
+      return this.scheduleRouteTransition(this.nextSlug, direction);
     }
 
+    if (direction === -1 && isAtStart && this.bookService.currentChapterPage() > 1) return;
+
     if (direction === -1 && isAtStart && this.prevSlug !== null) {
-      this.isTransitioning = true;
       this.keepCoverOpenWhenEnteringHome(this.prevSlug);
-      this.bookService.triggerFlip(direction);
-      setTimeout(() => { this.router.navigate(['/' + this.prevSlug]); }, 450);
-      return;
+      return this.scheduleRouteTransition(this.prevSlug, direction);
     }
 
     if ((direction === 1 && !isAtEnd) || (direction === -1 && !isAtStart)) {
       this.bookService.triggerFlip(direction);
-      el.scrollBy({ left: direction * el.clientWidth, behavior: 'instant' });
+      hostElement.scrollBy({ left: direction * hostElement.clientWidth, behavior: 'instant' });
+      this.updateCurrentPage();
       this.lockUntilScrollSettles();
     }
   }
 
+  private scheduleRouteTransition(targetSlug: string, direction: number): void {
+    this.clearTimers();
+    this.stateService.navigateWithFlip('/' + targetSlug, direction, { state: { turnDirection: direction } });
+  }
+
   private lockUntilScrollSettles(): void {
+    clearTimeout(this.scrollLockTimer);
     this.isScrolling = true;
-    setTimeout(() => {
+    this.scrollLockTimer = setTimeout(() => {
       this.isScrolling = false;
       this.updateCurrentPage();
     }, 500);
   }
 
-  private isCoverStage(): boolean {
-    return this.stateService.isDesktop() && this.bookService.activePageType() === PageType.Home;
-  }
-
   private isFrontCoverTurn(direction: number): boolean {
-    if (!this.isCoverStage()) return false;
+    if (!this.stateService.isDesktopCoverStage()) return false;
     const isOpen = this.coverMotion.isOpen();
     if (direction === 1) return !isOpen;
-    return direction === -1 && (!isOpen || this.hostEl.scrollLeft - this.hostEl.clientWidth < 10);
+    return direction === -1 && isOpen && this.hostEl.scrollLeft - this.hostEl.clientWidth < 10;
   }
 
   private turnFrontCover(direction: number): void {
     if (direction === 1) {
-      this.openFrontCover();
-    } else {
-      this.coverMotion.close();
-    }
-    this.lockUntilScrollSettles();
-  }
-
-  private openFrontCover(): void {
-    this.coverMotion.open();
-    this.hostEl.scrollTo({ left: this.hostEl.clientWidth, behavior: 'instant' });
-  }
-
-  private showClosedCover(): void {
-    if (!this.isCoverStage()) return;
-    this.scrollToStart();
+      this.coverMotion.open();
+      this.hostEl.scrollTo({ left: this.hostEl.clientWidth, behavior: 'instant' });
+    } else this.coverMotion.close();
     this.updateCurrentPage();
+    this.lockUntilScrollSettles();
   }
 
   private keepCoverOpenWhenEnteringHome(slug: string): void {
@@ -214,67 +208,74 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   }
 
   private alignWithCover(): void {
-    if (!this.isCoverStage()) return;
-    const el = this.hostEl;
-    const isOnCoverSpread = el.scrollLeft < 10;
+    if (!this.stateService.isDesktopCoverStage()) return;
+    const hostElement = this.hostEl;
+    const isOnCoverSpread = hostElement.scrollLeft < 10;
     if (this.coverMotion.isOpen() && isOnCoverSpread) {
-      el.scrollTo({ left: el.scrollWidth - el.clientWidth, behavior: 'instant' });
+      const targetLeft = Math.max(hostElement.clientWidth, hostElement.scrollWidth - hostElement.clientWidth);
+      hostElement.scrollTo({ left: targetLeft, behavior: 'instant' });
       return;
     }
     if (!isOnCoverSpread) this.coverMotion.open();
   }
 
-  public triggerScroll() {
+  public triggerScroll(): void {
     if (!this.isBrowser || !this.anchorTarget) return;
-    setTimeout(() => {
-      const el = document.getElementById(this.anchorTarget);
-      if (el && typeof el.scrollTo === 'function') {
-        const viewportWidth = this.hostEl.clientWidth;
-        const targetScroll = Math.floor(el.offsetLeft / viewportWidth) * viewportWidth;
-        
+    clearTimeout(this.anchorScrollTimer);
+    this.anchorScrollTimer = setTimeout(() => {
+      const targetElement = document.getElementById(this.anchorTarget);
+      const viewportWidth = this.hostEl.clientWidth;
+      if (targetElement && viewportWidth > 0) {
+        const targetScroll = Math.floor(targetElement.offsetLeft / viewportWidth) * viewportWidth;
         this.hostEl.scrollTo({ left: targetScroll, behavior: 'instant' });
         this.updateCurrentPage();
       }
     }, 100);
   }
 
-  public measurePage() {
-    if (!this.isBrowser) return;
-    const el = this.hostEl;
-    if (el && el.clientWidth > 0) {
-      const isDesktop = window.innerWidth >= 768;
-      const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
-      const totalCols = Math.round(el.scrollWidth / colWidth);
+  public measurePage(): void {
+    if (!this.isBrowser || this.hostEl.clientWidth <= 0) return;
+    const totalCols = Math.max(1, this.columnsIn(this.hostEl.scrollWidth));
+    if (this.isBlankPageOutOfBalance(totalCols)) this.toggleBlankPage();
+    else {
       this.alignWithCover();
       this.pageMeasured.emit(totalCols);
       this.updateCurrentPage();
     }
   }
 
-  public updateCurrentPage() {
-    if (!this.isBrowser) return;
-    const el = this.hostEl;
-    if (el && el.clientWidth > 0) {
-      const isDesktop = window.innerWidth >= 768;
-      const colWidth = isDesktop ? (el.clientWidth / 2) : el.clientWidth;
-      
-      let current: number;
-      
-      if (this.currentSlug === '' && el.scrollLeft < 10) {
-        current = 1;
-      } else {
-        current = Math.round(el.scrollLeft / colWidth) + 1;
-      }
-      
-      this.bookService.currentChapterPage.set(current);
-    }
+  public resetBlankPage(): void {
+    this.needsBlankPage.set(false);
   }
 
-  public scrollToStart() {
-    if (!this.isBrowser) return;
-    const el = this.hostEl;
-    if (el && typeof el.scrollTo === 'function') {
-      el.scrollTo({ left: 0, behavior: 'instant' });
-    }
+  private isBlankPageOutOfBalance(totalCols: number): boolean {
+    const colsWithoutBlank = this.needsBlankPage() ? totalCols - 1 : totalCols;
+    return this.stateService.isDesktop() && (colsWithoutBlank % 2 !== 0) !== this.needsBlankPage();
+  }
+
+  private toggleBlankPage(): void {
+    this.needsBlankPage.update(needsBlank => !needsBlank);
+    clearTimeout(this.remeasureTimer);
+    this.remeasureTimer = setTimeout(() => this.measurePage(), 50);
+  }
+
+  public columnsIn(width: number): number {
+    const columnWidth = this.stateService.isDesktop()
+      ? this.hostEl.clientWidth / 2
+      : this.hostEl.clientWidth;
+    return Math.round(width / columnWidth);
+  }
+
+  public updateCurrentPage(): void {
+    if (!this.isBrowser || this.hostEl.clientWidth <= 0) return;
+    const scrollLeft = this.hostEl.scrollLeft;
+    const current = scrollLeft < 10 ? 1 : this.columnsIn(scrollLeft) + 1;
+    this.bookService.currentChapterPage.set(current);
+  }
+
+  public scrollToStart(): void {
+    if (!this.isBrowser || typeof this.hostEl.scrollTo !== 'function') return;
+    this.hostEl.scrollTo({ left: 0, behavior: 'instant' });
+    this.updateCurrentPage();
   }
 }

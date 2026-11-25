@@ -26,7 +26,7 @@ RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
-RUN mkdir -p /app/public/pages /app/public/content-media /app/src \
+RUN mkdir -p /app/public/pages /app/public/images /app/src \
   && touch /app/src/prerender-routes.txt \
   && chown -R node:node /app
 

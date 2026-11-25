@@ -143,7 +143,7 @@ describe('PortfolioContentService', () => {
     }
   });
 
-  it('should populate database with all 85 entries, preserve media, and run StaticExportService.exportAll when exportStatic is true', async () => {
+  it('should populate database with all 75 entries, preserve media, and run StaticExportService.exportAll when exportStatic is true', async () => {
     const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
     const db = createMockDrizzleDb();
     db.seedTableRows('pages', PORTFOLIO_CONTENT_FIXTURES.dirtyDbPages);
@@ -165,13 +165,13 @@ describe('PortfolioContentService', () => {
     const urls = db.getTableRows('urls');
     const media = db.getTableRows('media');
 
-    expect(pages).toHaveLength(85);
-    expect(urls).toHaveLength(85);
+    expect(pages).toHaveLength(75);
+    expect(urls).toHaveLength(75);
     expect(media).toHaveLength(PORTFOLIO_CONTENT_FIXTURES.preservedMediaRows.length);
 
     const manifest = parseStaticRoutesManifest(fs.getFile(`${config.staticPagesDir}/routes.json`));
-    expect(manifest.pages).toHaveLength(85);
-    expect(manifest.urls).toHaveLength(85);
+    expect(manifest.pages).toHaveLength(75);
+    expect(manifest.urls).toHaveLength(75);
     expect(manifest.media).toEqual(PORTFOLIO_CONTENT_FIXTURES.preservedMediaRows);
 
     const manifestPagesById = new Map(manifest.pages.map((page) => [page.id, page]));
@@ -242,8 +242,8 @@ describe('PortfolioContentService', () => {
     });
 
     expect(result.staticExported).toBe(false);
-    expect(db.getTableRows('pages')).toHaveLength(85);
-    expect(db.getTableRows('urls')).toHaveLength(85);
+    expect(db.getTableRows('pages')).toHaveLength(75);
+    expect(db.getTableRows('urls')).toHaveLength(75);
     expect(fs.writeFileAtomic).not.toHaveBeenCalled();
   });
 
@@ -282,5 +282,17 @@ describe('PortfolioContentService', () => {
     db.setShouldFail(false);
     expect(db.getTableRows('pages')).toHaveLength(PORTFOLIO_CONTENT_FIXTURES.dirtyDbPages.length);
     expect(exportSpy).not.toHaveBeenCalled();
+  });
+
+  it('should sync and export the consolidated ibid. web engineering quality topic cleanly via syncAll and StaticExportService.exportAll', async () => {
+    const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
+    const db = createMockDrizzleDb();
+    const fs = createMockFileSystem(PORTFOLIO_CONTENT_FIXTURES.consolidatedIbidContentFiles);
+    const service = new PortfolioContentService({ db, fs, config, staticExport: new StaticExportService(db, fs, config) });
+    const result = await service.syncAll({ contentDir: PORTFOLIO_CONTENT_FIXTURES.contentDir, exportStatic: true });
+    expect(result.pagesSynced).toBe(75);
+    expect(result.staticExported).toBe(true);
+    expect(String(fs.getFile(`${config.staticPagesDir}/en/en-chapter-iv.html`))).toContain('ibid.');
+    expect(String(fs.getFile(`${config.staticPagesDir}/routes.json`))).toContain('en-ibid-web-engineering-quality');
   });
 });

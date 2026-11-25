@@ -1,3 +1,4 @@
+import { SANITIZER_IMAGE_FIXTURES } from '../mocks/portfolio-image-sources.mock';
 import { HTML_SANITIZER_FIXTURES } from '../mocks/static-export-fixtures.mock';
 import { sanitizePageHtml } from './html-sanitizer.util';
 
@@ -96,5 +97,12 @@ describe('sanitizePageHtml', () => {
     expect(sanitizePageHtml(HTML_SANITIZER_FIXTURES.deeplyNestedSafeHtml)).toBe(
       HTML_SANITIZER_FIXTURES.deeplyNestedSafeHtml
     );
+  });
+
+  it('should keep image src values served from the /images/ folder while stripping event handlers', () => {
+    const sanitized = sanitizePageHtml(SANITIZER_IMAGE_FIXTURES.imagesFolderHtml);
+
+    expect(sanitized).toContain('src="/images/hero.webp"');
+    expect(sanitized.toLowerCase()).not.toContain('onerror');
   });
 });

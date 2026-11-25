@@ -37,7 +37,7 @@ services:
       POSTGRES_PORT: 5432
       WORKSPACE_ROOT: /app
       STATIC_PAGES_DIR: /app/public/pages
-      MEDIA_DIR: /app/public/content-media
+      MEDIA_DIR: /app/public/images
       PRERENDER_ROUTES_PATH: /app/src/prerender-routes.txt
     volumes:
       - ./public:/app/public

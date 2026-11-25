@@ -12,7 +12,6 @@ async function runSync(): Promise<void> {
   const config = new ConfigService(process.env);
   const fs = new FileSystemService();
   const pool = createPgPool(config);
-  const exportStatic = process.argv.includes('--export');
 
   try {
     await ensureDatabaseSchema(pool);
@@ -24,10 +23,11 @@ async function runSync(): Promise<void> {
       config,
       staticExport: exporter,
     });
-    const result = await service.syncAll({ exportStatic });
+    const repaired = await service.repairExistingEncoding();
+    const exported = await exporter.exportAll();
 
     process.stdout.write(
-      `Synced ${result.pagesSynced} pages and ${result.urlsSynced} urls (repaired ${result.pagesRepaired}, media preserved ${result.mediaPreserved}, static exported: ${String(result.staticExported)})\n`,
+      `Exported ${exported.pagesExported} pages and ${exported.urlsExported} urls from PostgreSQL (repaired ${repaired}, media exported ${exported.mediaExported})\n`,
     );
   } finally {
     await pool.end();
@@ -36,6 +36,6 @@ async function runSync(): Promise<void> {
 
 runSync().catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);
-  process.stderr.write(`Portfolio content sync failed: ${message}\n`);
+  process.stderr.write(`Portfolio content export failed: ${message}\n`);
   process.exit(1);
 });

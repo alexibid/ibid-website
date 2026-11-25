@@ -1,9 +1,18 @@
-import {Component, inject, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, OnDestroy, computed, inject, input
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { StateService } from '../../../../application/state/state.service';
+import { CoverMotionState } from '../../../../application/state/cover-motion.state';
 import { BookService } from '../../../../infrastructure/services/book.service';
 import { PageTurn } from '../page-turn/page-turn';
+
+export {
+  syncAllChapterPageCounts,
+  recordMeasuredChapterPage,
+  type BookPaginationDeps,
+  type ChapterEstimator
+} from '../../../../application/state/state.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,35 +22,41 @@ import { PageTurn } from '../page-turn/page-turn';
   templateUrl: './footer.html',
   styleUrl: './footer.scss'
 })
-export class Footer {
-  public globalState = inject(StateService);
-  public bookService = inject(BookService);
-  private router = inject(Router);
-  public pageTurn = input.required<PageTurn>();
+export class Footer implements OnDestroy {
+  public readonly globalState = inject(StateService);
+  public readonly bookService = inject(BookService);
+  private readonly coverMotion = inject(CoverMotionState);
+  public readonly pageTurn = input.required<PageTurn>();
 
-  public canGoPrev = computed(() => {
+  public readonly canGoPrev = computed(() => {
     const page = this.bookService.currentChapterPage();
-    return page > 1 || !!this.globalState.prevLink();
+    const isDesktopHomeOpen = this.globalState.isDesktopCoverStage() && this.coverMotion.isOpen();
+    return page > 1 || isDesktopHomeOpen || !!this.globalState.prevLink();
   });
 
-  public canGoNext = computed(() => {
+  public readonly canGoNext = computed(() => {
+    this.bookService.pageCountsUpdated();
     const page = this.bookService.currentChapterPage();
-    const slug = this.bookService.activeChapterSlug();
-    const total = this.bookService.getChapterPages(slug);
-    return page < total || !!this.globalState.nextLink();
+    const total = this.bookService.getChapterPages(this.bookService.activeChapterSlug());
+    const isDesktop = this.globalState.isDesktop();
+    const isDesktopHomeClosed = this.globalState.isDesktopCoverStage() && !this.coverMotion.isOpen();
+    const hasMorePages = isDesktop ? page + 1 < total : page < total;
+    return hasMorePages || isDesktopHomeClosed || !!this.globalState.nextLink();
   });
 
-  public navigatePage(dir: number) {
-    if (dir === -1 && !this.canGoPrev()) return;
-    if (dir === 1 && !this.canGoNext()) return;
-    this.bookService.navigationRequest.next(dir);
+  ngOnDestroy(): void {
+    this.globalState.cancelScheduledNavigation();
   }
 
-  public navigateChapter(link: string | null, dir: number) {
-    if (!link) return;
-    this.bookService.triggerFlip(dir);
-    setTimeout(() => {
-      this.router.navigate([link]);
-    }, 450);
+  public navigatePage(direction: number): void {
+    if (this.globalState.isTransitioning()) return;
+    if (direction === -1 && !this.canGoPrev()) return;
+    if (direction === 1 && !this.canGoNext()) return;
+    this.bookService.navigationRequest.next(direction);
+  }
+
+  public navigateChapter(link: string | null, direction: number): void {
+    if (!link || this.bookService.isFlipping()) return;
+    this.globalState.navigateWithFlip(link, direction);
   }
 }

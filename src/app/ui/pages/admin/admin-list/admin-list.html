@@ -1,114 +1,166 @@
-<div class="admin-page">
-  <header>
-    <div class="header-top">
-      <h1>Administration ({{ facade.lang() | uppercase }})</h1>
-      <div class="header-actions">
-        <a routerLink="/admin" class="btn-back">Back to Languages</a>
-        <a routerLink="/admin/create" class="btn-create">+ Create New Page</a>
+<div class="admin-list">
+  <header class="admin-list__header">
+    <div class="admin-list__top">
+      <h1 class="admin-list__title">Administration ({{ facade.lang() | uppercase }})</h1>
+      <div class="admin-list__actions">
+        <a routerLink="/admin" class="list-button list-button--back">Back to Languages</a>
+        <a routerLink="/admin/create" class="list-button list-button--create">+ Create New Page</a>
       </div>
     </div>
-    <p>Content Management for: <strong>{{ facade.lang() | uppercase }}</strong></p>
+    <p class="admin-list__lead">Content Management for: <strong>{{ facade.lang() | uppercase }}</strong></p>
   </header>
 
   @if (facade.error()) {
-    <div class="error-message" role="alert">
+    <div class="error-message list-error" role="alert">
       <span>{{ facade.error() }}</span>
-      <button type="button" class="btn-retry" (click)="facade.loadUrls()">Retry</button>
+      <button type="button" class="list-button list-button--retry" (click)="facade.loadUrls()">Retry</button>
     </div>
   }
 
   @if (facade.isLoading()) {
-    <div class="loading">Loading records...</div>
+    <div class="admin-list__loading">Loading records...</div>
   } @else {
-    <section class="admin-table-group">
-      <h2>Home Pages</h2>
-      <div class="table-scroll">
-        <table>
+    <section class="admin-list__group">
+      <h2 class="admin-list__group-title">Home Pages</h2>
+      <div class="admin-list__scroll">
+        <table class="admin-list__table">
+          <colgroup>
+            <col class="admin-list__col-title">
+            <col class="admin-list__col-location">
+            <col class="admin-list__col-path">
+            <col class="admin-list__col-actions">
+          </colgroup>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Location</th>
-              <th>Path (URL)</th>
-              <th>Actions</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Title</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Location</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Path (URL)</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             @for (item of facade.homeUrls(); track item.id) {
-              <tr>
-                <td class="page-title">{{ item.expand?.page_id?.title }}</td>
-                <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
-                <td><a [routerLink]="'/' + item.url" target="_blank" class="url-link">{{ item.url }}</a></td>
-                <td class="actions">
-                  <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>
-                  <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="btn-delete">Delete</a>
+              <tr class="admin-list__row">
+                <td class="admin-list__cell admin-list__cell--title">{{ item.expand?.page_id?.title }}</td>
+                <td class="admin-list__cell">
+                  <code class="admin-list__code">{{ item.expand?.page_id?.metadata?.location }}</code>
+                </td>
+                <td class="admin-list__cell">
+                  <a [routerLink]="'/' + item.url" target="_blank" class="admin-list__link">{{ item.url }}</a>
+                </td>
+                <td class="admin-list__cell">
+                  <div class="admin-list__buttons">
+                    <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit row-action row-action--edit">Edit</a>
+                    <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="row-action row-action--delete">Delete</a>
+                  </div>
                 </td>
               </tr>
             } @empty {
-              <tr><td colspan="4" class="empty-state">No 'Home' records found for this language.</td></tr>
+              <tr class="admin-list__row">
+                <td colspan="4" class="admin-list__cell admin-list__cell--empty">
+                  No 'Home' records found for this language.
+                </td>
+              </tr>
             }
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="admin-table-group">
-      <h2>Exit Pages</h2>
-      <div class="table-scroll">
-        <table>
+    <section class="admin-list__group">
+      <h2 class="admin-list__group-title">Exit Pages</h2>
+      <div class="admin-list__scroll">
+        <table class="admin-list__table">
+          <colgroup>
+            <col class="admin-list__col-title">
+            <col class="admin-list__col-location">
+            <col class="admin-list__col-path">
+            <col class="admin-list__col-actions">
+          </colgroup>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Location</th>
-              <th>Path (URL)</th>
-              <th>Actions</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Title</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Location</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Path (URL)</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             @for (item of facade.exitUrls(); track item.id) {
-              <tr>
-                <td class="page-title">{{ item.expand?.page_id?.title }}</td>
-                <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
-                <td><a [routerLink]="'/' + item.url" target="_blank" class="url-link">{{ item.url }}</a></td>
-                <td class="actions">
-                  <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>
-                  <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="btn-delete">Delete</a>
+              <tr class="admin-list__row">
+                <td class="admin-list__cell admin-list__cell--title">{{ item.expand?.page_id?.title }}</td>
+                <td class="admin-list__cell">
+                  <code class="admin-list__code">{{ item.expand?.page_id?.metadata?.location }}</code>
+                </td>
+                <td class="admin-list__cell">
+                  <a [routerLink]="'/' + item.url" target="_blank" class="admin-list__link">{{ item.url }}</a>
+                </td>
+                <td class="admin-list__cell">
+                  <div class="admin-list__buttons">
+                    <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit row-action row-action--edit">Edit</a>
+                    <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="row-action row-action--delete">Delete</a>
+                  </div>
                 </td>
               </tr>
             } @empty {
-              <tr><td colspan="4" class="empty-state">No 'Exit' records found for this language.</td></tr>
+              <tr class="admin-list__row">
+                <td colspan="4" class="admin-list__cell admin-list__cell--empty">
+                  No 'Exit' records found for this language.
+                </td>
+              </tr>
             }
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="admin-table-group">
-      <h2>Chapter Pages (Virtual Scrolling)</h2>
-      <cdk-virtual-scroll-viewport itemSize="56" class="admin-viewport">
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Location</th>
-                <th>Path (URL)</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+    <section class="admin-list__group">
+      <h2 class="admin-list__group-title">Chapter Pages (Virtual Scrolling)</h2>
+      <div class="admin-list__scroll">
+        <table class="admin-list__table admin-list__table--head">
+          <colgroup>
+            <col class="admin-list__col-title">
+            <col class="admin-list__col-location">
+            <col class="admin-list__col-path">
+            <col class="admin-list__col-actions">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Title</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Location</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Path (URL)</th>
+              <th class="admin-list__cell admin-list__cell--head" scope="col">Actions</th>
+            </tr>
+          </thead>
+        </table>
+        <cdk-virtual-scroll-viewport itemSize="56" class="admin-list__viewport">
+          <table class="admin-list__table admin-list__table--body">
+            <colgroup>
+              <col class="admin-list__col-title">
+              <col class="admin-list__col-location">
+              <col class="admin-list__col-path">
+              <col class="admin-list__col-actions">
+            </colgroup>
             <tbody>
-              <tr *cdkVirtualFor="let item of facade.chapterUrls()">
-                <td class="page-title">{{ item.expand?.page_id?.title }}</td>
-                <td><code>{{ item.expand?.page_id?.metadata?.location }}</code></td>
-                <td><a [routerLink]="'/' + item.url" target="_blank" class="url-link">{{ item.url }}</a></td>
-                <td class="actions">
-                  <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit">Edit</a>
-                  <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="btn-delete">Delete</a>
+              <tr class="admin-list__row" *cdkVirtualFor="let item of facade.chapterUrls()">
+                <td class="admin-list__cell admin-list__cell--title">{{ item.expand?.page_id?.title }}</td>
+                <td class="admin-list__cell">
+                  <code class="admin-list__code">{{ item.expand?.page_id?.metadata?.location }}</code>
+                </td>
+                <td class="admin-list__cell">
+                  <a [routerLink]="'/' + item.url" target="_blank" class="admin-list__link">{{ item.url }}</a>
+                </td>
+                <td class="admin-list__cell">
+                  <div class="admin-list__buttons">
+                    <a [routerLink]="['/admin/update', item.expand?.page_id?.id]" class="btn-edit row-action row-action--edit">Edit</a>
+                    <a [routerLink]="['/admin/delete', item.expand?.page_id?.id]" class="row-action row-action--delete">Delete</a>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </cdk-virtual-scroll-viewport>
+        </cdk-virtual-scroll-viewport>
+      </div>
     </section>
   }
 </div>

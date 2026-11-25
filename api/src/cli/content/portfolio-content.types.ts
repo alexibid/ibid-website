@@ -18,8 +18,6 @@ export const CHAPTER_LOCATIONS = [
   'VII',
   'VIII',
   'IX',
-  'X',
-  'XI',
 ] as const;
 
 export const EXIT_LOCATIONS = ['about', 'contact-form', 'back-cover'] as const;
@@ -68,6 +66,7 @@ const FORBIDDEN_TEXT_PATTERNS: readonly RegExp[] = [
   /barre\s+de\s+menus/i,
   /Men[uü]leisten/i,
   /\bVS[\s-]Code\b/i,
+  /\bboilerplate\b/i,
 ];
 const IMG_TAG_PATTERN = /<img\b[^>]*>/gi;
 const SRC_ATTR_PATTERN = /\bsrc="([^"]*)"/i;
@@ -140,8 +139,8 @@ export function parsePortfolioContentFile(
 }
 
 export function validatePortfolioDataset(entries: readonly PortfolioEntry[]): void {
-  if (entries.length !== SUPPORTED_LANGS.length * 17) {
-    throw new Error(`Expected 85 portfolio entries, received ${entries.length}`);
+  if (entries.length !== SUPPORTED_LANGS.length * 15) {
+    throw new Error(`Expected 75 portfolio entries, received ${entries.length}`);
   }
   for (const lang of SUPPORTED_LANGS) {
     validateLanguageEntries(
@@ -197,8 +196,8 @@ function validateLanguageEntries(
   lang: SupportedLang,
   entries: readonly PortfolioEntry[],
 ): void {
-  if (entries.length !== 17) {
-    throw new Error(`Expected 17 entries for ${lang}, received ${entries.length}`);
+  if (entries.length !== 15) {
+    throw new Error(`Expected 15 entries for ${lang}, received ${entries.length}`);
   }
   assertOrderedLocations(entries.filter((e) => e.type === 'home'), HOME_LOCATIONS, `${lang}:home`);
   assertOrderedLocations(
@@ -208,9 +207,9 @@ function validateLanguageEntries(
   );
   assertOrderedLocations(entries.filter((e) => e.type === 'exit'), EXIT_LOCATIONS, `${lang}:exit`);
 
-  const chapterX = entries.find((e) => e.location === 'X');
-  if (!chapterX || !`${chapterX.title} ${chapterX.content}`.includes('Solum')) {
-    throw new Error(`Chapter X for ${lang} must reference Solum`);
+  const chapterVIII = entries.find((e) => e.location === 'VIII');
+  if (!chapterVIII || !`${chapterVIII.title} ${chapterVIII.content}`.includes('Solum')) {
+    throw new Error(`Chapter VIII for ${lang} must reference Solum`);
   }
   for (const entry of entries) {
     validateSingleEntry(lang, entry);
@@ -287,8 +286,7 @@ function validateImageTags(html: string, context: string): void {
     const tag = match[0];
     const src = SRC_ATTR_PATTERN.exec(tag)?.[1]?.trim() ?? '';
     const alt = ALT_ATTR_PATTERN.exec(tag)?.[1]?.trim() ?? '';
-    const hasValidPrefix =
-      src.startsWith('https://') || src.startsWith('/content-media/') || src.startsWith('/images/');
+    const hasValidPrefix = src.startsWith('https://') || src.startsWith('/images/');
     if (!hasValidPrefix || alt.length === 0) {
       throw new Error(`Invalid image tag in ${context}`);
     }

@@ -105,6 +105,62 @@ const INVALID_DATASETS: readonly InvalidExclusionDataset[] = [
   },
 ];
 
+const STANDALONE_CHAPTER_DATASETS: readonly InvalidExclusionDataset[] = [
+  {
+    label: 'standalone-boilerplate-chapter',
+    entries: patchEntry(PORTFOLIO_CONTENT_FIXTURES.validEntries, 'en', 'IV', {
+      slug: 'boilerplate',
+      title: 'Boilerplate',
+      content: '<p>Standalone boilerplate setup chapter.</p>',
+    }),
+  },
+  {
+    label: 'standalone-ibid-ui-chapter-link',
+    entries: patchEntry(PORTFOLIO_CONTENT_FIXTURES.validEntries, 'en', 'IV', {
+      slug: 'ibid-ui',
+      title: 'ibid-ui Design System',
+      content: '<p>Component library at https://github.com/alexibid/ibid-ui.</p>',
+    }),
+  },
+  {
+    label: 'standalone-ibid-workspace-chapter-link',
+    entries: patchEntry(PORTFOLIO_CONTENT_FIXTURES.validEntries, 'en', 'V', {
+      slug: 'ibid-workspace',
+      title: 'ibid-workspace',
+      content:
+        '<p>Workspace library at https://github.com/alexibid/ibid-workspace/tree/main/libs/ibid-ui.</p>',
+    }),
+  },
+  {
+    label: 'standalone-extra-ibid-ui-chapter-x',
+    entries: [
+      ...PORTFOLIO_CONTENT_FIXTURES.validEntries,
+      {
+        id: 'en-chapter-x',
+        type: 'chapter',
+        lang: 'en',
+        location: 'X',
+        slug: 'ibid-ui',
+        title: 'ibid-ui Design System',
+        content: '<p>Standalone UI library chapter.</p>',
+        metadata: { location: 'X' },
+      },
+    ],
+  },
+  {
+    label: 'standalone-extra-ibid-workspace-chapter-xi',
+    entries: patchEntry(PORTFOLIO_CONTENT_FIXTURES.validEntries, 'en', 'IX', {
+      id: 'en-chapter-xi',
+      location: 'XI',
+      slug: 'ibid-workspace',
+      title: 'ibid-workspace',
+      content: '<p>Standalone workspace chapter.</p>',
+      metadata: { location: 'XI' },
+    }),
+  },
+];
+
 export const PORTFOLIO_EXCLUSION_FIXTURES = {
   invalidDatasets: INVALID_DATASETS,
+  standaloneChapterDatasets: STANDALONE_CHAPTER_DATASETS,
 };

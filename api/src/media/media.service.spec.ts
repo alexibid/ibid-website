@@ -9,7 +9,27 @@ import { MediaStorageService } from './media-storage.service';
 import { MediaService } from './media.service';
 
 describe('MediaService', () => {
-  it('should copy valid uploaded media into public/content-media, record metadata in PostgreSQL, and run StaticExportService.exportAll', async () => {
+  it('should return recorded media items from PostgreSQL via findAll without touching disk', async () => {
+    const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
+    const db = createMockDrizzleDb();
+    db.seedTableRows('media', MEDIA_MOCK_FIXTURES.existingMedia);
+    const fs = createMockFileSystem();
+    const service = new MediaService(
+      db,
+      new MediaStorageService(fs, config),
+      new StaticExportService(db, fs, config)
+    );
+
+    const records = await service.findAll();
+
+    expect(records).toEqual(MEDIA_MOCK_FIXTURES.existingMedia);
+    expect(fs.readdir).not.toHaveBeenCalled();
+    expect(fs.readFile).not.toHaveBeenCalled();
+    expect(fs.readBuffer).not.toHaveBeenCalled();
+    expect(fs.getWrittenFiles()).toHaveLength(0);
+  });
+
+  it('should copy valid uploaded media into public/images, record metadata in PostgreSQL, and run StaticExportService.exportAll', async () => {
     const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
     const db = createMockDrizzleDb();
     const fs = createMockFileSystem();
@@ -17,12 +37,12 @@ describe('MediaService', () => {
     const exportSpy = vi.spyOn(staticExport, 'exportAll');
     const service = new MediaService(db, new MediaStorageService(fs, config), staticExport);
 
-    const record = await service.upload(MEDIA_MOCK_FIXTURES.validPngUpload);
+    const record = await service.upload(MEDIA_MOCK_FIXTURES.validWebpUpload);
 
-    expect(record.filename).toContain('.png');
-    expect(record.url.startsWith('/content-media/')).toBe(true);
-    expect(record.mimeType).toBe('image/png');
-    expect(record.sizeBytes).toBe(MEDIA_MOCK_FIXTURES.validPngUpload.size);
+    expect(record.filename).toContain('.webp');
+    expect(record.url.startsWith('/images/')).toBe(true);
+    expect(record.mimeType).toBe('image/webp');
+    expect(record.sizeBytes).toBe(MEDIA_MOCK_FIXTURES.validWebpUpload.size);
     expect(fs.mkdir).toHaveBeenCalledWith(config.mediaDir);
     expect(fs.getWrittenFiles().some((p) => p.startsWith(`${config.mediaDir}/`))).toBe(true);
     expect(db.getTableRows('media')).toHaveLength(1);
@@ -65,6 +85,27 @@ describe('MediaService', () => {
     expect(exportSpy).not.toHaveBeenCalled();
   });
 
+  it('should reject PNG, JPEG and non-WebP files with the WebP-only message without side effects', async () => {
+    const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
+    const db = createMockDrizzleDb();
+    const fs = createMockFileSystem();
+    const staticExport = new StaticExportService(db, fs, config);
+    const exportSpy = vi.spyOn(staticExport, 'exportAll');
+    const service = new MediaService(db, new MediaStorageService(fs, config), staticExport);
+    const rejected = [
+      MEDIA_MOCK_FIXTURES.pngUpload,
+      MEDIA_MOCK_FIXTURES.jpegUpload,
+      MEDIA_MOCK_FIXTURES.mislabelledPngUpload
+    ];
+
+    for (const upload of rejected) {
+      await expect(service.upload(upload)).rejects.toThrow('Only WebP images are allowed');
+    }
+    expect(fs.getWrittenFiles()).toHaveLength(0);
+    expect(db.getTableRows('media')).toHaveLength(0);
+    expect(exportSpy).not.toHaveBeenCalled();
+  });
+
   it('should reject oversized or zero-byte uploads with BadRequestException without writing files or calling exportAll', async () => {
     const config = new ConfigService(CONFIG_MOCK_ENVS.configured);
     const db = createMockDrizzleDb();
@@ -90,7 +131,7 @@ describe('MediaService', () => {
     db.seedTableRows('media', MEDIA_MOCK_FIXTURES.existingMedia);
     const targetFilename = MEDIA_MOCK_FIXTURES.existingMedia[0].filename;
     const fs = createMockFileSystem({
-      [`${config.mediaDir}/${targetFilename}`]: MEDIA_MOCK_FIXTURES.validPngUpload.buffer
+      [`${config.mediaDir}/${targetFilename}`]: MEDIA_MOCK_FIXTURES.validWebpUpload.buffer
     });
     const staticExport = new StaticExportService(db, fs, config);
     const exportSpy = vi.spyOn(staticExport, 'exportAll');

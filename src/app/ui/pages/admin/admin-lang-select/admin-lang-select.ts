@@ -10,96 +10,138 @@ import { LANGUAGE_LABELS, isSupportedLanguage } from '../../../../domain/constan
   standalone: true,
   imports: [RouterLink, UpperCasePipe],
   template: `
-    <header>
-      <h1>Website Administration</h1>
-      <p>Select a language to manage content</p>
+    <header class="admin-lang-header">
+      <h1 class="admin-lang-header__title">Website Administration</h1>
+      <p class="admin-lang-header__lead">Select a language to manage content</p>
     </header>
 
     <section class="admin-table-group">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Language Code</th>
-              <th scope="col">Language Name</th>
-              <th scope="col">Action</th>
+      <table class="admin-table-group__table">
+        <thead>
+          <tr>
+            <th class="admin-table-group__cell admin-table-group__cell--head" scope="col">Language Code</th>
+            <th class="admin-table-group__cell admin-table-group__cell--head" scope="col">Language Name</th>
+            <th class="admin-table-group__cell admin-table-group__cell--head" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (lang of languages; track lang) {
+            <tr class="admin-table-group__row">
+              <td class="admin-table-group__cell"><strong>{{ lang | uppercase }}</strong></td>
+              <td class="admin-table-group__cell">{{ getLangName(lang) }}</td>
+              <td class="admin-table-group__cell">
+                <a [routerLink]="['/admin', lang]" class="btn-manage">Manage Content</a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            @for (lang of languages; track lang) {
-              <tr>
-                <td><strong>{{ lang | uppercase }}</strong></td>
-                <td>{{ getLangName(lang) }}</td>
-                <td>
-                  <a [routerLink]="['/admin', lang]" class="btn-manage">Manage Content</a>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </section>
+          }
+        </tbody>
+      </table>
+    </section>
 
-      <div class="global-actions">
-        <a routerLink="/admin/create" class="btn-create">+ Create New Page</a>
-      </div>
+    <div class="admin-lang-actions">
+      <a routerLink="/admin/create" class="btn-create">+ Create New Page</a>
+    </div>
   `,
   styles: [`
-    header {
-      margin-bottom: 2rem;
-      h1 { font-size: 2rem; color: #2c3e50; margin: 0; }
-      p { color: #666; font-size: 1.1rem; margin: 0.5rem 0 0; }
+    .admin-lang-header {
+      margin-bottom: 1.5rem;
+
+      &__title {
+        font-family: var(--font-sans);
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #0f172a;
+        margin: 0;
+      }
+
+      &__lead {
+        font-family: var(--font-sans);
+        color: #475569;
+        font-size: 0.9375rem;
+        margin: 0.375rem 0 0;
+      }
     }
 
     .admin-table-group {
-      background: white;
+      background: #ffffff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
       overflow: hidden;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
 
-      table {
+      &__table {
         width: 100%;
         border-collapse: collapse;
+      }
 
-        th, td {
-          padding: 1rem 1.5rem;
-          text-align: left;
-          border-bottom: 1px solid #eaeaea;
+      &__row {
+        border-bottom: 1px solid #e2e8f0;
+
+        &:last-child {
+          border-bottom: none;
         }
 
-        th {
-          background: #f8f9fa;
+        &:hover {
+          background: #f8fafc;
+        }
+      }
+
+      &__cell {
+        padding: 0.875rem 1.5rem;
+        text-align: left;
+
+        &--head {
+          background: #f8fafc;
+          border-bottom: 1px solid #e2e8f0;
           font-weight: 600;
-          color: #777;
+          color: #475569;
           text-transform: uppercase;
-          font-size: 0.85rem;
-          letter-spacing: 0.5px;
+          font-size: 0.75rem;
+          letter-spacing: 0.05em;
         }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #fdfdfd; }
       }
     }
 
     .btn-manage {
-      color: #3182ce;
+      color: #1d4ed8;
       text-decoration: none;
-      font-weight: 500;
-      &:hover { text-decoration: underline; }
+      font-size: 0.875rem;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
-    .global-actions {
+    .admin-lang-actions {
       display: flex;
       justify-content: flex-end;
     }
 
     .btn-create {
-      background: #27ae60;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 4px;
+      background: #15803d;
+      color: #ffffff;
+      padding: 0.375rem 0.875rem;
+      min-height: 36px;
+      min-width: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      line-height: 1.25;
       text-decoration: none;
       font-weight: 600;
-      &:hover { background: #219150; }
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: #166534;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
     }
   `]
 })

@@ -7,3 +7,22 @@
   font-weight: 400;
   font-family: var(--font-serif);
 }
+
+@mixin full-bleed-image($max-height, $desktop-max-height, $margin) {
+  height: auto;
+  max-height: $max-height;
+  object-fit: cover;
+  margin-top: $margin;
+  margin-bottom: $margin;
+  border-radius: 0;
+  margin-left: -40px;
+  margin-right: calc(0px - var(--book-padding-w-mobile));
+  width: calc(100% + 40px + var(--book-padding-w-mobile));
+
+  @media (min-width: 768px) {
+    margin-left: calc(0px - var(--book-padding-w-desktop));
+    margin-right: calc(0px - var(--book-padding-w-desktop));
+    width: calc(100% + (2 * var(--book-padding-w-desktop)));
+    max-height: $desktop-max-height;
+  }
+}

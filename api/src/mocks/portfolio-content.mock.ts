@@ -22,8 +22,6 @@ const CHAPTER_LOCATIONS: readonly string[] = [
   'VII',
   'VIII',
   'IX',
-  'X',
-  'XI',
 ];
 
 const EXIT_SLUGS: Record<LangCode, string> = {
@@ -82,9 +80,9 @@ function buildLanguageEntries(lang: LangCode): PortfolioMockEntry[] {
     lang,
     location: loc,
     slug: `${lang}-chapter-${loc.toLowerCase()}`,
-    title: loc === 'X' ? `Solum ${lang.toUpperCase()}` : `Chapter ${loc} ${lang.toUpperCase()}`,
+    title: loc === 'VIII' ? `Solum ${lang.toUpperCase()}` : `Chapter ${loc} ${lang.toUpperCase()}`,
     content:
-      loc === 'X'
+      loc === 'VIII'
         ? '<p>Solum integra o projeto arquitetónico e a engenharia digital.</p><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200" alt="Solum view">'
         : '<p>Colaboração com WS, P4, qb arquitectura + design e Grupo Sosoares.</p><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200" alt="Atelier work">',
     metadata: { location: loc },
@@ -151,6 +149,18 @@ function swapExitOrder(entries: readonly PortfolioMockEntry[], lang: LangCode): 
 
 const VALID_DATASET = buildValidDataset();
 
+const CONSOLIDATED_IBID_DATASET = VALID_DATASET.map((entry) =>
+  entry.type === 'chapter' && entry.location === 'IV'
+    ? {
+        ...entry,
+        slug: `${entry.lang}-ibid-web-engineering-quality`,
+        title: `ibid. — Web Engineering Quality (${entry.lang.toUpperCase()})`,
+        content:
+          '<p>ibid. consolidates architecture, accessibility, testing, and performance engineering into one web quality system.</p><img src="/images/ibid-quality.webp" alt="ibid. engineering quality">',
+      }
+    : entry,
+);
+
 export const ENCODING_FIXTURES = {
   dirtyUnicodeAndQuotesHtml:
     '"<p>Estrat\\u00e9gia, \\"Design\\" e Conte\\u00fados\\nNovo par\\u00e1grafo \\u2014 Solum</p>"',
@@ -212,7 +222,7 @@ export const PORTFOLIO_CONTENT_FIXTURES = {
     {
       id: 'media-existing-1',
       filename: 'cover.webp',
-      url: '/content-media/cover.webp',
+      url: '/images/cover.webp',
       mimeType: 'image/webp',
       sizeBytes: 2048,
     },
@@ -220,7 +230,7 @@ export const PORTFOLIO_CONTENT_FIXTURES = {
   invalidMissingLanguage: VALID_DATASET.filter((e) => e.lang !== 'de'),
   invalidMissingSolum: replaceFirstMatching(
     VALID_DATASET,
-    (e) => e.lang === 'pt' && e.location === 'X',
+    (e) => e.lang === 'pt' && e.location === 'VIII',
     { title: 'Software', content: '<p>Ferramenta digital genérica.</p>' },
   ),
   invalidClientName: replaceFirstMatching(
@@ -259,4 +269,9 @@ export const PORTFOLIO_CONTENT_FIXTURES = {
     { slug: 'contacts' },
   ),
   invalidExitOrder: swapExitOrder(VALID_DATASET, 'pt'),
+  consolidatedIbidEntries: CONSOLIDATED_IBID_DATASET,
+  consolidatedIbidContentFiles: buildContentDirFiles(
+    '/workspace/apps/ibid-website/api/src/cli/content',
+    CONSOLIDATED_IBID_DATASET,
+  ),
 };

@@ -5,101 +5,95 @@
   @include book-page-layout;
 }
 
+.book-cover-page {
+  display: block;
+  height: 100%;
+  width: 100%;
+  scroll-snap-align: start;
 
-.page-head {
+  @media (min-width: 768px) {
+    width: calc(200% + (var(--book-padding-w-desktop) * 2));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.page-break-spacer {
   display: block;
   break-after: column;
   height: 100%;
+
+  @media (min-width: 768px) {
+    width: 1px;
+  }
 }
 
-.page-body {
-  .book-cover-page {
+.index-section {
+  break-before: column;
+}
+
+:host .index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  break-after: column;
+
+  &__item {
     display: block;
-    height: 100%;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    break-inside: avoid-column;
+  }
+
+  &__link {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     width: 100%;
-    scroll-snap-align: start;
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1.35rem;
 
-    @media (min-width: 768px) {
-      width: calc(200% + (var(--book-padding-w-desktop) * 2)); 
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-
-  .page-break-spacer {
-    display: block;
-    break-after: column;
-    height: 100%;
-    
-    @media (min-width: 768px) {
-      width: 1px;
-    }
-  }
-
-  .index-section {
-    break-before: column;
-  }
-
-  ::ng-deep {
-    .index-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2rem 0;
-      break-after: column;
-
-      li {
-        font-family: var(--font-serif);
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        opacity: 0.9;
-
-        &::after {
-          content: "";
-          flex-grow: 1;
-          border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-          margin: 0 10px;
-          order: 2;
-        }
-
-        .page-num {
-          order: 3;
-          font-family: var(--font-sans);
-          font-size: 1.2rem;
-          opacity: 0.5;
-        }
-
-        span:first-child {
-          order: 1;
-        }
-      }
+    &::after {
+      content: "";
+      flex-grow: 1;
+      border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+      margin: 0 10px;
+      order: 2;
     }
 
-    a {
-      color: inherit;
+    &:hover {
       text-decoration: none;
-      cursor: pointer;
 
-      &:hover {
+      .index-list__title {
         text-decoration: underline dotted;
         text-decoration-color: var(--color-grey-700);
         text-decoration-thickness: 1px;
         text-underline-offset: 8px;
       }
     }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
   }
-}
 
-a {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
+  &__title {
+    order: 1;
+  }
 
-  &:hover {
-    text-decoration: underline dotted;
+  &__page {
+    order: 3;
+    flex-shrink: 0;
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    opacity: 0.5;
   }
 }
 

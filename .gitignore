@@ -59,3 +59,7 @@ api/coverage/
 api/*.tsbuildinfo
 
 
+
+/public/pages/
+/public/images/
+/public/content-media/

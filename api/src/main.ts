@@ -17,7 +17,7 @@ async function bootstrap(): Promise<void> {
     credentials: true,
   });
   app.useStaticAssets(config.mediaDir, {
-    prefix: '/content-media/',
+    prefix: '/images/',
   });
 
   app.use('/api', noStoreCacheMiddleware);

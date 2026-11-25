@@ -9,6 +9,13 @@
     "build": {
       "executor": "@angular/build:application",
       "defaultConfiguration": "production",
+      "inputs": [
+        "production",
+        "^production",
+        {
+          "runtime": "node tools/builder/hash-directories.mjs apps/ibid-website/public/pages apps/ibid-website/public/images"
+        }
+      ],
       "options": {
         "browser": "apps/ibid-website/src/main.ts",
         "tsConfig": "apps/ibid-website/tsconfig.app.json",

@@ -1,3 +1,4 @@
+import { CONFIG_MEDIA_DIR_FIXTURES } from '../mocks/config-media-dir.mock';
 import { CONFIG_MOCK_ENVS } from '../mocks/static-export-fixtures.mock';
 import { ConfigService } from './config.service';
 
@@ -31,5 +32,13 @@ describe('ConfigService', () => {
 
   it('should reject invalid or negative port configuration values', () => {
     expect(() => new ConfigService(CONFIG_MOCK_ENVS.invalidPort)).toThrow();
+  });
+
+  it('should default mediaDir to public/images and honour MEDIA_DIR when set', () => {
+    const defaulted = new ConfigService(CONFIG_MEDIA_DIR_FIXTURES.defaultEnv);
+    const overridden = new ConfigService(CONFIG_MEDIA_DIR_FIXTURES.overrideEnv);
+
+    expect(defaulted.mediaDir).toBe(CONFIG_MEDIA_DIR_FIXTURES.defaultMediaDir);
+    expect(overridden.mediaDir).toBe(CONFIG_MEDIA_DIR_FIXTURES.overrideMediaDir);
   });
 });

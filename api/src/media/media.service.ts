@@ -27,13 +27,9 @@ export interface MediaRecord {
 }
 
 const MAX_MEDIA_SIZE_BYTES = 10 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set([
-  'image/png',
-  'image/jpeg',
-  'image/webp',
-  'image/gif',
-  'image/avif',
-]);
+const ALLOWED_MIME_TYPE = 'image/webp';
+const ALLOWED_EXTENSION = '.webp';
+const WEBP_ONLY_MESSAGE = 'Only WebP images are allowed';
 
 @Injectable()
 export class MediaService {
@@ -85,8 +81,8 @@ function validateUpload(file: UploadedMediaFile | undefined): asserts file is Up
   if (!file) {
     throw new BadRequestException('Media file is required');
   }
-  if (!ALLOWED_MIME_TYPES.has(file.mimetype)) {
-    throw new BadRequestException(`Unsupported media type: ${file.mimetype}`);
+  if (file.mimetype !== ALLOWED_MIME_TYPE || !isWebpFilename(file.originalname)) {
+    throw new BadRequestException(WEBP_ONLY_MESSAGE);
   }
   if (file.size <= 0 || file.buffer.length <= 0) {
     throw new BadRequestException('Media file must not be empty');
@@ -94,6 +90,10 @@ function validateUpload(file: UploadedMediaFile | undefined): asserts file is Up
   if (file.size > MAX_MEDIA_SIZE_BYTES || file.buffer.length > MAX_MEDIA_SIZE_BYTES) {
     throw new BadRequestException('Media file exceeds maximum allowed size');
   }
+}
+
+function isWebpFilename(filename: string): boolean {
+  return filename.toLowerCase().endsWith(ALLOWED_EXTENSION);
 }
 
 function toMediaRecord(row: Record<string, unknown>): MediaRecord {
