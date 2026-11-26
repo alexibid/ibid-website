@@ -107,10 +107,14 @@
         <div class="image-modal__field">
           <label class="admin-form__label admin-form__label--modal" for="image-width">Width</label>
           <div class="image-modal__quick-sizes">
-            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '100%'">100%</button>
-            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '75%'">75%</button>
-            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = '50%'">50%</button>
-            <button type="button" class="image-modal__quick-size-btn" (click)="imageProps.width = 'auto'">Original</button>
+            <button type="button" class="image-modal__quick-size-btn"
+              (click)="imageProps.width = '100%'">100%</button>
+            <button type="button" class="image-modal__quick-size-btn"
+              (click)="imageProps.width = '75%'">75%</button>
+            <button type="button" class="image-modal__quick-size-btn"
+              (click)="imageProps.width = '50%'">50%</button>
+            <button type="button" class="image-modal__quick-size-btn"
+              (click)="imageProps.width = 'auto'">Original</button>
           </div>
           <input class="admin-form__input" id="image-width" type="text"
             [(ngModel)]="imageProps.width"
@@ -137,15 +141,20 @@
       <footer class="image-modal__footer">
         @if (confirmImageDelete()) {
           <div class="image-modal__delete-confirm">
-            <button type="button" class="btn-danger form-button form-button--danger" (click)="deleteSelectedImage()">Confirm Delete</button>
-            <button type="button" class="form-button form-button--secondary" (click)="cancelDeleteImage()">Keep Image</button>
+            <button type="button" class="btn-danger form-button form-button--danger"
+              (click)="deleteSelectedImage()">Confirm Delete</button>
+            <button type="button" class="form-button form-button--secondary"
+              (click)="cancelDeleteImage()">Keep Image</button>
           </div>
         } @else {
-          <button type="button" class="form-button form-button--danger-outline" (click)="requestDeleteImage()">Delete Image</button>
+          <button type="button" class="form-button form-button--danger-outline"
+            (click)="requestDeleteImage()">Delete Image</button>
         }
         <div class="image-modal__footer-actions">
-          <button type="button" class="form-button form-button--secondary" (click)="closeImageModal()">Cancel</button>
-          <button type="button" class="form-button form-button--primary" (click)="saveImageProps()">Apply Changes</button>
+          <button type="button" class="form-button form-button--secondary"
+            (click)="closeImageModal()">Cancel</button>
+          <button type="button" class="form-button form-button--primary"
+            (click)="saveImageProps()">Apply Changes</button>
         </div>
       </footer>
     </div>

@@ -75,45 +75,32 @@
   &__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 16px; }
 }
 
-:host ::ng-deep {
-  .ql-toolbar.ql-snow {
-    border-color: var(--form-border);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    font-family: var(--font-sans);
+:host ::ng-deep .ql-toolbar.ql-snow {
+  border-color: var(--form-border);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  font-family: var(--font-sans);
 
-    button {
-      min-width: 0;
-      min-height: 0;
-      width: 28px;
-      height: 24px;
-      padding: 3px 5px;
-    }
+  button { min-width: 0; min-height: 0; width: 28px; height: 24px; padding: 3px 5px; }
+  .ql-picker { height: 24px; }
+  .ql-picker-label { min-width: 0; min-height: 0; }
+}
 
-    .ql-picker { height: 24px; }
+:host ::ng-deep .ql-container.ql-snow {
+  min-height: 300px;
+  border-color: var(--form-border);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
 
-    .ql-picker-label {
-      min-width: 0;
-      min-height: 0;
-    }
-  }
-
-  .ql-container.ql-snow {
-    min-height: 300px;
-    border-color: var(--form-border);
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    font-family: var(--font-sans);
-    font-size: 1rem;
-  }
-
-  .ql-editor img {
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color 0.2s ease;
-    &:hover { border-color: var(--form-primary); }
-    @media (prefers-reduced-motion: reduce) { transition: none; }
-  }
+:host ::ng-deep .ql-editor img {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  &:hover { border-color: var(--form-primary); }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 }
 
 .form-error {
@@ -188,6 +175,23 @@
   box-sizing: border-box;
 }
 
+@mixin modal-option-btn {
+  flex: 1;
+  min-height: 32px;
+  min-width: auto;
+  padding: 0.25rem 0.625rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: var(--form-muted-surface);
+  border: 1px solid var(--form-border);
+  color: var(--form-text);
+  cursor: pointer;
+  border-radius: 6px;
+  &:hover { background: #e2e8f0; }
+  &:focus-visible { outline: 2px solid var(--form-primary); outline-offset: 2px; }
+}
+
 .image-modal {
   background: var(--form-surface);
   width: 100%;
@@ -233,11 +237,7 @@
     @media (min-width: 768px) { padding: 20px; }
   }
 
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  &__field { display: flex; flex-direction: column; gap: 6px; }
 
   &__footer {
     padding: 16px;
@@ -260,25 +260,11 @@
     margin-bottom: 8px;
   }
 
-  &__quick-size-btn,
-  &__alignment-btn {
-    flex: 1;
-    min-height: 32px;
-    min-width: auto;
-    padding: 0.25rem 0.625rem;
-    font-family: var(--font-sans);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    background: var(--form-muted-surface);
-    border: 1px solid var(--form-border);
-    color: var(--form-text);
-    cursor: pointer;
-    border-radius: 6px;
-    &:hover { background: #e2e8f0; }
-    &:focus-visible { outline: 2px solid var(--form-primary); outline-offset: 2px; }
-  }
+  &__quick-size-btn { @include modal-option-btn; }
 
   &__alignment-btn {
+    @include modal-option-btn;
+
     &--active {
       background: var(--form-primary);
       color: var(--form-surface);
@@ -290,10 +276,5 @@
 .image-preview {
   display: block;
 
-  &__img {
-    max-height: 120px;
-    display: block;
-    margin: 10px auto;
-    border-radius: 4px;
-  }
+  &__img { max-height: 120px; display: block; margin: 10px auto; border-radius: 4px; }
 }

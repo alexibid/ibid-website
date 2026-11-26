@@ -38,63 +38,63 @@
   padding: 0;
   margin: 0 0 2rem 0;
   break-after: column;
+}
 
-  &__item {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-    break-inside: avoid-column;
+:host .index-list__item {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  break-inside: avoid-column;
+}
+
+:host .index-list__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.35rem;
+
+  &::after {
+    content: "";
+    flex-grow: 1;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+    order: 2;
   }
 
-  &__link {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    width: 100%;
-    color: inherit;
-    font: inherit;
+  &:hover {
     text-decoration: none;
-    cursor: pointer;
-    font-size: 1.35rem;
-
-    &::after {
-      content: "";
-      flex-grow: 1;
-      border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-      margin: 0 10px;
-      order: 2;
-    }
-
-    &:hover {
-      text-decoration: none;
-
-      .index-list__title {
-        text-decoration: underline dotted;
-        text-decoration-color: var(--color-grey-700);
-        text-decoration-thickness: 1px;
-        text-underline-offset: 8px;
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--color-text);
-      outline-offset: 2px;
-    }
   }
 
-  &__title {
-    order: 1;
+  &:hover .index-list__title {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--color-grey-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 8px;
   }
 
-  &__page {
-    order: 3;
-    flex-shrink: 0;
-    font-family: var(--font-sans);
-    font-size: 1.2rem;
-    opacity: 0.5;
+  &:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
   }
+}
+
+:host .index-list__title {
+  order: 1;
+}
+
+:host .index-list__page {
+  order: 3;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  opacity: 0.5;
 }
 
 .preface-section,

@@ -56,173 +56,171 @@ a {
   display: contents;
 }
 
-:host ::ng-deep .page-body {
-  p {
-    display: block;
-    width: 100%;
-    margin: 0 0 0.5rem 0;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: var(--book-line-height);
-    color: var(--color-text);
-    text-align: left;
-    break-inside: avoid-column;
-  }
+:host ::ng-deep .page-body p {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: var(--book-line-height);
+  color: var(--color-text);
+  text-align: left;
+  break-inside: avoid-column;
+}
 
-  :has(+ h2),
-  :has(+ h3) {
-    margin-block-end: var(--book-heading-gap);
-  }
+:host ::ng-deep .page-body :has(+ h2),
+:host ::ng-deep .page-body :has(+ h3) {
+  margin-block-end: var(--book-heading-gap);
+}
 
-  h2,
-  h3 {
-    font-family: var(--font-title);
-    font-weight: 600;
-    line-height: var(--book-line-height);
-    break-inside: avoid-column;
-    break-after: avoid-column;
-  }
+:host ::ng-deep .page-body h2,
+:host ::ng-deep .page-body h3 {
+  font-family: var(--font-title);
+  font-weight: 600;
+  line-height: var(--book-line-height);
+  break-inside: avoid-column;
+  break-after: avoid-column;
+}
 
-  h2 {
-    font-size: 1.75rem;
-    margin: 1.5rem 0 1rem;
-  }
+:host ::ng-deep .page-body h2 {
+  font-size: 1.75rem;
+  margin: 1.5rem 0 1rem;
+}
 
-  h3 {
-    font-size: 1.25rem;
-    margin: 1rem 0 0.5rem;
-  }
+:host ::ng-deep .page-body h3 {
+  font-size: 1.25rem;
+  margin: 1rem 0 0.5rem;
+}
 
-  h2:has(+ p > em:only-child),
-  h3:has(+ p > em:only-child) {
-    margin-bottom: 0;
-  }
+:host ::ng-deep .page-body h2:has(+ p > em:only-child),
+:host ::ng-deep .page-body h3:has(+ p > em:only-child) {
+  margin-bottom: 0;
+}
 
-  h2:has(+ p),
-  h3:has(+ p){
-    margin-bottom: 0;
-  }
+:host ::ng-deep .page-body h2:has(+ p),
+:host ::ng-deep .page-body h3:has(+ p) {
+  margin-bottom: 0;
+}
 
-  p:has(strong:only-child) {
-    margin-bottom: 0.2rem;
-    break-inside: avoid-column;
-    break-after: avoid-column;
-  }
+:host ::ng-deep .page-body p:has(strong:only-child) {
+  margin-bottom: 0.2rem;
+  break-inside: avoid-column;
+  break-after: avoid-column;
+}
 
-  ul,
-  ol {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 0.75rem 0;
-  }
+:host ::ng-deep .page-body ul,
+:host ::ng-deep .page-body ol {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem 0;
+}
 
-  li {
-    display: block;
-    margin-bottom: 0.75rem;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: var(--book-line-height);
-    color: var(--color-text);
-  }
+:host ::ng-deep .page-body li {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: var(--book-line-height);
+  color: var(--color-text);
+}
 
-  a {
-    color: inherit;
-    font: inherit;
-    font-weight: 400;
+:host ::ng-deep .page-body a {
+  color: inherit;
+  font: inherit;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--color-grey-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 8px;
+  }
+}
+
+:host ::ng-deep .page-body li > a:has(> strong):has(> span) {
+  display: block;
+  width: 100%;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.15);
+  padding-bottom: 0.25rem;
+
+  &:hover {
     text-decoration: none;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline dotted;
-      text-decoration-color: var(--color-grey-700);
-      text-decoration-thickness: 1px;
-      text-underline-offset: 8px;
-    }
+    border-bottom-color: rgba(0, 0, 0, 0.3);
   }
 
-  li > a:has(> strong):has(> span) {
+  &:hover strong {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--color-grey-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 8px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+}
+
+:host ::ng-deep .page-body em {
+  font-style: italic;
+  font-family: var(--font-serif);
+  opacity: 0.8;
+}
+
+:host ::ng-deep .page-body img {
+  display: block;
+  width: 100%;
+  max-height: 75vh;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  break-inside: avoid-column;
+  margin-bottom: 1rem;
+}
+
+:host ::ng-deep .page-body .img-landscape-a {
+  @include full-bleed-image(50vh, 55vh, 24px);
+}
+
+:host ::ng-deep .page-body .img-landscape-b {
+  @include full-bleed-image(65vh, 70vh, 32px);
+}
+
+:host ::ng-deep .page-body .img-feature {
+  break-before: column;
+  break-after: column;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  box-sizing: border-box;
+  margin: calc(0px - var(--book-padding-h-mobile)) calc(0px - var(--book-padding-w-mobile))
+    calc(0px - var(--book-padding-h-mobile)) -40px;
+  width: calc(100% + 40px + var(--book-padding-w-mobile));
+  height: var(--book-height-mobile);
+  max-height: none;
+
+  @media (min-width: 768px) {
+    margin: calc(0px - var(--book-padding-h-desktop)) calc(0px - var(--book-padding-w-desktop));
+    width: calc(100% + (2 * var(--book-padding-w-desktop)));
+    height: var(--book-height-desktop);
+  }
+}
+
+:host ::ng-deep .page-body .img-feature--desktop {
+  display: none;
+
+  @media (min-width: 768px) {
     display: block;
-    width: 100%;
-    border-bottom: 1px dotted rgba(0, 0, 0, 0.15);
-    padding-bottom: 0.25rem;
-
-    &:hover {
-      text-decoration: none;
-      border-bottom-color: rgba(0, 0, 0, 0.3);
-
-      strong {
-        text-decoration: underline dotted;
-        text-decoration-color: var(--color-grey-700);
-        text-decoration-thickness: 1px;
-        text-underline-offset: 8px;
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--color-text);
-      outline-offset: 2px;
-    }
   }
+}
 
-  em {
-    font-style: italic;
-    font-family: var(--font-serif);
-    opacity: 0.8;
-  }
+:host ::ng-deep .page-body .img-feature--mobile {
+  display: block;
 
-  img {
-    display: block;
-    width: 100%;
-    max-height: 75vh;
-    height: auto;
-    object-fit: contain;
-    border-radius: 2px;
-    break-inside: avoid-column;
-    margin-bottom: 1rem;
-  }
-
-  .img-landscape-a {
-    @include full-bleed-image(50vh, 55vh, 24px);
-  }
-
-  .img-landscape-b {
-    @include full-bleed-image(65vh, 70vh, 32px);
-  }
-
-  .img-feature {
-    break-before: column;
-    break-after: column;
-    display: block;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 0;
-    box-sizing: border-box;
-    margin: calc(0px - var(--book-padding-h-mobile)) calc(0px - var(--book-padding-w-mobile))
-      calc(0px - var(--book-padding-h-mobile)) -40px;
-    width: calc(100% + 40px + var(--book-padding-w-mobile));
-    height: var(--book-height-mobile);
-    max-height: none;
-
-    @media (min-width: 768px) {
-      margin: calc(0px - var(--book-padding-h-desktop)) calc(0px - var(--book-padding-w-desktop));
-      width: calc(100% + (2 * var(--book-padding-w-desktop)));
-      height: var(--book-height-desktop);
-    }
-
-    &--desktop {
-      display: none;
-
-      @media (min-width: 768px) {
-        display: block;
-      }
-    }
-
-    &--mobile {
-      display: block;
-
-      @media (min-width: 768px) {
-        display: none;
-      }
-    }
+  @media (min-width: 768px) {
+    display: none;
   }
 }
