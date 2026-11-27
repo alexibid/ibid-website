@@ -8,6 +8,11 @@ import { CoverMotionState } from '../../application/state/cover-motion.state';
 import { PageType } from '../../domain/models/page-type.enum';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import {
+  isButtonSpaceActivation,
+  isEditableNavigationTarget,
+  isScrollableTextAreaTarget
+} from './book-navigation-target';
 
 @Directive({
   selector: '[websiteBookNavigation]',
@@ -114,6 +119,8 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
+    if (event.defaultPrevented || event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (isEditableNavigationTarget(event.target) || isButtonSpaceActivation(event)) return;
     let direction = 0;
     if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) direction = 1;
     else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) direction = -1;
@@ -125,17 +132,20 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent): void {
     if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
+    if (isScrollableTextAreaTarget(event.target)) return;
     if (Math.abs(event.deltaY) > 30) this.handleNavigation(event.deltaY > 0 ? 1 : -1);
   }
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent): void {
-    if (this.isBrowser) this.lastTouchY = event.touches[0].clientY;
+    if (!this.isBrowser || event.touches.length === 0) return;
+    this.lastTouchY = event.touches[0].clientY;
   }
 
   @HostListener('touchmove', ['$event'])
   onTouchMove(event: TouchEvent): void {
     if (!this.isBrowser || this.isScrolling || this.stateService.isTransitioning()) return;
+    if (event.touches.length === 0 || isScrollableTextAreaTarget(event.target)) return;
     const deltaY = this.lastTouchY - event.touches[0].clientY;
     if (Math.abs(deltaY) > 30) {
       this.handleNavigation(deltaY > 0 ? 1 : -1);

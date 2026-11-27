@@ -71,6 +71,32 @@ describe('BookNavigationDirective', () => {
     directive.ngOnInit();
   }
 
+  function createTextArea(scrollHeight: number): HTMLTextAreaElement {
+    const textArea = document.createElement('textarea');
+    const { visibleHeight } = BOOK_NAVIGATION_SCENARIOS.textAreaGestures;
+    Object.defineProperty(textArea, 'clientHeight', { value: visibleHeight });
+    Object.defineProperty(textArea, 'scrollHeight', { value: scrollHeight });
+    return textArea;
+  }
+
+  function wheelOver(target: Node): void {
+    const event = new WheelEvent('wheel', { deltaY: BOOK_NAVIGATION_SCENARIOS.textAreaGestures.wheelDeltaY });
+    target.dispatchEvent(event);
+    directive.onWheel(event);
+  }
+
+  function swipeOver(target: Node): void {
+    const { touchStartY, touchEndY } = BOOK_NAVIGATION_SCENARIOS.textAreaGestures;
+    const touchAt = (type: string, clientY: number): TouchEvent => {
+      const event = new TouchEvent(type);
+      Object.defineProperty(event, 'touches', { value: [{ clientY }] });
+      target.dispatchEvent(event);
+      return event;
+    };
+    directive.onTouchStart(touchAt('touchstart', touchStartY));
+    directive.onTouchMove(touchAt('touchmove', touchEndY));
+  }
+
   function resetDirective(): void {
     directive.ngOnDestroy();
     TestBed.resetTestingModule();
@@ -232,4 +258,38 @@ describe('BookNavigationDirective', () => {
       expect(harness.router.navigate).toHaveBeenCalledTimes(2);
     }
   );
+
+  it('should never turn the page on wheel or swipe inside a scrollable textarea, and turn it when the textarea does not overflow', async () => {
+    const { overflowingScrollHeight, fittingScrollHeight, typedText } = BOOK_NAVIGATION_SCENARIOS.textAreaGestures;
+    createDirective('/preface', 0);
+    const scrollable = createTextArea(overflowingScrollHeight);
+    const fitting = createTextArea(fittingScrollHeight);
+    const textInside = scrollable.appendChild(document.createTextNode(typedText));
+    const paragraph = document.createElement('p');
+
+    wheelOver(scrollable);
+    swipeOver(scrollable);
+    wheelOver(textInside);
+    swipeOver(textInside);
+    await vi.advanceTimersByTimeAsync(navigationDelayMs);
+
+    expect(harness.host.scrollBy).not.toHaveBeenCalled();
+    expect(harness.host.scrollLeft).toBe(0);
+    expect(harness.stateService.navigateWithFlip).not.toHaveBeenCalled();
+    expect(harness.router.navigate).not.toHaveBeenCalled();
+
+    wheelOver(fitting);
+    expect(harness.host.scrollLeft).toBe(viewportWidth);
+    await vi.advanceTimersByTimeAsync(scrollLockMs);
+    swipeOver(fitting);
+    expect(harness.host.scrollLeft).toBe(lastSpreadScroll);
+
+    await vi.advanceTimersByTimeAsync(scrollLockMs);
+    harness.host.scrollLeft = 0;
+    wheelOver(paragraph);
+    expect(harness.host.scrollLeft).toBe(viewportWidth);
+    await vi.advanceTimersByTimeAsync(scrollLockMs);
+    swipeOver(paragraph);
+    expect(harness.host.scrollLeft).toBe(lastSpreadScroll);
+  });
 });

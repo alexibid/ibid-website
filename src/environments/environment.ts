@@ -1,4 +1,11 @@
-export const environment = {
+export const environment: {
+  readonly production: boolean;
+  readonly contentMode: 'static' | 'api';
+  readonly apiBaseUrl: string;
+  readonly recaptchaSiteKey: string;
+} = {
   production: true,
-  apiBaseUrl: ''
+  contentMode: 'static',
+  apiBaseUrl: '',
+  recaptchaSiteKey: '6LdjqTMuAAAAAB7KWbVSd7AhtSgRDYwBKQMgHmYz'
 };

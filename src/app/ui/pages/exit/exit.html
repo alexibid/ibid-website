@@ -1,53 +1,74 @@
+<div class="sr-only" aria-live="polite" aria-atomic="true">@if (facade.submitStatus() === 'success') { {{ 'contacts.success-title' | translate }}. {{ 'contacts.success-message' | translate }} }</div>
+
 @if (facade.sections().length > 0) {
 <article class="page-body">
   @for (section of facade.sections(); track section.id) {
   @if (section.metadata && section.metadata.location === 'contact-form') {
   <section class="page-section" [id]="section.metadata.location">
     <header class="page-header">
-      <h2 class="page-title">{{ section.title }}</h2>
+      <h2 id="contact-form-title" class="page-title">{{ section.title }}</h2>
     </header>
     <div [innerHTML]="section.content"></div>
 
-    <form class="contact-form" (submit)="onSubmit($event)">
-      @if (facade.submitStatus() === 'error' && facade.errorMessage()) {
-      <div class="form-error-global" role="alert">{{ facade.errorMessage() }}</div>
+    <form class="contact-form" [class.contact-form--banner]="hasBanner()" aria-labelledby="contact-form-title" novalidate (submit)="onSubmit($event)">
+      @if (facade.submitStatus() === 'success') {
+      <div #confirmationBanner class="form-confirmation" role="region" tabindex="-1" aria-labelledby="contact-confirmation-title">
+        <span id="contact-confirmation-title" class="form-confirmation__title">{{ 'contacts.success-title' | translate }}</span>
+        <span class="form-confirmation__message">{{ 'contacts.success-message' | translate }}</span>
+        <button type="button" class="form-confirmation__action" (click)="onSendAnother()">{{ 'contacts.send-another' | translate }}</button>
+      </div>
       }
-      <div class="form-group">
+      @if (facade.submitStatus() === 'error' && facade.errorMessage()) {
+      <div class="form-error-global" role="alert">
+        <span class="form-error-global__message">{{ facade.errorMessage() | translate }}</span>
+        <button type="button" class="form-error-global__retry" (click)="onSubmit($event)">{{ 'contacts.retry' | translate }}</button>
+      </div>
+      }
+      <div class="form-group" [class.form-group--error]="!!facade.errors().name">
         <label class="form-group__label" for="name">{{ 'contacts.name' | translate }}</label>
-        <span id="name" role="textbox" contenteditable="true" class="form-input"
-          [attr.aria-placeholder]="'contacts.name-placeholder' | translate"
-          (input)="facade.name.set($any($event.target).innerText || '')"></span>
-        @if (facade.errors().name) {
-        <span class="field-error">{{ facade.errors().name }}</span>
+        <input #nameField id="name" name="name" type="text" class="form-input" autocomplete="name" required
+          [attr.aria-invalid]="facade.errors().name ? 'true' : null"
+          [attr.aria-describedby]="facade.errors().name ? 'name-error' : null"
+          [placeholder]="'contacts.name-placeholder' | translate" [value]="facade.name()"
+          (input)="updateField('name', $event)" (blur)="onFieldBlur('name')" />
+        @if (facade.errors().name; as nameError) {
+        <span id="name-error" class="field-error">{{ nameError | translate }}</span>
         }
       </div>
-      <div class="form-group">
+      <div class="form-group" [class.form-group--error]="!!facade.errors().email">
         <label class="form-group__label" for="email">{{ 'contacts.email' | translate }}</label>
-        <span id="email" role="textbox" contenteditable="true" class="form-input"
-          [attr.aria-placeholder]="'contacts.email-placeholder' | translate"
-          (input)="facade.email.set($any($event.target).innerText || '')"></span>
-        @if (facade.errors().email) {
-        <span class="field-error">{{ facade.errors().email }}</span>
+        <input #emailField id="email" name="email" type="email" class="form-input" autocomplete="email" required
+          [attr.aria-invalid]="facade.errors().email ? 'true' : null"
+          [attr.aria-describedby]="facade.errors().email ? 'email-error' : null"
+          [placeholder]="'contacts.email-placeholder' | translate" [value]="facade.email()"
+          (input)="updateField('email', $event)" (blur)="onFieldBlur('email')" />
+        @if (facade.errors().email; as emailError) {
+        <span id="email-error" class="field-error">{{ emailError | translate }}</span>
         }
       </div>
-      <div class="form-group">
+      <div class="form-group" [class.form-group--error]="!!facade.errors().message">
         <label class="form-group__label" for="message">{{ 'contacts.message' | translate }}</label>
-        <span id="message" role="textbox" contenteditable="true" class="form-textarea"
-          [attr.aria-placeholder]="'contacts.message-placeholder' | translate"
-          (input)="facade.message.set($any($event.target).innerText || '')"></span>
-        @if (facade.errors().message) {
-        <span class="field-error">{{ facade.errors().message }}</span>
+        <textarea #messageField id="message" name="message" [attr.rows]="hasBanner() ? 1 : 4" class="form-textarea" autocomplete="off" required
+          [attr.aria-invalid]="facade.errors().message ? 'true' : null"
+          [attr.aria-describedby]="facade.errors().message ? 'message-error' : null"
+          [placeholder]="'contacts.message-placeholder' | translate" [value]="facade.message()"
+          (input)="updateField('message', $event)" (blur)="onFieldBlur('message')"></textarea>
+        @if (facade.errors().message; as messageError) {
+        <span id="message-error" class="field-error">{{ messageError | translate }}</span>
         }
       </div>
-      <div role="button" tabindex="0" class="submit-btn" [class.disabled]="facade.isSubmitting()"
-        (click)="onSubmit($event)">
-        {{ 'contacts.submit' | translate }}
-      </div>
+      <input type="text" name="honeypot" class="contact-honeypot" tabindex="-1" aria-hidden="true"
+        autocomplete="off" [value]="facade.honeypot()" (input)="updateField('honeypot', $event)" />
+      <button type="submit" class="submit-btn" [disabled]="facade.isSubmitting()"
+        [attr.aria-busy]="facade.isSubmitting()">
+        {{ (facade.isSubmitting() ? 'contacts.submitting' : 'contacts.submit') | translate }}
+      </button>
+      <small class="contact-privacy">{{ 'contacts.privacy-notice' | translate }}</small>
     </form>
   </section>
   }
   @if (section.metadata && section.metadata.location === 'about') {
-  <section class="page-section" [id]="section.metadata.location">
+  <section class="page-section page-section--about" [id]="section.metadata.location">
     <header class="page-header">
       <div class="page-number">{{ 'chapter' | translate }} VIII</div>
       <h1 class="page-title">{{ section.title }}</h1>
@@ -70,6 +91,6 @@
 }
 } @else {
 <div class="loading-state">
-  <p>Construindo a contra-capa e formulários...</p>
+  <p>{{ 'contacts.loading' | translate }}</p>
 </div>
 }

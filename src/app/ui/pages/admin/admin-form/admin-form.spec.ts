@@ -119,6 +119,7 @@ describe('AdminForm', () => {
     const facadeSpy = vi.spyOn(facade, 'uploadImageUrl');
     const quillMock = ADMIN_MEDIA_FIXTURES.createMockQuill();
     component.onEditorCreated(quillMock.editor);
+    expect(quillMock.on).toHaveBeenCalledWith('text-change', expect.any(Function));
 
     const samplePage = MOCK_I18N_PAGES[0];
     const expectedLocation = samplePage.metadata?.location ?? '';

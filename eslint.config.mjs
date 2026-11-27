@@ -6,6 +6,8 @@ export default [
     ignores: [
       '**/api/**',
       'api/**',
+      '**/functions/**',
+      'functions/**',
       '**/dist/**',
       '**/out-tsc/**',
       '**/test-results/**',
@@ -28,15 +30,23 @@ export default [
     }
   },
   {
-    files: ['src/app/domains/book/**/*.ts'],
+    files: ['src/app/domain/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['**/domains/contact/**', '**/domains/content-management/**'],
-              message: 'Cross-domain imports are forbidden. Use shared or core instead.'
+              group: [
+                '@angular/**',
+                'rxjs',
+                'rxjs/**',
+                '**/application/**',
+                '**/infrastructure/**',
+                '**/ui/**'
+              ],
+              message:
+                'Domain layer must stay framework-free and independent of application, infrastructure, and UI layers.'
             }
           ]
         }
@@ -44,15 +54,15 @@ export default [
     }
   },
   {
-    files: ['src/app/domains/contact/**/*.ts'],
+    files: ['src/app/application/facades/contact.facade.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['**/domains/book/**', '**/domains/content-management/**'],
-              message: 'Cross-domain imports are forbidden. Use shared or core instead.'
+              group: ['**/ui/**', './*', './**', '../facades/**', '**/application/facades/**'],
+              message: 'ContactFacade cannot import UI modules or sibling facades.'
             }
           ]
         }
@@ -60,15 +70,17 @@ export default [
     }
   },
   {
-    files: ['src/app/domains/content-management/**/*.ts'],
+    files: ['src/app/ui/pages/exit/**/*.ts'],
+    ignores: ['**/*.spec.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['**/domains/book/**', '**/domains/contact/**'],
-              message: 'Cross-domain imports are forbidden. Use shared or core instead.'
+              group: ['**/infrastructure/**', '**/application/state/**'],
+              message:
+                'Exit UI must communicate exclusively through application facades and directives.'
             }
           ]
         }
@@ -82,6 +94,15 @@ export default [
       '@angular-eslint/template/interactive-supports-focus': 'off',
       '@angular-eslint/template/label-has-associated-control': 'off',
       '@angular-eslint/template/alt-text': 'off'
+    }
+  },
+  {
+    files: ['src/app/ui/pages/exit/**/*.html'],
+    rules: {
+      '@angular-eslint/template/click-events-have-key-events': 'error',
+      '@angular-eslint/template/interactive-supports-focus': 'error',
+      '@angular-eslint/template/label-has-associated-control': 'error',
+      '@angular-eslint/template/alt-text': 'error'
     }
   },
   {

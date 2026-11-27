@@ -15,6 +15,7 @@ import { RoutingService } from '../../../infrastructure/services/routing.service
 import { CONTENT_READ_REPOSITORY } from '../../../infrastructure/tokens/content-repository.token';
 import { BookNavigationDirective } from '../../directives/book-navigation.directive';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { prependProbeCover, splitChapterCover } from './chapter-cover';
 
 function createImageBlocks(element: Element, metrics: LayoutMetrics, imageSizes: ReadonlyMap<string, ImageDimensions>): readonly FlowBlock[] {
   if ((element.classList.contains('img-feature--desktop') && !metrics.isDesktop) || (element.classList.contains('img-feature--mobile') && metrics.isDesktop)) return [];
@@ -96,7 +97,8 @@ function populateProbeContent(
   [header.className, numberElement.className, titleElement.className, body.className] = ['page-header', 'page-number', 'page-title', 'page-body drop-cap'];
   const locationLabel = page.metadata?.location ?? page.location ?? '';
   const chapterPrefix = host.querySelector('.page-number')?.textContent?.trim().split(/\s+/)[0] || 'Chapter';
-  [numberElement.textContent, titleElement.textContent, body.innerHTML] = [locationLabel ? `${chapterPrefix} ${locationLabel}` : '', page.title, page.content];
+  const parts = splitChapterCover(page.content);
+  [numberElement.textContent, titleElement.textContent, body.innerHTML] = [locationLabel ? `${chapterPrefix} ${locationLabel}` : '', page.title, parts.body];
   if (scopeAttribute) [header, numberElement, titleElement, body].forEach(node => node.setAttribute(scopeAttribute, ''));
   body.querySelectorAll('img').forEach(image => {
     const dimensions = options.imageSizes.get(image.getAttribute('src') ?? '');
@@ -104,6 +106,7 @@ function populateProbeContent(
   });
   header.append(numberElement, titleElement);
   probe.append(header, body);
+  prependProbeCover(probe, parts.cover, scopeAttribute);
 }
 
 function measureChapterWithDom(host: HTMLElement, page: CmsRouteData, options: EstimateOptions): number {
@@ -186,6 +189,8 @@ export class Chapter implements OnInit, OnDestroy {
       location: loaded.metadata?.location ?? base.location
     };
   });
+
+  protected readonly parts = computed(() => splitChapterCover(this.pageData()?.content ?? ''));
 
   protected readonly needsBlankPage = this.nav.needsBlankPage.asReadonly();
   private readonly destroy$ = new Subject<void>();

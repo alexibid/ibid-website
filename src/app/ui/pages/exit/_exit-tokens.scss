@@ -1,0 +1,68 @@
+@mixin contact-tokens {
+  --contact-form-max-width: 30rem;
+  --contact-focus-clearance: 4px;
+  --contact-form-top: 1rem;
+  --contact-block-gap: 1rem;
+  --contact-group-gap: 0.25rem;
+  --contact-error-reserve-active: 1rem;
+  --contact-error-reserve: var(--contact-error-reserve-active);
+  --contact-error-font-size: 0.75rem;
+  --contact-error-line-height: 1;
+  --contact-banner-gap: 0.375rem;
+  --contact-banner-font-size: 0.875rem;
+  --contact-copy-line-height: var(--contact-field-line-height);
+  --contact-submit-padding: 0.75rem 1.5rem;
+  --contact-privacy-top: 1rem;
+  --contact-font-sm: 0.85rem;
+  --contact-field-bg: rgba(255, 255, 255, 0.58);
+  --contact-field-bg-hover: rgba(255, 255, 255, 0.8);
+  --contact-field-bg-focus: #ffffff;
+  --contact-field-bg-disabled: rgba(220, 211, 194, 0.7);
+  --contact-field-border: #76695e;
+  --contact-field-border-disabled: #857a6e;
+  --contact-field-focus: #46251b;
+  --contact-field-placeholder: #6b6057;
+  --contact-field-shadow-focus: 0 0 0 3px rgba(70, 37, 27, 0.16);
+  --contact-field-border-width: 1px;
+  --contact-field-radius: 4px;
+  --contact-field-padding: 0.625rem 0.875rem;
+  --contact-field-line-height: 1.5;
+  --contact-field-font-size: 1rem;
+  --contact-input-min-height: 2.75rem;
+  --contact-textarea-min-height: 6.5rem;
+  --contact-outline-width: 2px;
+  --contact-transition: 0.2s ease;
+  --contact-error-text: #8f1d18;
+  --contact-error-border: #a62620;
+  --contact-error-bg: rgba(166, 38, 32, 0.08);
+  --contact-error-field-bg: #fff7f6;
+  --contact-error-shadow: 0 0 0 3px rgba(166, 38, 32, 0.18);
+  --contact-success-text: #1e5231;
+  --contact-success-border: #2a6b42;
+  --contact-success-bg: rgba(42, 107, 66, 0.09);
+  --contact-btn-bg-hover: #5c3224;
+  --contact-btn-bg-disabled: #6d5c54;
+  --contact-btn-shadow: 0 4px 10px rgba(70, 37, 27, 0.15);
+  --contact-btn-shadow-hover: 0 6px 14px rgba(70, 37, 27, 0.25);
+  --contact-btn-shadow-active: 0 2px 6px rgba(70, 37, 27, 0.2);
+
+  @media (min-width: 768px) {
+    --contact-form-top: 1.25rem;
+    --contact-block-gap: 1rem;
+    --contact-group-gap: 0.5rem;
+    --contact-submit-padding: 0.85rem 2rem;
+  }
+}
+
+@mixin contact-compact-tokens {
+  --contact-form-top: 0.5rem;
+  --contact-block-gap: 0.5rem;
+  --contact-group-gap: 0.25rem;
+  --contact-error-reserve: 0;
+  --contact-field-padding: 0.4375rem 0.75rem;
+  --contact-textarea-min-height: var(--contact-input-min-height);
+  --contact-banner-font-size: 0.8125rem;
+  --contact-copy-line-height: 1.3;
+  --contact-submit-padding: 0.5rem 1.25rem;
+  --contact-privacy-top: 0.375rem;
+}

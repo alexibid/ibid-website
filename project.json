@@ -86,6 +86,17 @@
               "with": "apps/ibid-website/src/environments/environment.development.ts"
             }
           ]
+        },
+        "e2e": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/ibid-website/src/environments/environment.ts",
+              "with": "apps/ibid-website/src/environments/environment.e2e.ts"
+            }
+          ]
         }
       }
     },
@@ -117,17 +128,20 @@
     },
     "serve-e2e": {
       "executor": "@angular/build:dev-server",
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "e2e",
       "options": {
-        "port": 4201,
-        "proxyConfig": "apps/ibid-website/proxy.conf.json"
+        "port": 4201
       },
       "configurations": {
         "production": {
           "buildTarget": "ibid-website:build:production"
         },
         "development": {
-          "buildTarget": "ibid-website:build:development"
+          "buildTarget": "ibid-website:build:development",
+          "proxyConfig": "apps/ibid-website/proxy.conf.json"
+        },
+        "e2e": {
+          "buildTarget": "ibid-website:build:e2e"
         }
       }
     },

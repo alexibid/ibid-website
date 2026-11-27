@@ -155,6 +155,10 @@ export const BOOK_NAVIGATION_SCENARIOS = {
     { label: 'chapter first page to previous chapter', url: '/chapter-one', expectedTarget: '/preface', expectedCoverOpen: false },
     { label: 'first chapter first page to cover keeping cover open', url: '/preface', expectedTarget: '/', expectedCoverOpen: true }
   ],
+  textAreaGestures: {
+    wheelDeltaY: 40, touchStartY: 300, touchEndY: 200, visibleHeight: 100,
+    overflowingScrollHeight: 400, fittingScrollHeight: 100, typedText: 'Typed message'
+  },
   turnForwardState: TURN_FORWARD_NAVIGATION_STATE,
   turnBackState: TURN_BACK_NAVIGATION_STATE
 } as const;

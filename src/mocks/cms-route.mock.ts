@@ -25,6 +25,12 @@ const CHAPTER_II_PT = buildPage('chapter-ii-pt', PageType.Chapter, 'pt', 'II');
 const CHAPTER_I_PT = buildPage('chapter-i-pt', PageType.Chapter, 'pt', 'I');
 const EXIT_PT = buildPage('exit-pt', PageType.Exit, 'pt', 'back-cover');
 const EXIT_PT_LONG = buildPage('exit-pt-long', PageType.Exit, 'pt', 'back-cover');
+const EXIT_PT_CONTACT = buildPage('exit-pt-contact', PageType.Exit, 'pt', 'contact-form');
+const EXIT_PT_ABOUT = buildPage('exit-pt-about', PageType.Exit, 'pt', 'about');
+const EXIT_PT_BACK = buildPage('exit-pt-back', PageType.Exit, 'pt', 'back-cover');
+const EXIT_FR_CONTACT = buildPage('exit-fr-contact', PageType.Exit, 'fr', 'contact-form');
+const EXIT_FR_ABOUT = buildPage('exit-fr-about', PageType.Exit, 'fr', 'about');
+const EXIT_FR_BACK = buildPage('exit-fr-back', PageType.Exit, 'fr', 'back-cover');
 const PREFACE_EN = buildPage('preface-en', PageType.Chapter, 'en', 'preface');
 const HOME_EN = buildPage('home-en', PageType.Home, 'en', 'front-cover');
 
@@ -58,6 +64,27 @@ export const CMS_ROUTE_RECORDS = {
   onlyOrphan: [ORPHAN_URL],
   onlyEnglish: [buildUrl('preface', PREFACE_EN)],
   duplicateTranslation: [buildUrl('prefacio', PREFACE_PT), buildUrl('prefacio-bis', PREFACE_PT)],
+  exitContactFirst: [
+    buildUrl('contactos', EXIT_PT_CONTACT),
+    buildUrl('contactos', EXIT_PT_ABOUT),
+    buildUrl('contactos', EXIT_PT_BACK),
+    buildUrl('contact', EXIT_FR_CONTACT),
+    buildUrl('contact', EXIT_FR_ABOUT),
+    buildUrl('contact', EXIT_FR_BACK)
+  ],
+  exitBackCoverFirst: [
+    buildUrl('contactos', EXIT_PT_BACK),
+    buildUrl('contactos', EXIT_PT_ABOUT),
+    buildUrl('contactos', EXIT_PT_CONTACT),
+    buildUrl('contact', EXIT_FR_BACK),
+    buildUrl('contact', EXIT_FR_ABOUT),
+    buildUrl('contact', EXIT_FR_CONTACT)
+  ],
+  exitOrderTieBreak: [
+    buildUrl('z-back', EXIT_PT_BACK),
+    buildUrl('z-abot', EXIT_PT_ABOUT),
+    buildUrl('z-cont', EXIT_PT_CONTACT)
+  ],
   empty: EMPTY_URLS
 };
 
@@ -65,6 +92,11 @@ export const CMS_ROUTE_EXPECTATIONS = {
   homePtKey: 'pt',
   prefacePtKey: 'pt/prefacio',
   prefaceEnKey: 'en/preface',
+  exitPtKey: 'pt/contactos',
+  exitFrKey: 'fr/contact',
+  exitPtContactTitle: 'title-exit-pt-contact',
+  exitFrContactTitle: 'title-exit-fr-contact',
+  exitOrderTieBreakSlug: 'pt/z-cont',
   fallbackHome: (lang: string): CmsRouteData => ({
     pageId: `fallback-${lang}-home`,
     title: 'IBID',

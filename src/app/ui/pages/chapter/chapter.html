@@ -1,10 +1,14 @@
 @if (pageData(); as data) {
+@if (parts().cover) {
+<div class="page-body" [innerHTML]="parts().cover"></div>
+}
+
 <header class="page-header">
   <div class="page-number">{{ 'chapter' | translate }} {{ data.metadata?.location }}</div>
   <h1 class="page-title">{{ data.title }}</h1>
 </header>
 
-<article class="page-body drop-cap" [innerHTML]="data.content"></article>
+<article class="page-body drop-cap" [innerHTML]="parts().body"></article>
 
 @if (needsBlankPage()) {
 <div class="page-blank"></div>

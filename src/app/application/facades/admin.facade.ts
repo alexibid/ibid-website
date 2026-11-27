@@ -1,6 +1,7 @@
 import { Injectable, Injector, computed, inject, signal } from '@angular/core';
 import { ADMIN_CONTENT_REPOSITORY } from '../../infrastructure/tokens/content-repository.token';
 import { RoutingService } from '../../infrastructure/services/routing.service';
+import { SITE_PUBLISHER } from '../../infrastructure/tokens/site-publisher.token';
 import { CmsPage, CmsPagePayload, CmsUrl } from '../../domain/models/cms.interface';
 import { PageType } from '../../domain/models/page-type.enum';
 import { locationToInt } from '../../domain/utils/location.utils';
@@ -130,6 +131,13 @@ export class AdminFacade {
 
   public async uploadImageUrl(file: File): Promise<string> {
     return this.uploadImage(file);
+  }
+
+  public async publishSite(): Promise<void> {
+    return this.runAction(
+      () => this.injector.get(SITE_PUBLISHER).publish(),
+      'Failed to publish the site.'
+    );
   }
 
   private async runAction<T>(task: () => Promise<T>, fallbackMessage: string): Promise<T> {

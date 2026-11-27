@@ -1,3 +1,5 @@
+import { CONTACT_I18N } from './contact-i18n';
+
 export const UI_I18N: Record<string, unknown> = {
   pt: {
     'not-found': { title: '404 - Página não encontrada', message: 'O conteúdo que procura não existe ou foi movido.', back: 'Voltar ao início' },
@@ -7,18 +9,7 @@ export const UI_I18N: Record<string, unknown> = {
     'close': 'Fechar',
     'chapter': 'Capítulo',
     'return': 'Voltar',
-    'contacts': {
-      'socials': 'Redes Sociais',
-      'maps': 'Ver no Google Maps',
-      'name': 'Nome',
-      'name-placeholder': 'O seu nome',
-      'email': 'E-mail',
-      'email-placeholder': 'O seu e-mail',
-      'message': 'Mensagem',
-      'message-placeholder': 'Como o podemos ajudar?',
-      'submit': 'Enviar Mensagem',
-      'info-title': 'Informações'
-    }
+    'contacts': CONTACT_I18N.pt
   },
   en: {
     'not-found': { title: '404 - Page Not Found', message: 'The content you are looking for does not exist or has been moved.', back: 'Back to home' },
@@ -28,18 +19,7 @@ export const UI_I18N: Record<string, unknown> = {
     'close': 'Close',
     'chapter': 'Chapter',
     'return': 'Return',
-    'contacts': {
-      'socials': 'Social Networks',
-      'maps': 'View on Google Maps',
-      'name': 'Name',
-      'name-placeholder': 'Your name',
-      'email': 'Email',
-      'email-placeholder': 'Your email',
-      'message': 'Message',
-      'message-placeholder': 'How can we help you?',
-      'submit': 'Send Message',
-      'info-title': 'Information'
-    }
+    'contacts': CONTACT_I18N.en
   },
   es: {
     'not-found': { title: '404 - Página no encontrada', message: 'El contenido que busca no existe o ha sido movido.', back: 'Volver al inicio' },
@@ -49,18 +29,7 @@ export const UI_I18N: Record<string, unknown> = {
     'close': 'Cerrar',
     'chapter': 'Capítulo',
     'return': 'Voltar',
-    'contacts': {
-      'socials': 'Redes Sociales',
-      'maps': 'Ver en Google Maps',
-      'name': 'Nombre',
-      'name-placeholder': 'Su nombre',
-      'email': 'Correo electrónico',
-      'email-placeholder': 'Su correo',
-      'message': 'Mensaje',
-      'message-placeholder': '¿Cómo le podemos ayudar?',
-      'submit': 'Enviar mensaje',
-      'info-title': 'Información'
-    }
+    'contacts': CONTACT_I18N.es
   },
   fr: {
     'not-found': { title: '404 - Page non trouvée', message: 'Le contenu que vous recherchez n\'existe pas ou a été déplacé.', back: 'Retour à l\'accueil' },
@@ -70,18 +39,7 @@ export const UI_I18N: Record<string, unknown> = {
     'close': 'Fermer',
     'chapter': 'Chapitre',
     'return': 'Retour',
-    'contacts': {
-      'socials': 'Réseaux Sociaux',
-      'maps': 'Voir sur Google Maps',
-      'name': 'Nom',
-      'name-placeholder': 'Votre nom',
-      'email': 'E-mail',
-      'email-placeholder': 'Votre e-mail',
-      'message': 'Message',
-      'message-placeholder': 'Comment pouvons-nous vous aider ?',
-      'submit': 'Envoyer le message',
-      'info-title': 'Informations'
-    }
+    'contacts': CONTACT_I18N.fr
   },
   de: {
     'not-found': {
@@ -104,17 +62,6 @@ export const UI_I18N: Record<string, unknown> = {
     'close': 'Schließen',
     'chapter': 'Kapitel',
     'return': 'Zurück',
-    'contacts': {
-      'socials': 'Soziale Netzwerke',
-      'maps': 'Auf Google Maps ansehen',
-      'name': 'Name',
-      'name-placeholder': 'Ihr Name',
-      'email': 'E-Mail',
-      'email-placeholder': 'Ihre E-Mail-Adresse',
-      'message': 'Nachricht',
-      'message-placeholder': 'Wie können wir Ihnen helfen?',
-      'submit': 'Nachricht senden',
-      'info-title': 'Informationen'
-    }
+    'contacts': CONTACT_I18N.de
   }
 };

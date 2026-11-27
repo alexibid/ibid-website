@@ -33,7 +33,11 @@ import { AdminForm } from '../admin-form/admin-form';
         <website-admin-form
           #adminForm
           [initialData]="page()"
+          [isPublishable]="isPublishable()"
+          [isPublishing]="isPublishing()"
           (save)="onSave($event)"
+          (publish)="onPublish()"
+          (edited)="isPublishable.set(false)"
           (cancel)="onCancel()"
         ></website-admin-form>
       } @else if (!error()) {
@@ -133,6 +137,8 @@ export default class AdminUpdate implements OnInit {
   public readonly page = signal<CmsPage | null>(null);
   public readonly isSaving = signal(false);
   public readonly error = signal<string | null>(null);
+  public readonly isPublishable = signal(false);
+  public readonly isPublishing = signal(false);
   private shouldViewAfterSave = false;
 
   public async ngOnInit(): Promise<void> {
@@ -143,6 +149,7 @@ export default class AdminUpdate implements OnInit {
     try {
       const data = await this.adminService.getPage(id);
       this.page.set(data);
+      this.isPublishable.set(true);
     } catch (err) {
       const message =
         err instanceof Error && err.message ? err.message : 'Failed to load page.';
@@ -158,7 +165,9 @@ export default class AdminUpdate implements OnInit {
     this.error.set(null);
     this.isSaving.set(true);
     try {
-      await this.adminService.updatePage(id, data);
+      this.page.set(await this.adminService.updatePage(id, data));
+      this.adminForm?.markSaved();
+      this.isPublishable.set(true);
 
       if (this.shouldViewAfterSave) {
         const urls = await this.adminService.getUrls();
@@ -168,8 +177,6 @@ export default class AdminUpdate implements OnInit {
           window.open(fullUrl, '_blank');
         }
         this.shouldViewAfterSave = false;
-      } else {
-        await this.router.navigate(['/admin', data.lang]);
       }
     } catch (err) {
       const message =
@@ -180,6 +187,21 @@ export default class AdminUpdate implements OnInit {
       this.shouldViewAfterSave = false;
     } finally {
       this.isSaving.set(false);
+    }
+  }
+
+  public async onPublish(): Promise<void> {
+    this.error.set(null);
+    this.isPublishing.set(true);
+    try {
+      await this.adminService.publishSite();
+      this.isPublishable.set(false);
+    } catch (err) {
+      this.error.set(
+        err instanceof Error && err.message ? err.message : 'Failed to publish the site.'
+      );
+    } finally {
+      this.isPublishing.set(false);
     }
   }
 

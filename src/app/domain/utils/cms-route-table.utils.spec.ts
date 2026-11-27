@@ -55,6 +55,22 @@ describe('buildCmsRouteTable', () => {
 
     expect(table.pages.size).toBe(CMS_ROUTE_SUPPORTED_LANGUAGES.length);
   });
+
+  it('should resolve exit page title and metadata to the localized contact title instead of the back-cover title regardless of record order', () => {
+    for (const records of [CMS_ROUTE_RECORDS.exitContactFirst, CMS_ROUTE_RECORDS.exitBackCoverFirst]) {
+      const table = buildCmsRouteTable(records, CMS_ROUTE_SUPPORTED_LANGUAGES);
+      const ptExit = table.pages.get(CMS_ROUTE_EXPECTATIONS.exitPtKey);
+      const frExit = table.pages.get(CMS_ROUTE_EXPECTATIONS.exitFrKey);
+
+      expect(ptExit?.title).toBe(CMS_ROUTE_EXPECTATIONS.exitPtContactTitle);
+      expect(ptExit?.location).toBe('contact-form');
+      expect(ptExit?.metadata?.location).toBe('contact-form');
+
+      expect(frExit?.title).toBe(CMS_ROUTE_EXPECTATIONS.exitFrContactTitle);
+      expect(frExit?.location).toBe('contact-form');
+      expect(frExit?.metadata?.location).toBe('contact-form');
+    }
+  });
 });
 
 describe('buildRouteOrder', () => {
@@ -74,6 +90,18 @@ describe('buildRouteOrder', () => {
     const order = buildRouteOrder(CMS_ROUTE_RECORDS.ptWithLongerDuplicates, 'pt');
 
     expect(order.map((entry) => entry.slug)).toEqual(CMS_ROUTE_EXPECTATIONS.ptLongestDuplicatesSlugs);
+  });
+
+  it('should prefer contact-form over about and back-cover when exit urls have equal length', () => {
+    const order = buildRouteOrder(CMS_ROUTE_RECORDS.exitOrderTieBreak, 'pt');
+
+    expect(order).toEqual([
+      {
+        slug: CMS_ROUTE_EXPECTATIONS.exitOrderTieBreakSlug,
+        title: CMS_ROUTE_EXPECTATIONS.exitPtContactTitle,
+        type: PageType.Exit
+      }
+    ]);
   });
 
   it('should return only the language home placeholder for an empty list', () => {

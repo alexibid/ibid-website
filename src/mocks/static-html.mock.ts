@@ -229,12 +229,21 @@ export const CONTACT_FORM_FIXTURES = {
   validName: 'Alex',
   validEmail: 'test@example.com',
   invalidEmail: 'invalid-email',
-  validMessage: 'Hello',
+  validMessage: 'Hello, this is a valid message.',
+  editedName: 'Maria',
+  editedEmail: 'maria@example.com',
+  editedMessage: 'Line 1 Line 2',
   botName: 'Bot',
   botEmail: 'bot@example.com',
-  botMessage: 'Spam',
+  botMessage: 'Spam message content',
   honeypotValue: 'spam-value',
-  doubleSubmitEmail: 'alex@example.com'
+  doubleSubmitEmail: 'alex@example.com',
+  exitLang: 'pt',
+  contactEndpoint: '/api/v1/contact',
+  viewportWidth: 400,
+  scrollWidth: 1200,
+  editingKeys: [' ', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Backspace', 'Enter'] as const,
+  createSuccessResponse: () => new Response(null, { status: 200 })
 };
 
 export function createMockContentReadRepository(

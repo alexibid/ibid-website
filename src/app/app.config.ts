@@ -21,6 +21,12 @@ import {
   ADMIN_CONTENT_REPOSITORY,
   CONTENT_READ_REPOSITORY
 } from './infrastructure/tokens/content-repository.token';
+import {
+  ANTI_SPAM_PRODUCTION,
+  ANTI_SPAM_TOKEN_PORT,
+  RECAPTCHA_SITE_KEY,
+  createLazyRecaptchaAntiSpamPort
+} from './infrastructure/tokens/contact.tokens';
 import { StaticHtmlContentRepository } from './infrastructure/repositories/static-html-content.repository';
 import { ApiContentRepository } from './infrastructure/repositories/api-content.repository';
 
@@ -39,11 +45,20 @@ export function provideContentRepositories(mode: ContentMode): EnvironmentProvid
   ]);
 }
 
+export function provideContactAntiSpam(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    { provide: RECAPTCHA_SITE_KEY, useFactory: () => environment.recaptchaSiteKey },
+    { provide: ANTI_SPAM_PRODUCTION, useFactory: () => environment.production },
+    { provide: ANTI_SPAM_TOKEN_PORT, useFactory: createLazyRecaptchaAntiSpamPort }
+  ]);
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    provideContentRepositories(environment.production ? 'static' : 'api'),
+    provideContentRepositories(environment.contentMode),
+    provideContactAntiSpam(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideHttpClient(
       withFetch(),

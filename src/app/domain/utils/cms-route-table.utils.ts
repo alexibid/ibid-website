@@ -11,6 +11,12 @@ import { locationToInt } from './location.utils';
 
 const FALLBACK_LOCATION = 'front-cover';
 const FALLBACK_TITLE = 'IBID';
+export const EXIT_LOCATION_PRECEDENCE = ['contact-form', 'about', 'back-cover'] as const;
+
+export function exitLocationRank(location?: string): number {
+  const index = EXIT_LOCATION_PRECEDENCE.findIndex((entry) => entry === location);
+  return index === -1 ? EXIT_LOCATION_PRECEDENCE.length : index;
+}
 
 export function toRouteKey(record: CmsUrl): string {
   const path = record.url.startsWith('/') ? record.url.slice(1) : record.url;
@@ -55,7 +61,20 @@ function addRecord(
   if (location) {
     addTranslation(translations, location, { lang: record.lang, url: '/' + key });
   }
-  pages.set(key, toRouteData(page, record.lang));
+  const candidate = toRouteData(page, record.lang);
+  if (shouldOverwritePage(pages.get(key), candidate)) {
+    pages.set(key, candidate);
+  }
+}
+
+function shouldOverwritePage(
+  existing: CmsRouteData | undefined,
+  candidate: CmsRouteData
+): boolean {
+  if (!existing || existing.type !== PageType.Exit || candidate.type !== PageType.Exit) {
+    return true;
+  }
+  return exitLocationRank(candidate.location) <= exitLocationRank(existing.location);
 }
 
 function toRouteData(page: CmsPage, lang: string): CmsRouteData {
@@ -105,11 +124,19 @@ function addTranslation(
 
 function orderRecords(langRecords: readonly CmsUrl[]): readonly CmsUrl[] {
   const home = shortestOfType(langRecords, PageType.Home);
-  const exit = shortestOfType(langRecords, PageType.Exit);
+  const exit = recordsOfType(langRecords, PageType.Exit).sort(compareExitRecords).slice(0, 1);
   const chapters = recordsOfType(langRecords, PageType.Chapter).sort(
     (first, second) => locationOf(first) - locationOf(second)
   );
   return [...home, ...chapters, ...exit];
+}
+
+function compareExitRecords(first: CmsUrl, second: CmsUrl): number {
+  return (
+    first.url.length - second.url.length ||
+    exitLocationRank(first.expand?.page_id?.metadata?.location) -
+      exitLocationRank(second.expand?.page_id?.metadata?.location)
+  );
 }
 
 function shortestOfType(records: readonly CmsUrl[], type: PageType): readonly CmsUrl[] {

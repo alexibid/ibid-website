@@ -220,11 +220,14 @@ export const ADMIN_MEDIA_FIXTURES = {
     editor: Quill;
     insertEmbed: ReturnType<typeof vi.fn>;
     update: ReturnType<typeof vi.fn>;
+    on: ReturnType<typeof vi.fn>;
   } {
     const viApi = getVi();
     const insertEmbed = viApi.fn();
     const update = viApi.fn();
+    const on = viApi.fn();
     const editor: Quill = Object.assign(Object.create(Object.prototype), {
+      on,
       getModule: viApi.fn(() => undefined),
       root: document.createElement('div'),
       getSelection: viApi.fn(() => ({ index: 0, length: 0 })),
@@ -232,7 +235,7 @@ export const ADMIN_MEDIA_FIXTURES = {
       getLeaf: viApi.fn(() => [null, 0]),
       update
     });
-    return { editor, insertEmbed, update };
+    return { editor, insertEmbed, update, on };
   }
 };
 

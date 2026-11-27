@@ -58,7 +58,9 @@ describe('AdminUpdate', () => {
       ADMIN_PAGE_FIXTURES.primaryPage.id,
       ADMIN_PAGE_FIXTURES.payload
     );
-    expect(navigateSpy).toHaveBeenCalled();
+    expect(component.isPublishable()).toBe(true);
+    expect(component.isSaving()).toBe(false);
+    expect(navigateSpy).not.toHaveBeenCalled();
   });
 
   it('should report an inline error and preserve edited input when API is unreachable during updatePage', async () => {

@@ -1,17 +1,21 @@
-import { Component, OnInit, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  input,
+  viewChild
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Cover } from '../../components/cover/cover';
 import { BookNavigationDirective } from '../../directives/book-navigation.directive';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { ContactFacade } from '../../../application/facades/contact.facade';
-import { BookService } from '../../../infrastructure/services/book.service';
-import { I18nService } from '../../../infrastructure/services/i18n.service';
-import { RoutingService } from '../../../infrastructure/services/routing.service';
-import { CONTENT_READ_REPOSITORY } from '../../../infrastructure/tokens/content-repository.token';
-import {
-  type BookPaginationDeps,
-  syncAllChapterPageCounts
-} from '../../components/layout/footer/footer';
+import type { ContactFieldName } from '../../../domain/models/contact.model';
 import { estimateChapterPageCount } from '../chapter/chapter';
 
 @Component({
@@ -33,35 +37,51 @@ export class Exit implements OnInit {
   public readonly lang = input<string>();
   public readonly facade = inject(ContactFacade);
   private readonly nav = inject(BookNavigationDirective);
-  private readonly bookService = inject(BookService);
-  private readonly i18n = inject(I18nService);
-  private readonly routingService = inject(RoutingService);
-  private readonly contentRepo = inject(CONTENT_READ_REPOSITORY);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly nameField = viewChild<ElementRef<HTMLInputElement>>('nameField');
+  private readonly emailField = viewChild<ElementRef<HTMLInputElement>>('emailField');
+  private readonly messageField = viewChild<ElementRef<HTMLTextAreaElement>>('messageField');
+  private readonly confirmationBanner = viewChild<ElementRef<HTMLElement>>('confirmationBanner');
 
   protected readonly needsBlankPage = this.nav.needsBlankPage.asReadonly();
+  protected readonly hasBanner = computed(
+    () =>
+      this.facade.submitStatus() === 'success' ||
+      (this.facade.submitStatus() === 'error' && this.facade.errorMessage().length > 0)
+  );
+  private destroyed = false;
 
   constructor() {
+    this.destroyRef.onDestroy(() => {
+      this.destroyed = true;
+      this.facade.cancelPendingSubmission();
+    });
+
     effect(() => {
-      const lang = this.lang() || this.i18n.currentLangCode();
+      const inputLang = this.lang();
+      if (inputLang) {
+        this.facade.setLanguage(inputLang);
+      }
+    });
+
+    effect(() => {
+      const lang = this.lang() || this.facade.currentLang();
       void this.facade.loadExitSections(lang);
     });
 
     effect(() => {
-      const order = this.bookService.dynamicRouteOrder();
+      const order = this.facade.dynamicRouteOrder();
       const sections = this.facade.sections();
-      const isDesktop = this.facade.stateService.isDesktop();
-      if (order.length > 0 && sections.length > 0 && this.facade.stateService.isBrowser) {
-        void syncAllChapterPageCounts(
-          this.nav.hostEl,
-          this.paginationDeps(isDesktop),
-          estimateChapterPageCount
-        );
+      this.facade.isDesktop();
+      if (order.length > 0 && sections.length > 0 && this.facade.isBrowser) {
+        void this.facade.syncBookPagination(this.nav.hostEl, estimateChapterPageCount);
       }
     });
 
     effect((onCleanup) => {
       const sections = this.facade.sections();
-      if (sections.length > 0 && this.facade.stateService.isBrowser) {
+      if (sections.length > 0 && this.facade.isBrowser) {
         this.nav.resetBlankPage();
         const timerId = setTimeout(() => {
           if (!this.nav.hasFragment) {
@@ -74,35 +94,118 @@ export class Exit implements OnInit {
         onCleanup(() => clearTimeout(timerId));
       }
     });
+
+    effect((onCleanup) => {
+      const sections = this.facade.sections();
+      this.facade.errors();
+      this.facade.submitStatus();
+      this.facade.errorMessage();
+      this.lang();
+      this.facade.currentLang();
+      this.facade.isDesktop();
+      if (sections.length > 0 && this.facade.isBrowser) {
+        const rafId = requestAnimationFrame(() => this.nav.measurePage());
+        onCleanup(() => cancelAnimationFrame(rafId));
+      }
+    });
+
+    let lastFocusedBanner: HTMLElement | undefined;
+    effect(() => {
+      const submitStatus = this.facade.submitStatus();
+      const banner = this.confirmationBanner()?.nativeElement;
+      if (!banner) {
+        lastFocusedBanner = undefined;
+        return;
+      }
+      if (submitStatus === 'success' && this.facade.isBrowser && banner !== lastFocusedBanner) {
+        lastFocusedBanner = banner;
+        this.focusElement(banner);
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.facade.loadRecaptchaScript();
+    this.facade.initAntiSpam();
   }
 
   protected onPageMeasured(totalCols: number): void {
     this.facade.setPageCount(this.nav.currentSlug, totalCols);
-    void syncAllChapterPageCounts(
-      this.nav.hostEl,
-      this.paginationDeps(this.facade.stateService.isDesktop()),
-      estimateChapterPageCount
-    );
+    void this.facade.syncBookPagination(this.nav.hostEl, estimateChapterPageCount);
+  }
+
+  protected updateField(field: ContactFieldName | 'honeypot', event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    if (field === 'honeypot') {
+      this.facade.updateHoneypot(target.value);
+      return;
+    }
+    this.facade.updateField(field, target.value);
+  }
+
+  protected onFieldBlur(field: ContactFieldName): void {
+    this.facade.blurField(field);
+  }
+
+  protected onSendAnother(): void {
+    this.facade.resetSubmission();
+    this.focusField('name');
   }
 
   public async onSubmit(event: Event): Promise<void> {
     event.preventDefault();
+    if (this.facade.isSubmitting()) {
+      return;
+    }
     const success = await this.facade.submit();
-    if (success) {
-      this.nav.hostEl.scrollTo({ left: this.nav.hostEl.scrollWidth, behavior: 'smooth' });
+    if (this.destroyed || success) {
+      return;
+    }
+    const invalidField = this.facade.firstInvalidField();
+    if (invalidField !== null) {
+      this.focusField(invalidField);
     }
   }
 
-  private paginationDeps(isDesktop: boolean): BookPaginationDeps {
-    return {
-      bookService: this.bookService,
-      routingService: this.routingService,
-      contentRepo: this.contentRepo,
-      isDesktop
-    };
+  private getFieldElement(
+    field: ContactFieldName
+  ): HTMLInputElement | HTMLTextAreaElement | undefined {
+    if (field === 'name') {
+      return this.nameField()?.nativeElement;
+    }
+    if (field === 'email') {
+      return this.emailField()?.nativeElement;
+    }
+    return this.messageField()?.nativeElement;
+  }
+
+  private focusField(field: ContactFieldName): void {
+    this.focusElement(this.getFieldElement(field));
+  }
+
+  private focusElement(element: HTMLElement | undefined): void {
+    if (!element || !this.facade.isBrowser) {
+      return;
+    }
+    const hostEl = this.nav.hostEl;
+    const viewportWidth = hostEl.clientWidth;
+    if (viewportWidth > 0) {
+      const hostRect = hostEl.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const hasLayoutMetrics = hostRect.width > 0 && elementRect.width > 0;
+      const elementLeft = hasLayoutMetrics
+        ? elementRect.left - hostRect.left + hostEl.scrollLeft
+        : element.offsetLeft;
+      const targetScroll = Math.max(0, Math.floor(elementLeft / viewportWidth) * viewportWidth);
+      if (Math.abs(targetScroll - hostEl.scrollLeft) > 1) {
+        if (typeof hostEl.scrollTo === 'function') {
+          hostEl.scrollTo({ left: targetScroll, behavior: 'instant' });
+        }
+        this.nav.updateCurrentPage();
+      }
+    }
+    element.focus({ preventScroll: true });
   }
 }

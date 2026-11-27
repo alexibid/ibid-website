@@ -13,9 +13,7 @@ import { SUPPORTED_LANGUAGES } from '../../../../infrastructure/services/i18n.se
 import { CustomImage, cssWidthOf } from './custom-image';
 
 const ALIGN_MARGINS: Readonly<Record<string, readonly [string, string]>> = {
-  left: ['0', 'auto'],
-  center: ['auto', 'auto'],
-  right: ['auto', '0']
+  left: ['0', 'auto'], center: ['auto', 'auto'], right: ['auto', '0']
 };
 
 @Component({
@@ -31,13 +29,16 @@ export class AdminForm implements OnInit {
   private readonly adminService = inject(AdminFacade);
   public readonly supportedLanguages = inject(SUPPORTED_LANGUAGES);
   public readonly languageOptions = this.supportedLanguages.map((code) => ({
-    code,
-    label: isSupportedLanguage(code) ? LANGUAGE_LABELS[code].optionLabel : code.toUpperCase()
+    code, label: isSupportedLanguage(code) ? LANGUAGE_LABELS[code].optionLabel : code.toUpperCase()
   }));
 
   public readonly initialData = input<CmsPage | null>(null);
   public readonly save = output<CmsPagePayload>();
   public readonly cancel = output<void>();
+  public readonly isPublishable = input(false);
+  public readonly isPublishing = input(false);
+  public readonly publish = output<void>();
+  public readonly edited = output<void>();
   public readonly PageType = PageType;
   public readonly form: FormGroup;
   public readonly isSubmitting = signal(false);
@@ -59,12 +60,9 @@ export class AdminForm implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      title: ['', Validators.required],
-      type: [PageType.Chapter, Validators.required],
-      lang: ['pt', Validators.required],
-      content: ['', Validators.required],
-      location: [''],
-      customLocation: ['']
+      title: ['', Validators.required], type: [PageType.Chapter, Validators.required],
+      lang: ['pt', Validators.required], content: ['', Validators.required],
+      location: [''], customLocation: ['']
     });
   }
 
@@ -72,11 +70,8 @@ export class AdminForm implements OnInit {
     const data = this.initialData();
     if (data) {
       this.form.patchValue({
-        title: data.title,
-        type: data.type,
-        lang: data.lang,
-        content: data.content,
-        location: data.metadata?.location || ''
+        title: data.title, type: data.type, lang: data.lang,
+        content: data.content, location: data.metadata?.location || ''
       });
     }
     void this.updateLocationOptions();
@@ -86,7 +81,10 @@ export class AdminForm implements OnInit {
         void this.suggestNextLocation();
       });
     }
+    this.form.valueChanges.subscribe(() => { if (this.form.dirty) this.edited.emit(); });
   }
+
+  public markSaved(): void { this.form.markAsPristine(); }
 
   private async updateLocationOptions(): Promise<void> {
     const type = String(this.form.get('type')?.value ?? '');
@@ -133,14 +131,13 @@ export class AdminForm implements OnInit {
 
   public onEditorCreated(quill: Quill): void {
     this.activeQuill = quill;
+    quill.on('text-change', (_delta, _oldDelta, source) => {
+      if (source === 'user') this.edited.emit();
+    });
     const toolbar = quill.getModule('toolbar');
-    if (toolbar instanceof Toolbar) {
-      toolbar.addHandler('image', () => this.imageHandler(quill));
-    }
+    if (toolbar instanceof Toolbar) toolbar.addHandler('image', () => this.imageHandler(quill));
     quill.root.addEventListener('click', (ev: MouseEvent) => {
-      if (ev.target instanceof HTMLImageElement) {
-        this.openImageModal(ev.target);
-      }
+      if (ev.target instanceof HTMLImageElement) this.openImageModal(ev.target);
     });
   }
 
@@ -182,6 +179,7 @@ export class AdminForm implements OnInit {
       blot.format('width', this.imageProps.width);
     }
     this.activeQuill.update();
+    this.edited.emit();
     this.closeImageModal();
   }
 
@@ -195,6 +193,7 @@ export class AdminForm implements OnInit {
       const url = await this.adminService.uploadImageUrl(file);
       img.setAttribute('src', url);
       this.activeQuill?.update();
+      this.edited.emit();
     } catch (err) {
       this.modalError.set(this.toErrorMessage(err, 'Error uploading replacement image.'));
     }
@@ -211,6 +210,7 @@ export class AdminForm implements OnInit {
     const blot = Quill.find(img);
     if (blot instanceof CustomImage) blot.remove();
     this.activeQuill?.update();
+    this.edited.emit();
     this.closeImageModal();
   }
 
@@ -220,9 +220,7 @@ export class AdminForm implements OnInit {
     this.pickAndInsertImage(this.activeQuill, imageClass);
   }
 
-  public imageHandler(quill: Quill): void {
-    this.pickAndInsertImage(quill, 'cms-image');
-  }
+  public imageHandler(quill: Quill): void { this.pickAndInsertImage(quill, 'cms-image'); }
 
   private pickAndInsertImage(quill: Quill, imageClass: string): void {
     const input = document.createElement('input');
@@ -243,6 +241,7 @@ export class AdminForm implements OnInit {
           img.setAttribute('class', imageClass);
         }
         quill.update();
+        this.edited.emit();
       } catch (err) {
         this.formError.set(this.toErrorMessage(err, 'Error uploading image.'));
       }
@@ -266,11 +265,8 @@ export class AdminForm implements OnInit {
         }
       }
       this.save.emit({
-        title: val.title,
-        type: val.type,
-        lang: val.lang,
-        content: normalizeEditorHtml(val.content),
-        metadata: { location: newLocation }
+        title: val.title, type: val.type, lang: val.lang,
+        content: normalizeEditorHtml(val.content), metadata: { location: newLocation }
       });
     } catch (err) {
       this.formError.set(this.toErrorMessage(err, 'An error occurred while saving.'));

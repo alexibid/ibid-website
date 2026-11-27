@@ -102,12 +102,6 @@ a {
   margin-bottom: 0;
 }
 
-:host ::ng-deep .page-body p:has(strong:only-child) {
-  margin-bottom: 0.2rem;
-  break-inside: avoid-column;
-  break-after: avoid-column;
-}
-
 :host ::ng-deep .page-body ul,
 :host ::ng-deep .page-body ol {
   list-style: none;

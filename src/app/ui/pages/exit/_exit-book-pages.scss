@@ -1,0 +1,59 @@
+@mixin exit-book-pages {
+  .book-cover-page {
+    display: block;
+    height: 100%;
+    width: 100%;
+    scroll-snap-align: start;
+    @media (min-width: 768px) {
+      width: calc(200% + (var(--book-padding-w-desktop) * 2));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      break-before: column;
+    }
+  }
+  .page-section {
+    display: block;
+    box-sizing: border-box;
+    &--about {
+      @media (min-width: 768px) {
+        break-before: column;
+      }
+    }
+  }
+  :host ::ng-deep .page-section--about ul {
+    margin: 1.5rem 0;
+  }
+  :host ::ng-deep .page-section--about li {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    break-inside: avoid-column;
+  }
+  :host ::ng-deep .page-section--about li > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+    &::after {
+      content: "";
+      flex-grow: 1;
+      border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+      margin-left: 10px;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+    &:hover > span {
+      text-decoration: underline dotted;
+      text-decoration-color: var(--color-grey-700);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 8px;
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+  }
+}

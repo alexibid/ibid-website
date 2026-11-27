@@ -66,8 +66,13 @@
   </div>
   <div class="admin-form__actions">
     <button type="button" class="form-button form-button--secondary" (click)="onCancel()">Cancel</button>
-    <button type="submit" class="form-button form-button--primary"
-      [disabled]="form.invalid || isSubmitting()">{{ isEdit() ? 'Save Changes' : 'Create Page' }}</button>
+    @if (isPublishable()) {
+      <button type="button" class="form-button form-button--primary"
+        [disabled]="isPublishing()" (click)="publish.emit()">{{ isPublishing() ? 'Publishing...' : 'Publish' }}</button>
+    } @else {
+      <button type="submit" class="form-button form-button--primary"
+        [disabled]="form.invalid || isSubmitting()">{{ isEdit() ? 'Save Changes' : 'Create Page' }}</button>
+    }
   </div>
 </form>
 
