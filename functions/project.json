@@ -13,9 +13,6 @@
         "cwd": "apps/ibid-website/functions"
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

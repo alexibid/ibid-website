@@ -26,19 +26,14 @@
             "input": "apps/ibid-website/public"
           }
         ],
-        "styles": [
-          "apps/ibid-website/src/styles.scss"
-        ],
+        "styles": ["apps/ibid-website/src/styles.scss"],
         "server": "apps/ibid-website/src/main.server.ts",
         "outputMode": "static",
         "prerender": {
           "routesFile": "apps/ibid-website/src/prerender-routes.txt",
           "discoverRoutes": false
         },
-        "allowedCommonJsDependencies": [
-          "quill",
-          "quill-delta"
-        ]
+        "allowedCommonJsDependencies": ["quill", "quill-delta"]
       },
       "configurations": {
         "production": {
@@ -74,10 +69,7 @@
               "with": "apps/ibid-website/src/app/app.routes.server.development.ts"
             }
           ],
-          "styles": [
-            "apps/ibid-website/src/styles.scss",
-            "node_modules/quill/dist/quill.snow.css"
-          ]
+          "styles": ["apps/ibid-website/src/styles.scss", "node_modules/quill/dist/quill.snow.css"]
         },
         "unit-test": {
           "fileReplacements": [
@@ -115,9 +107,6 @@
           "buildTarget": "ibid-website:build:development"
         }
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular/build:unit-test",
