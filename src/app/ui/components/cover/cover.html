@@ -1,9 +1,19 @@
 <div class="cover-layer" [class.back-cover]="isBack()">
+  @if (isHeading()) {
   <h1 class="cover-wrapper">
-    <span class="cover-branding">ibid.</span>
-    <br>
-    <span class="cover-title">{{ data().title }}</span>
+    <ng-container [ngTemplateOutlet]="coverHeading"></ng-container>
   </h1>
-  <div class="cover-content no-caps" [innerHTML]="data().content"></div>
+  } @else {
+  <div class="cover-wrapper">
+    <ng-container [ngTemplateOutlet]="coverHeading"></ng-container>
+  </div>
+  }
+  <div class="cover-content no-caps" [websiteStaticHtml]="data().content"></div>
 
 </div>
+
+<ng-template #coverHeading>
+  <span class="cover-branding">ibid.</span>
+  <br>
+  <span class="cover-title">{{ data().title }}</span>
+</ng-template>

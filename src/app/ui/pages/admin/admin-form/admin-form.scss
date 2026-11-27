@@ -68,7 +68,10 @@
     &:focus-visible { outline: 2px solid var(--form-primary); outline-offset: 1px; border-color: var(--form-primary); }
     &--custom-location { margin-top: 5px; }
     &--file { border: none; padding: 6px 0; }
+    &--multiline { resize: vertical; font-family: inherit; }
   }
+
+  &__checkbox { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--form-text); }
 
   &__toolbar-bar { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
 

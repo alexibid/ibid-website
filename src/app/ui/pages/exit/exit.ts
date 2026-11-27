@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { Cover } from '../../components/cover/cover';
 import { BookNavigationDirective } from '../../directives/book-navigation.directive';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { StaticHtmlDirective } from '../../directives/static-html.directive';
 import { ContactFacade } from '../../../application/facades/contact.facade';
 import type { ContactFieldName } from '../../../domain/models/contact.model';
 import { estimateChapterPageCount } from '../chapter/chapter';
@@ -22,14 +23,14 @@ import { estimateChapterPageCount } from '../chapter/chapter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'website-exit',
   standalone: true,
-  imports: [CommonModule, Cover, TranslatePipe],
+  imports: [CommonModule, Cover, TranslatePipe, StaticHtmlDirective],
   templateUrl: './exit.html',
-  styleUrl: './exit.scss',
   hostDirectives: [{
     directive: BookNavigationDirective,
     outputs: ['pageMeasured']
   }],
   host: {
+    class: 'book-page exit',
     '(pageMeasured)': 'onPageMeasured($event)'
   }
 })

@@ -36,7 +36,13 @@ function buildChapterViewportKey(host: HTMLElement, deps: BookPaginationDeps, sl
   return buildPaginationViewportKey(host, { isDesktop: deps.isDesktop, signature });
 }
 
+function afterWindowLoad(): Promise<void> {
+  if (typeof window === 'undefined' || document.readyState === 'complete') return Promise.resolve();
+  return new Promise(resolve => window.addEventListener('load', () => resolve(), { once: true }));
+}
+
 async function loadChapterPages(slugs: readonly string[], deps: BookPaginationDeps): Promise<readonly { readonly slug: string; readonly page: CmsRouteData }[]> {
+  await afterWindowLoad();
   return Promise.all(slugs.map(async slug => {
     const basePage = deps.routingService.getPage(slug);
     if (basePage.content !== '') return { slug, page: basePage };

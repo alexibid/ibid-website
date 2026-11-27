@@ -1,16 +1,40 @@
 <header class="book-header">
   <div class="header-content">
-    <a [routerLink]="['/' + i18n.currentLangCode()]" fragment="menu" class="header-logo">
-      <span class="char char-i1">i</span>
-      <span class="char char-b">b</span>
-      <span class="char char-i2">i</span>
-      <span class="char char-d">d</span>
-      <span class="logo-anim-wrap">
-        <span class="char char-dot">.</span>
-        <span class="char char-e">e</span>
-        <span class="char char-m">m</span>
-      </span>
-    </a>
+    <div
+      class="header-bookmark"
+      (pointerenter)="previewMenu($event)"
+      (pointerleave)="endPreview($event)"
+      (focusout)="closeWhenFocusLeaves($event)"
+      (websiteClickOutside)="closeMenu()"
+    >
+      <button
+        #menuTrigger
+        id="header-logo"
+        type="button"
+        class="header-logo"
+        [class.header-logo--open]="isMenuOpen()"
+        aria-labelledby="header-logo bookmark-nav"
+        aria-controls="bookmark-nav"
+        [attr.aria-expanded]="isMenuOpen()"
+        (click)="toggleMenu()"
+      >
+        <span class="char char-i1">i</span>
+        <span class="char char-b">b</span>
+        <span class="char char-i2">i</span>
+        <span class="char char-d">d</span>
+        <span class="logo-anim-wrap">
+          <span class="char char-dot" aria-hidden="true">.</span>
+          <span class="char char-e">e</span>
+          <span class="char char-m">m</span>
+        </span>
+      </button>
+
+      <website-bookmark-nav
+        [isOpen]="isMenuOpen()"
+        (focusin)="pinPreview()"
+        (destinationChosen)="dismissMenu()"
+      ></website-bookmark-nav>
+    </div>
 
     <div class="header-actions">
       <website-lang-selector></website-lang-selector>

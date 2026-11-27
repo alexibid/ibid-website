@@ -49,6 +49,7 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
   private manifestCache: StaticRoutesManifest | undefined;
   private pendingManifest: Promise<StaticRoutesManifest> | undefined;
   private readonly htmlCache = new Map<string, string>();
+  private readonly pendingHtml = new Map<string, Promise<string>>();
 
   async loadSections(type: PageType, lang: string): Promise<CmsPage[]> {
     const safeLang = assertSafePathSegment(lang, 'lang');
@@ -154,13 +155,21 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
       this.htmlCache.set(cacheKey, transferred);
       return transferred;
     }
-    const html = await firstValueFrom(
-      this.http.get(`/pages/${safeLang}/${safeId}.html`, { responseType: 'text' })
-    );
-    this.htmlCache.set(cacheKey, html);
-    if (isPlatformServer(this.platformId)) {
-      this.transferState.set(stateKey, html);
+    const pending = this.pendingHtml.get(cacheKey) ?? this.requestPageHtml(cacheKey, stateKey);
+    this.pendingHtml.set(cacheKey, pending);
+    return pending;
+  }
+
+  private async requestPageHtml(cacheKey: string, stateKey: StateKey<string>): Promise<string> {
+    try {
+      const html = await firstValueFrom(this.http.get(`/pages/${cacheKey}.html`, { responseType: 'text' }));
+      this.htmlCache.set(cacheKey, html);
+      if (isPlatformServer(this.platformId)) {
+        this.transferState.set(stateKey, html);
+      }
+      return html;
+    } finally {
+      this.pendingHtml.delete(cacheKey);
     }
-    return html;
   }
 }

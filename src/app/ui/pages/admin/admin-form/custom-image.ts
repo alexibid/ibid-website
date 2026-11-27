@@ -12,9 +12,11 @@ interface ImageValue {
   readonly alt?: string;
   readonly class?: string;
   readonly width?: string;
+  readonly caption?: string;
 }
 
-const EDITABLE_ATTRIBUTES: readonly string[] = ['alt', 'class', 'width'];
+const CAPTION_ATTRIBUTE = 'data-caption';
+const EDITABLE_ATTRIBUTES: readonly string[] = ['alt', CAPTION_ATTRIBUTE, 'class', 'width'];
 const ImageFormat: ImageFormatClass = Image;
 
 export class CustomImage extends ImageFormat {
@@ -34,6 +36,7 @@ export class CustomImage extends ImageFormat {
       alt: node.getAttribute('alt') ?? undefined,
       class: node.getAttribute('class') ?? undefined,
       width: node.getAttribute('width') ?? undefined,
+      caption: node.getAttribute(CAPTION_ATTRIBUTE) ?? undefined,
     };
   }
 
@@ -65,6 +68,7 @@ function isImageValue(value: unknown): value is ImageValue {
 function applyImageValue(node: Element, value: ImageValue): void {
   node.setAttribute('src', value.url || value.src || '');
   if (value.alt) node.setAttribute('alt', value.alt);
+  if (value.caption) node.setAttribute(CAPTION_ATTRIBUTE, value.caption);
   if (value.class) node.setAttribute('class', value.class);
   if (value.width && node instanceof HTMLElement) {
     node.setAttribute('width', value.width);

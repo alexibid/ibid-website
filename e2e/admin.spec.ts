@@ -51,6 +51,7 @@ test.describe('Admin journey', () => {
 
     await page.locator('#title').fill(ADMIN_E2E_FIXTURES.updatedTitle);
     await page.locator('button', { hasText: 'Save Changes' }).click();
-    await expect(page).toHaveURL(/.*\/admin\/pt/);
+    await expect.poll(() => mockTitle).toBe(ADMIN_E2E_FIXTURES.updatedTitle);
+    await expect(page).toHaveURL(/.*\/admin\/update\//);
   });
 });

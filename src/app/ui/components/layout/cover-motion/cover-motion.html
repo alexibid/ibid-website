@@ -2,7 +2,7 @@
   <div class="cover-motion__leaf">
     <div class="cover-motion__face cover-motion__face--front">
       @if (stateService.coverData(); as cover) {
-      <website-cover [data]="cover"></website-cover>
+      <website-cover [data]="cover" [isHeading]="false"></website-cover>
       }
     </div>
     <div class="cover-motion__face cover-motion__face--back"></div>

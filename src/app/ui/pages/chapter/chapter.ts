@@ -15,6 +15,7 @@ import { RoutingService } from '../../../infrastructure/services/routing.service
 import { CONTENT_READ_REPOSITORY } from '../../../infrastructure/tokens/content-repository.token';
 import { BookNavigationDirective } from '../../directives/book-navigation.directive';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { StaticHtmlDirective } from '../../directives/static-html.directive';
 import { prependProbeCover, splitChapterCover } from './chapter-cover';
 
 function createImageBlocks(element: Element, metrics: LayoutMetrics, imageSizes: ReadonlyMap<string, ImageDimensions>): readonly FlowBlock[] {
@@ -80,33 +81,32 @@ function buildFallbackBlocks(host: HTMLElement, page: CmsRouteData, options: Est
   return { blocks, columnHeight: metrics.columnHeight };
 }
 
-function createChapterProbe(host: HTMLElement, hostAttributeName: string): HTMLElement {
+function createChapterProbe(host: HTMLElement): HTMLElement {
   const bounds = host.getBoundingClientRect();
   const [probeWidth, probeHeight] = [bounds.width > 0 ? bounds.width : host.clientWidth, bounds.height > 0 ? bounds.height : host.clientHeight];
   const probe = document.createElement('div');
-  if (hostAttributeName) probe.setAttribute(hostAttributeName, '');
+  probe.className = host.className;
   probe.style.cssText = `position:absolute;top:0;left:0;width:${probeWidth}px;height:${probeHeight}px;visibility:hidden;pointer-events:none;z-index:-1;`;
   return probe;
 }
 
 function populateProbeContent(
-  probe: HTMLElement, host: HTMLElement, context: { readonly page: CmsRouteData; readonly options: EstimateOptions; readonly scopeAttribute: string }
+  probe: HTMLElement, host: HTMLElement, context: { readonly page: CmsRouteData; readonly options: EstimateOptions }
 ): void {
-  const { page, options, scopeAttribute } = context;
+  const { page, options } = context;
   const [header, numberElement, titleElement, body] = ['header', 'div', 'h1', 'article'].map(tag => document.createElement(tag));
   [header.className, numberElement.className, titleElement.className, body.className] = ['page-header', 'page-number', 'page-title', 'page-body drop-cap'];
   const locationLabel = page.metadata?.location ?? page.location ?? '';
   const chapterPrefix = host.querySelector('.page-number')?.textContent?.trim().split(/\s+/)[0] || 'Chapter';
   const parts = splitChapterCover(page.content);
   [numberElement.textContent, titleElement.textContent, body.innerHTML] = [locationLabel ? `${chapterPrefix} ${locationLabel}` : '', page.title, parts.body];
-  if (scopeAttribute) [header, numberElement, titleElement, body].forEach(node => node.setAttribute(scopeAttribute, ''));
   body.querySelectorAll('img').forEach(image => {
     const dimensions = options.imageSizes.get(image.getAttribute('src') ?? '');
     if (dimensions && dimensions.width > 0 && !image.classList.contains('img-feature')) [image.width, image.height] = [dimensions.width, dimensions.height];
   });
   header.append(numberElement, titleElement);
   probe.append(header, body);
-  prependProbeCover(probe, parts.cover, scopeAttribute);
+  prependProbeCover(probe, parts.cover);
 }
 
 function measureChapterWithDom(host: HTMLElement, page: CmsRouteData, options: EstimateOptions): number {
@@ -114,10 +114,8 @@ function measureChapterWithDom(host: HTMLElement, page: CmsRouteData, options: E
   if (!parent || host.clientWidth <= 0 || host.clientHeight <= 0) return 0;
   const hostStyles = getComputedStyle(host);
   if (hostStyles.columnCount === 'auto' && !(parseFloat(hostStyles.columnWidth) > 0)) return 0;
-  const hostAttribute = Array.from(host.attributes).find(attribute => attribute.name.startsWith('_nghost-'));
-  const scopeAttribute = hostAttribute ? `_ngcontent-${hostAttribute.name.slice(8)}` : '';
-  const probe = createChapterProbe(host, hostAttribute?.name ?? '');
-  populateProbeContent(probe, host, { page, options, scopeAttribute });
+  const probe = createChapterProbe(host);
+  populateProbeContent(probe, host, { page, options });
   parent.appendChild(probe);
   try {
     const columnWidth = options.isDesktop ? host.clientWidth / 2 : host.clientWidth;
@@ -126,7 +124,6 @@ function measureChapterWithDom(host: HTMLElement, page: CmsRouteData, options: E
     if (options.isDesktop && totalColumns % 2 !== 0) {
       const blankPage = document.createElement('div');
       blankPage.className = 'page-blank';
-      if (scopeAttribute) blankPage.setAttribute(scopeAttribute, '');
       probe.appendChild(blankPage);
       totalColumns = Math.max(1, Math.round(probe.scrollWidth / columnWidth));
     }
@@ -145,9 +142,9 @@ export function estimateChapterPageCount(host: HTMLElement, page: CmsRouteData, 
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush, selector: 'website-chapter', standalone: true,
-  imports: [TranslatePipe], templateUrl: './chapter.html', styleUrl: './chapter.scss',
+  imports: [TranslatePipe, StaticHtmlDirective], templateUrl: './chapter.html',
   hostDirectives: [{ directive: BookNavigationDirective, outputs: ['pageMeasured'] }],
-  host: { '(pageMeasured)': 'onPageMeasured($event)' }
+  host: { class: 'book-page', '(pageMeasured)': 'onPageMeasured($event)' }
 })
 export class Chapter implements OnInit, OnDestroy {
   public readonly lang = input<string>();

@@ -22,6 +22,14 @@ export interface ContactErrorTranslations {
   readonly message: ContactFieldLengthErrors;
 }
 
+export interface ContactRecaptchaNotice {
+  readonly before: string;
+  readonly privacy: string;
+  readonly between: string;
+  readonly terms: string;
+  readonly after: string;
+}
+
 export interface ContactTranslations {
   readonly socials: string;
   readonly maps: string;
@@ -40,6 +48,7 @@ export interface ContactTranslations {
   readonly 'send-another': string;
   readonly retry: string;
   readonly 'privacy-notice': string;
+  readonly 'recaptcha-notice': ContactRecaptchaNotice;
   readonly errors: ContactErrorTranslations;
   readonly 'submission-errors': Readonly<Record<ContactSubmissionErrorCode, string>>;
 }
@@ -96,7 +105,14 @@ export const CONTACT_I18N: Record<SupportedLanguage, ContactTranslations> = {
     'success-message': 'Obrigado pelo seu contacto. Responderemos em breve.',
     'send-another': 'Enviar outra mensagem',
     retry: 'Por favor, tente novamente.',
-    'privacy-notice': 'Os seus dados são utilizados apenas para responder à sua mensagem e não são partilhados com terceiros. Protegido contra spam pelo reCAPTCHA.',
+    'privacy-notice': 'Os seus dados são utilizados apenas para responder à sua mensagem e não são partilhados com terceiros.',
+    'recaptcha-notice': {
+      before: 'Este site é protegido pelo reCAPTCHA e aplicam-se a ',
+      privacy: 'Política de Privacidade',
+      between: ' e os ',
+      terms: 'Termos de Utilização',
+      after: ' da Google.'
+    },
     errors: {
       name: { required: 'O nome é obrigatório.', tooShort: `Mínimo de ${LIMITS.name.min} caracteres.`, tooLong: `Máximo de ${LIMITS.name.max} caracteres.` },
       email: { required: 'O e-mail é obrigatório.', tooShort: `Mínimo de ${LIMITS.email.min} caracteres.`, invalid: 'Introduza um e-mail válido.', tooLong: `Máximo de ${LIMITS.email.max} caracteres.` },
@@ -130,7 +146,14 @@ export const CONTACT_I18N: Record<SupportedLanguage, ContactTranslations> = {
     'success-message': 'Thank you for reaching out. We will reply shortly.',
     'send-another': 'Send another message',
     retry: 'Please try again.',
-    'privacy-notice': 'Your details are used solely to reply to your message and are not shared with third parties. Protected against spam by reCAPTCHA.',
+    'privacy-notice': 'Your details are used solely to reply to your message and are not shared with third parties.',
+    'recaptcha-notice': {
+      before: 'This site is protected by reCAPTCHA and the Google ',
+      privacy: 'Privacy Policy',
+      between: ' and ',
+      terms: 'Terms of Service',
+      after: ' apply.'
+    },
     errors: {
       name: { required: 'Name is required.', tooShort: `At least ${LIMITS.name.min} characters.`, tooLong: `Maximum ${LIMITS.name.max} characters.` },
       email: { required: 'Email is required.', tooShort: `At least ${LIMITS.email.min} characters.`, invalid: 'Enter a valid email address.', tooLong: `Maximum ${LIMITS.email.max} characters.` },
@@ -164,7 +187,14 @@ export const CONTACT_I18N: Record<SupportedLanguage, ContactTranslations> = {
     'success-message': 'Gracias por ponerse en contacto. Le responderemos pronto.',
     'send-another': 'Enviar otro mensaje',
     retry: 'Por favor, inténtelo de nuevo.',
-    'privacy-notice': 'Sus datos se utilizan únicamente para responder a su mensaje y no se comparten con terceros. Protegido contra el spam mediante reCAPTCHA.',
+    'privacy-notice': 'Sus datos se utilizan únicamente para responder a su mensaje y no se comparten con terceros.',
+    'recaptcha-notice': {
+      before: 'Este sitio está protegido por reCAPTCHA y se aplican la ',
+      privacy: 'Política de privacidad',
+      between: ' y los ',
+      terms: 'Términos del servicio',
+      after: ' de Google.'
+    },
     errors: {
       name: { required: 'El nombre es obligatorio.', tooShort: `Mínimo ${LIMITS.name.min} caracteres.`, tooLong: `Máximo ${LIMITS.name.max} caracteres.` },
       email: { required: 'El correo es obligatorio.', tooShort: `Mínimo ${LIMITS.email.min} caracteres.`, invalid: 'Introduzca un correo válido.', tooLong: `Máximo ${LIMITS.email.max} caracteres.` },
@@ -198,7 +228,14 @@ export const CONTACT_I18N: Record<SupportedLanguage, ContactTranslations> = {
     'success-message': 'Merci pour votre message. Nous vous répondrons bientôt.',
     'send-another': 'Envoyer un autre message',
     retry: 'Veuillez réessayer.',
-    'privacy-notice': 'Vos données servent uniquement à répondre à votre message et ne sont pas partagées avec des tiers. Protégé contre le spam par reCAPTCHA.',
+    'privacy-notice': 'Vos données servent uniquement à répondre à votre message et ne sont pas partagées avec des tiers.',
+    'recaptcha-notice': {
+      before: 'Ce site est protégé par reCAPTCHA, et les ',
+      privacy: 'Règles de confidentialité',
+      between: ' et les ',
+      terms: 'Conditions d’utilisation',
+      after: ' de Google s’appliquent.'
+    },
     errors: {
       name: { required: 'Le nom est requis.', tooShort: `Au moins ${LIMITS.name.min} caractères.`, tooLong: `Maximum ${LIMITS.name.max} caractères.` },
       email: { required: 'L’e-mail est requis.', tooShort: `Au moins ${LIMITS.email.min} caractères.`, invalid: 'Saisissez un e-mail valide.', tooLong: `Maximum ${LIMITS.email.max} caractères.` },
@@ -232,7 +269,14 @@ export const CONTACT_I18N: Record<SupportedLanguage, ContactTranslations> = {
     'success-message': 'Vielen Dank für Ihre Nachricht. Wir melden uns in Kürze.',
     'send-another': 'Weitere Nachricht senden',
     retry: 'Bitte versuchen Sie es erneut.',
-    'privacy-notice': 'Ihre Daten werden ausschließlich zur Beantwortung Ihrer Nachricht verwendet und nicht an Dritte weitergegeben. Durch reCAPTCHA vor Spam geschützt.',
+    'privacy-notice': 'Ihre Daten werden ausschließlich zur Beantwortung Ihrer Nachricht verwendet und nicht an Dritte weitergegeben.',
+    'recaptcha-notice': {
+      before: 'Diese Website ist durch reCAPTCHA geschützt und es gelten die ',
+      privacy: 'Datenschutzerklärung',
+      between: ' und ',
+      terms: 'Nutzungsbedingungen',
+      after: ' von Google.'
+    },
     errors: {
       name: { required: 'Der Name ist erforderlich.', tooShort: `Mindestens ${LIMITS.name.min} Zeichen.`, tooLong: `Höchstens ${LIMITS.name.max} Zeichen.` },
       email: { required: 'Die E-Mail ist erforderlich.', tooShort: `Mindestens ${LIMITS.email.min} Zeichen.`, invalid: 'Bitte gültige E-Mail eingeben.', tooLong: `Höchstens ${LIMITS.email.max} Zeichen.` },

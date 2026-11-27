@@ -1,4 +1,4 @@
-:host {
+.frontoffice-layout {
   --header-height: 60px;
   --footer-height: 50px;
 
@@ -56,14 +56,14 @@
     display: none;
   }
 
-  &.is-cover {
+  &--cover {
     --book-pages-bg: transparent;
     --book-pages-texture: none;
     --book-pages-shadow: none;
     --book-pages-edge-opacity: 0;
   }
 
-  &.is-cover-closed {
+  &--cover-closed {
     --book-pages-opacity: 0;
     --book-pages-clip: inset(var(--cover-reveal-bleed) var(--cover-reveal-bleed) var(--cover-reveal-bleed) 50%);
     --book-pages-transition:

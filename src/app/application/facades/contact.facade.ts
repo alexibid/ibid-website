@@ -1,5 +1,5 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { DestroyRef, Injectable, PendingTasks, computed, inject } from '@angular/core';
+import { DestroyRef, Injectable, PendingTasks, TransferState, computed, inject } from '@angular/core';
 import { Subscription, timeout } from 'rxjs';
 import { CONTENT_READ_REPOSITORY } from '../../infrastructure/tokens/content-repository.token';
 import { ANTI_SPAM_TOKEN_PORT, CONTACT_ENDPOINT } from '../../infrastructure/tokens/contact.tokens';
@@ -9,6 +9,7 @@ import { classifyContactHttpError } from '../../infrastructure/services/contact-
 import { I18nService } from '../../infrastructure/services/i18n.service';
 import { RoutingService } from '../../infrastructure/services/routing.service';
 import { ContactStore } from '../state/contact.store';
+import { readTransferredSections, writeTransferredSections } from '../state/page-sections.transfer';
 import { type ChapterEstimator, StateService } from '../state/state.service';
 import { PageType } from '../../domain/models/page-type.enum';
 import type {
@@ -49,6 +50,7 @@ export class ContactFacade {
   private readonly i18n = inject(I18nService);
   private readonly routingService = inject(RoutingService);
   private readonly stateService = inject(StateService);
+  private readonly transferState = inject(TransferState);
   private readonly pendingTasks = inject(PendingTasks);
 
   public readonly isBrowser = this.stateService.isBrowser;
@@ -164,6 +166,8 @@ export class ContactFacade {
   }
 
   public async loadExitSections(lang: string): Promise<void> {
+    const transferred = readTransferredSections(this.transferState, PageType.Exit, lang);
+    if (transferred.length > 0) { this.store.setSections(transferred); return; }
     const done = this.pendingTasks.add();
     this.store.setLoading(true);
     try {
@@ -177,6 +181,7 @@ export class ContactFacade {
         return orderA - orderB;
       });
       this.store.setSections(sorted);
+      if (!this.isBrowser) writeTransferredSections(this.transferState, PageType.Exit, { lang, sections: sorted });
     } finally {
       this.store.setLoading(false);
       done();

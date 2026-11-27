@@ -4,6 +4,7 @@ import { FrontofficeLayout } from './ui/layouts/frontoffice-layout/frontoffice-l
 import { I18nService } from './infrastructure/services/i18n.service';
 import { canMatchCmsPage } from './infrastructure/guards/cms-page.guard';
 import { CMS_ROUTE_DATA_RESOLVERS } from './infrastructure/resolvers/cms-route-data.resolver';
+import { pageStylesheetResolver } from './infrastructure/resolvers/page-stylesheet.resolver';
 import { PageType } from './domain/models/page-type.enum';
 
 type ComponentLoader = () => Promise<Type<unknown>>;
@@ -20,7 +21,7 @@ function cmsPageRoutes(type: PageType, loadComponent: ComponentLoader): Routes {
   return CMS_PAGE_PATHS.map((path) => ({
     path,
     canMatch: [canMatchCmsPage(type)],
-    resolve: CMS_ROUTE_DATA_RESOLVERS,
+    resolve: { ...CMS_ROUTE_DATA_RESOLVERS, stylesheets: pageStylesheetResolver(type) },
     loadComponent
   }));
 }

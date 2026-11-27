@@ -9,6 +9,22 @@
     <label class="admin-form__label" for="title">Title</label>
     <input class="admin-form__input" id="title" type="text" formControlName="title" placeholder="Page title">
   </div>
+  <div class="admin-form__group">
+    <label class="admin-form__label" for="seo-title">Search title</label>
+    <input class="admin-form__input" id="seo-title" type="text" formControlName="seoTitle"
+      aria-describedby="seo-title-hint">
+    <small class="admin-form__hint" id="seo-title-hint">Browser tab and search results. Empty uses the page title.</small>
+  </div>
+  <div class="admin-form__group">
+    <label class="admin-form__label" for="seo-description">Meta description</label>
+    <textarea class="admin-form__input admin-form__input--multiline" id="seo-description"
+      formControlName="seoDescription" rows="3" aria-describedby="seo-description-hint"></textarea>
+    <small class="admin-form__hint" id="seo-description-hint">Search result summary. Empty leaves it out.</small>
+  </div>
+  <label class="admin-form__checkbox">
+    <input type="checkbox" formControlName="product">
+    Product page (title reads "Title | ibid.")
+  </label>
   <div class="admin-form__row">
     <div class="admin-form__group">
       <label class="admin-form__label" for="type">Type</label>
@@ -102,6 +118,12 @@
           <input class="admin-form__input" id="image-alt" type="text"
             [(ngModel)]="imageProps.alt"
             placeholder="Image description">
+        </div>
+        <div class="image-modal__field">
+          <label class="admin-form__label admin-form__label--modal" for="image-caption">Caption</label>
+          <input class="admin-form__input" id="image-caption" type="text"
+            [(ngModel)]="imageProps.caption"
+            placeholder="Visible caption below the image">
         </div>
         <div class="image-modal__field">
           <label class="admin-form__label admin-form__label--modal" for="image-class">CSS Classes</label>

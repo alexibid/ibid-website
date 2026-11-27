@@ -10,7 +10,9 @@ import { StateService } from '../../../../application/state/state.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './page-turn.html',
-  styleUrl: './page-turn.scss'
+  host: {
+    class: 'page-turn'
+  }
 })
 export class PageTurn {
   public bookService = inject(BookService);

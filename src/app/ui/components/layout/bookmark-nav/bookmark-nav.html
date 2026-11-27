@@ -1,0 +1,21 @@
+<nav id="bookmark-nav" class="bookmark-nav" [attr.aria-label]="indexTitle()">
+  <ul class="bookmark-nav__list" [class.bookmark-nav__list--open]="isOpen()">
+    @for (destination of destinations(); track destination.path) {
+      <li class="bookmark-nav__item">
+        <a
+          class="bookmark-nav__link"
+          [routerLink]="destination.path"
+          routerLinkActive="bookmark-nav__link--active"
+          [routerLinkActiveOptions]="exactMatch"
+          ariaCurrentWhenActive="page"
+          [title]="destination.title"
+          [attr.aria-label]="destination.accessibleName"
+          (click)="chooseDestination(destination)"
+        >
+          <span class="bookmark-nav__number" aria-hidden="true">{{ destination.chapterNumeral }}</span>
+          <span class="bookmark-nav__title">{{ destination.title }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

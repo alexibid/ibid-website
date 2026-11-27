@@ -1,6 +1,6 @@
 @if (pageData(); as data) {
 @if (parts().cover) {
-<div class="page-body" [innerHTML]="parts().cover"></div>
+<div class="page-body" [websiteStaticHtml]="parts().cover"></div>
 }
 
 <header class="page-header">
@@ -8,7 +8,7 @@
   <h1 class="page-title">{{ data.title }}</h1>
 </header>
 
-<article class="page-body drop-cap" [innerHTML]="parts().body"></article>
+<article class="page-body drop-cap" [websiteStaticHtml]="parts().body"></article>
 
 @if (needsBlankPage()) {
 <div class="page-blank"></div>

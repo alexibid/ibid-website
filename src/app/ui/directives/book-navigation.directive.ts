@@ -229,6 +229,19 @@ export class BookNavigationDirective implements OnInit, AfterViewInit, OnDestroy
     if (!isOnCoverSpread) this.coverMotion.open();
   }
 
+  public revealSectionFromCover(sectionId: string): void {
+    const isIdle = !this.isScrolling && !this.stateService.isTransitioning();
+    const isOnFrontCover = !this.coverMotion.isOpen() && this.hostEl.scrollLeft < 10;
+    if (!this.isBrowser || !isIdle || !isOnFrontCover) return;
+    this.revealSection(sectionId);
+  }
+
+  public revealSection(sectionId: string): void {
+    if (this.stateService.isDesktopCoverStage()) this.coverMotion.open();
+    this.anchorTarget = sectionId;
+    this.triggerScroll();
+  }
+
   public triggerScroll(): void {
     if (!this.isBrowser || !this.anchorTarget) return;
     clearTimeout(this.anchorScrollTimer);

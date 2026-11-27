@@ -9,6 +9,7 @@ import { CmsPage, CmsPagePayload } from '../../../../domain/models/cms.interface
 import { PageType } from '../../../../domain/models/page-type.enum';
 import { normalizeEditorHtml } from '../../../../domain/utils/editor-html.utils';
 import { intToRoman, locationToInt } from '../../../../domain/utils/location.utils';
+import { buildPageMetadata, readPageSeoFields } from '../../../../domain/utils/page-metadata.utils';
 import { SUPPORTED_LANGUAGES } from '../../../../infrastructure/services/i18n.service';
 import { CustomImage, cssWidthOf } from './custom-image';
 
@@ -48,7 +49,7 @@ export class AdminForm implements OnInit {
   public readonly isEdit = computed(() => !!this.initialData());
   public readonly locationOptions = signal<string[]>([]);
   public readonly selectedImage = signal<HTMLImageElement | null>(null);
-  public imageProps = { alt: '', class: '', width: '', align: '' };
+  public imageProps = { alt: '', caption: '', class: '', width: '', align: '' };
   private activeQuill: Quill | null = null;
   public readonly quillModules = {
     toolbar: [
@@ -62,7 +63,8 @@ export class AdminForm implements OnInit {
     this.form = this.fb.group({
       title: ['', Validators.required], type: [PageType.Chapter, Validators.required],
       lang: ['pt', Validators.required], content: ['', Validators.required],
-      location: [''], customLocation: ['']
+      location: [''], customLocation: [''],
+      seoTitle: [''], seoDescription: [''], product: [false]
     });
   }
 
@@ -71,7 +73,8 @@ export class AdminForm implements OnInit {
     if (data) {
       this.form.patchValue({
         title: data.title, type: data.type, lang: data.lang,
-        content: data.content, location: data.metadata?.location || ''
+        content: data.content, location: data.metadata?.location || '',
+        ...readPageSeoFields(data.metadata ?? {})
       });
     }
     void this.updateLocationOptions();
@@ -148,6 +151,7 @@ export class AdminForm implements OnInit {
     const align = ['center', 'right', 'left'].find((side) => img.classList.contains(`align-${side}`)) ?? '';
     this.imageProps = {
       alt: img.getAttribute('alt') || '',
+      caption: img.getAttribute('data-caption') || '',
       class: img.getAttribute('class')?.replace(/align-(left|center|right)/g, '').trim() || 'cms-image',
       width: img.getAttribute('width') || '',
       align
@@ -164,6 +168,7 @@ export class AdminForm implements OnInit {
     const img = this.selectedImage();
     if (!img || !this.activeQuill) return;
     img.setAttribute('alt', this.imageProps.alt);
+    img.setAttribute('data-caption', this.imageProps.caption);
     img.setAttribute('width', this.imageProps.width);
     img.setAttribute('class', this.imageProps.class);
     const margins = ALIGN_MARGINS[this.imageProps.align];
@@ -175,6 +180,7 @@ export class AdminForm implements OnInit {
     const blot = Quill.find(img);
     if (blot instanceof CustomImage) {
       blot.format('alt', this.imageProps.alt);
+      blot.format('data-caption', this.imageProps.caption);
       blot.format('class', img.getAttribute('class') ?? '');
       blot.format('width', this.imageProps.width);
     }
@@ -264,9 +270,13 @@ export class AdminForm implements OnInit {
           });
         }
       }
+      const metadata = buildPageMetadata(this.initialData()?.metadata ?? {}, {
+        location: newLocation, seoTitle: String(val.seoTitle ?? ''),
+        seoDescription: String(val.seoDescription ?? ''), product: val.product === true
+      });
       this.save.emit({
         title: val.title, type: val.type, lang: val.lang,
-        content: normalizeEditorHtml(val.content), metadata: { location: newLocation }
+        content: normalizeEditorHtml(val.content), metadata
       });
     } catch (err) {
       this.formError.set(this.toErrorMessage(err, 'An error occurred while saving.'));

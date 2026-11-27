@@ -1,15 +1,38 @@
 import { Injectable, inject } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute, Data } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { I18nService } from './i18n.service';
 import { RoutingService } from './routing.service';
 import { extractLanguageFromPath } from '../../domain/constants/languages';
+import { isRecord } from '../../domain/models/static-routes.model';
+
+const BRAND = 'ibid.';
+const TITLE_SEPARATOR = ' | ';
 
 function stringField(data: Data, key: string): string {
   const value = data[key];
   return typeof value === 'string' ? value : '';
+}
+
+function isProductPage(data: Data): boolean {
+  const metadata: unknown = data['metadata'];
+  return isRecord(metadata) && metadata['product'] === true;
+}
+
+function metadataText(data: Data, key: string): string {
+  const metadata: unknown = data['metadata'];
+  const value = isRecord(metadata) ? metadata[key] : '';
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+export function toDocumentTitle(data: Data): string {
+  const title = metadataText(data, 'seoTitle') || stringField(data, 'title');
+  if (!title) {
+    return BRAND;
+  }
+  return isProductPage(data) ? title + TITLE_SEPARATOR + BRAND : BRAND + TITLE_SEPARATOR + title;
 }
 
 @Injectable({
@@ -17,6 +40,7 @@ function stringField(data: Data, key: string): string {
 })
 export class MetaService {
   private readonly titleService = inject(Title);
+  private readonly metaTags = inject(Meta);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -50,12 +74,19 @@ export class MetaService {
         }
         const currentLang = this.i18n.currentLangCode();
         this.document.documentElement.lang = currentLang;
-        const title = stringField(data, 'title');
-        const pageTitle = title ? `${title} | IBID` : 'IBID Architecture';
-        this.titleService.setTitle(pageTitle);
+        this.titleService.setTitle(toDocumentTitle(data));
+        this.applyDescription(metadataText(data, 'seoDescription'));
         this.cleanupSeoTags();
         this.generateMetaTags(stringField(data, 'location'));
       });
+  }
+
+  private applyDescription(description: string): void {
+    if (description) {
+      this.metaTags.updateTag({ name: 'description', content: description });
+    } else {
+      this.metaTags.removeTag('name="description"');
+    }
   }
 
   private cleanupSeoTags(): void {

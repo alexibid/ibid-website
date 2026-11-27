@@ -19,8 +19,7 @@ export {
   selector: 'website-footer',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './footer.html',
-  styleUrl: './footer.scss'
+  templateUrl: './footer.html'
 })
 export class Footer implements OnDestroy {
   public readonly globalState = inject(StateService);

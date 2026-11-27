@@ -1,4 +1,4 @@
-:host {
+.cover {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,6 +21,11 @@
   text-shadow:
     -1px -1px 1px rgba(0, 0, 0, 0.8),
     1px 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.cover-wrapper {
+  font-size: 2em;
+  font-weight: 600;
 }
 
 .cover-content {
@@ -79,7 +84,7 @@
   }
 
   .cover-content {
-    &::ng-deep * {
+    & * {
       font-family: var(--font-sans);
       font-size: 2cqh;
       line-height: 1.2;

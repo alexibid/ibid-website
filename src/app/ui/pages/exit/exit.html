@@ -8,7 +8,7 @@
     <header class="page-header">
       <h2 id="contact-form-title" class="page-title">{{ section.title }}</h2>
     </header>
-    <div [innerHTML]="section.content"></div>
+    <div [websiteStaticHtml]="section.content"></div>
 
     <form class="contact-form" [class.contact-form--banner]="hasBanner()" aria-labelledby="contact-form-title" novalidate (submit)="onSubmit($event)">
       @if (facade.submitStatus() === 'success') {
@@ -64,6 +64,7 @@
         {{ (facade.isSubmitting() ? 'contacts.submitting' : 'contacts.submit') | translate }}
       </button>
       <small class="contact-privacy">{{ 'contacts.privacy-notice' | translate }}</small>
+      <small class="contact-recaptcha">{{ 'contacts.recaptcha-notice.before' | translate }}<a class="contact-recaptcha__link" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">{{ 'contacts.recaptcha-notice.privacy' | translate }}</a>{{ 'contacts.recaptcha-notice.between' | translate }}<a class="contact-recaptcha__link" href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">{{ 'contacts.recaptcha-notice.terms' | translate }}</a>{{ 'contacts.recaptcha-notice.after' | translate }}</small>
     </form>
   </section>
   }
@@ -73,7 +74,7 @@
       <div class="page-number">{{ 'chapter' | translate }} VIII</div>
       <h1 class="page-title">{{ section.title }}</h1>
     </header>
-    <div [innerHTML]="section.content"></div>
+    <div [websiteStaticHtml]="section.content"></div>
   </section>
   }
   }
@@ -85,7 +86,7 @@
 
 @for (section of facade.sections(); track section.id) {
 @if (section.metadata && section.metadata.location === 'back-cover') {
-<website-cover class="book-cover-page" [data]="section" [isBack]="true" [fullSpread]="true" #thankYouSection
+<website-cover class="book-cover-page book-cover-page--back" [data]="section" [isBack]="true" [fullSpread]="true" [isHeading]="false" #thankYouSection
   [id]="section.metadata.location"></website-cover>
 }
 }

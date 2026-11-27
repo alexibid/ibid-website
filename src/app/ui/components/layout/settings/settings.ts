@@ -6,8 +6,7 @@ import { CommonModule } from '@angular/common';
   selector: 'website-settings',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './settings.html',
-  styleUrl: './settings.scss'
+  templateUrl: './settings.html'
 })
 export class Settings {
   public openSettings() {

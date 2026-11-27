@@ -71,10 +71,17 @@ function shouldOverwritePage(
   existing: CmsRouteData | undefined,
   candidate: CmsRouteData
 ): boolean {
-  if (!existing || existing.type !== PageType.Exit || candidate.type !== PageType.Exit) {
+  if (!existing || existing.type !== candidate.type) {
     return true;
   }
-  return exitLocationRank(candidate.location) <= exitLocationRank(existing.location);
+  if (candidate.type === PageType.Exit) {
+    return exitLocationRank(candidate.location) <= exitLocationRank(existing.location);
+  }
+  return candidate.type !== PageType.Home || canReplaceHomePage(existing, candidate);
+}
+
+function canReplaceHomePage(existing: CmsRouteData, candidate: CmsRouteData): boolean {
+  return existing.location !== FALLBACK_LOCATION || candidate.location === FALLBACK_LOCATION;
 }
 
 function toRouteData(page: CmsPage, lang: string): CmsRouteData {

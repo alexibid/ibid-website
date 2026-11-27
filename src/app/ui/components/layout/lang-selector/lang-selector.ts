@@ -11,8 +11,7 @@ import { ClickOutsideDirective } from '../../../directives/click-outside.directi
   selector: 'website-lang-selector',
   standalone: true,
   imports: [UpperCasePipe, ClickOutsideDirective],
-  templateUrl: './lang-selector.html',
-  styleUrl: './lang-selector.scss'
+  templateUrl: './lang-selector.html'
 })
 export class LangSelector {
   public readonly i18n = inject(I18nService);

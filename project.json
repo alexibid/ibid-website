@@ -7,6 +7,20 @@
   "tags": ["type:app", "scope:ibid-website"],
   "targets": {
     "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build-app"],
+      "inputs": ["production", "{projectRoot}/tools/static-css/**/*"],
+      "outputs": ["{workspaceRoot}/dist/ibid-website"],
+      "cache": true,
+      "options": {
+        "commands": [
+          "node apps/ibid-website/tools/static-css/build-static-css.mjs dist/ibid-website/browser",
+          "node apps/ibid-website/tools/static-css/check-size.mjs dist/ibid-website"
+        ],
+        "parallel": false
+      }
+    },
+    "build-app": {
       "executor": "@angular/build:application",
       "defaultConfiguration": "production",
       "inputs": [
@@ -49,7 +63,25 @@
               "maximumError": "16kB"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "optimization": {
+            "scripts": true,
+            "styles": { "minify": true, "inlineCritical": false },
+            "fonts": true
+          },
+          "styles": [
+            { "input": "apps/ibid-website/src/styles/layout.scss", "bundleName": "layout", "inject": false },
+            {
+              "input": "apps/ibid-website/src/app/ui/pages/home/home.scss",
+              "bundleName": "home",
+              "inject": false
+            },
+            {
+              "input": "apps/ibid-website/src/app/ui/pages/exit/exit.scss",
+              "bundleName": "exit",
+              "inject": false
+            }
+          ]
         },
         "development": {
           "optimization": false,
@@ -71,6 +103,9 @@
           ],
           "styles": ["apps/ibid-website/src/styles.scss", "node_modules/quill/dist/quill.snow.css"]
         },
+        "injected-styles": {
+          "styles": ["apps/ibid-website/src/styles.scss"]
+        },
         "unit-test": {
           "fileReplacements": [
             {
@@ -87,6 +122,14 @@
             {
               "replace": "apps/ibid-website/src/environments/environment.ts",
               "with": "apps/ibid-website/src/environments/environment.e2e.ts"
+            },
+            {
+              "replace": "apps/ibid-website/src/app/app.routes.ts",
+              "with": "apps/ibid-website/src/app/app.routes.development.ts"
+            },
+            {
+              "replace": "apps/ibid-website/src/app/app.routes.server.ts",
+              "with": "apps/ibid-website/src/app/app.routes.server.development.ts"
             }
           ]
         }
@@ -101,10 +144,10 @@
       },
       "configurations": {
         "production": {
-          "buildTarget": "ibid-website:build:production"
+          "buildTarget": "ibid-website:build-app:production,injected-styles"
         },
         "development": {
-          "buildTarget": "ibid-website:build:development"
+          "buildTarget": "ibid-website:build-app:development"
         }
       }
     },
@@ -112,7 +155,7 @@
       "executor": "@angular/build:unit-test",
       "options": {
         "tsConfig": "apps/ibid-website/tsconfig.spec.json",
-        "buildTarget": "ibid-website:build:development,unit-test"
+        "buildTarget": "ibid-website:build-app:development,unit-test"
       }
     },
     "serve-e2e": {
@@ -123,14 +166,14 @@
       },
       "configurations": {
         "production": {
-          "buildTarget": "ibid-website:build:production"
+          "buildTarget": "ibid-website:build-app:production,injected-styles"
         },
         "development": {
-          "buildTarget": "ibid-website:build:development",
+          "buildTarget": "ibid-website:build-app:development",
           "proxyConfig": "apps/ibid-website/proxy.conf.json"
         },
         "e2e": {
-          "buildTarget": "ibid-website:build:e2e"
+          "buildTarget": "ibid-website:build-app:e2e"
         }
       }
     },
@@ -139,6 +182,14 @@
       "options": {
         "command": "playwright test",
         "cwd": "apps/ibid-website"
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "firebase deploy --only hosting:ibid-website,functions:ibid-website --project ibid-32cbe"
       }
     }
   }

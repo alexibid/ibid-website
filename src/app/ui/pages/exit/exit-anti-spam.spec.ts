@@ -17,10 +17,12 @@ import {
   createMockContentReadRepository
 } from '../../../../mocks/static-html.mock';
 import { ANTI_SPAM_FIXTURES } from '../../../../mocks/contact-form.mock';
-import { expectCssRules } from '../../../../mocks/css-rules.mock';
+import { expectStylesheetRules } from '../../../../mocks/css-rules.mock';
 import { Chapter } from '../chapter/chapter';
 import { Home } from '../home/home';
 import { Exit } from './exit';
+
+const EXIT_STYLESHEET = 'apps/ibid-website/src/app/ui/pages/exit/exit.scss';
 
 function queryRecaptchaScripts(): HTMLScriptElement[] {
   return Array.from(
@@ -120,7 +122,7 @@ describe('Exit lazy anti-spam loading across book routes', () => {
     expect(honeypot.getAttribute('aria-hidden')).toBe('true');
     expect(honeypot.getAttribute('autocomplete')).toBe('off');
     expect(honeypot.labels?.length ?? 0).toBe(0);
-    expectCssRules(root, [
+    expectStylesheetRules(EXIT_STYLESHEET, [
       [/^\.contact-honeypot$/, /position:\s*absolute/],
       [/^\.contact-honeypot$/, /inset:\s*0(px)? auto auto -9999px/]
     ]);

@@ -29,6 +29,7 @@ import {
 } from './infrastructure/tokens/contact.tokens';
 import { StaticHtmlContentRepository } from './infrastructure/repositories/static-html-content.repository';
 import { ApiContentRepository } from './infrastructure/repositories/api-content.repository';
+import { provideServiceWorkerRegistration } from './infrastructure/services/service-worker-registration';
 
 export type ContentMode = 'static' | 'api';
 
@@ -66,6 +67,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
+    provideServiceWorkerRegistration(),
     provideAppInitializer(() => {
       const routingService = inject(RoutingService);
       const metaService = inject(MetaService);

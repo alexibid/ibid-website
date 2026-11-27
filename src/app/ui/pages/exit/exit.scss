@@ -1,11 +1,8 @@
-@use "../../../../styles/abstracts/page-layout" as *;
-@use "../../../../styles/components/book-base" as *;
 @use "./exit-tokens" as *;
 @use "./exit-book-pages" as *;
 
-:host {
+.exit {
   @include contact-tokens;
-  @include book-page-layout;
 }
 
 %contact-box {
@@ -234,12 +231,23 @@
     }
   }
 }
-.contact-privacy {
+%contact-notice {
   @extend %contact-copy;
-  margin-top: var(--contact-privacy-top);
   font-size: 0.8rem;
   color: var(--color-grey-700);
   break-inside: avoid-column;
+}
+.contact-privacy {
+  @extend %contact-notice;
+  margin-top: var(--contact-privacy-top);
+}
+.contact-recaptcha {
+  @extend %contact-notice;
+  &__link {
+    @extend %contact-interactive;
+    color: inherit;
+    text-decoration: underline;
+  }
 }
 .contact-honeypot {
   position: absolute;
@@ -282,9 +290,4 @@
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
-}
-.page-blank {
-  break-before: column;
-  height: 1px;
-  width: 100%;
 }

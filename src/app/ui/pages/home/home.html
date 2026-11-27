@@ -1,7 +1,7 @@
 @if (sections().length > 0) {
 <div class="page-body">
   @if (stateService.coverData(); as cover) {
-  <website-cover id="cover" class="book-cover-page" [data]="cover"></website-cover>
+  <website-cover id="cover" class="book-cover-page" [data]="cover" [isHeading]="!isIndexPage()"></website-cover>
   <div class="page-break-spacer"></div>
   }
 
@@ -12,7 +12,11 @@
     <header class="page-header">
       <a class="page-subheader" (click)="previousUrl()">
         < {{ 'return' | translate }}</a>
+          @if (isIndexPage()) {
+          <h1 class="page-title">{{ section.title }}</h1>
+          } @else {
           <h2 class="page-title">{{ section.title }}</h2>
+          }
     </header>
     <ul class="index-list">
       @for (route of bookService.routesMetadata(); track route.slug) {
@@ -43,7 +47,7 @@
     <header class="page-header">
       <h2 class="page-title">{{ section.title }}</h2>
     </header>
-    <div class="preface-content" [innerHTML]="section.content"></div>
+    <div class="preface-content" [websiteStaticHtml]="section.content"></div>
   </section>
   }
   }

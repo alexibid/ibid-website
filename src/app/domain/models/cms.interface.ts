@@ -4,6 +4,9 @@ export type PageLocation = 'front-cover' | 'index' | 'preface' | 'about' | 'cont
 
 export interface CmsPageMetadata {
   location?: PageLocation;
+  product?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
   [key: string]: unknown;
 }
 
@@ -48,9 +51,7 @@ export interface CmsPagePayload {
   type: PageType;
   lang: string;
   content: string;
-  metadata: {
-    location: string;
-  };
+  metadata: CmsPageMetadata & { location: string };
 }
 
 export interface CmsTranslationLink {

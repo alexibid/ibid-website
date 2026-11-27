@@ -212,6 +212,7 @@ export class BookService {
   public readonly flipDirection = signal<number>(1);
   public readonly dynamicRouteOrder = signal<string[]>([]);
   public readonly routesMetadata = signal<{ slug: string; title: string; type: PageType }[]>([]);
+  public readonly indexRevealRequested = signal<boolean>(false);
 
   public readonly navigationRequest = new Subject<number>();
 

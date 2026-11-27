@@ -27,7 +27,7 @@
 /es/competencias-y-herramientas
 /es/contacto
 /es/ideas-vivienda
-/es/indice-es
+/es/indice
 /es/oh-save-me
 /es/otros-proyectos
 /es/papikapi

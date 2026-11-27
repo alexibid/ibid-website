@@ -24,8 +24,7 @@ function textOf(translations: unknown, key: string): AlertText | undefined {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'website-global-alert',
   imports: [],
-  templateUrl: './global-alert.html',
-  styleUrl: './global-alert.scss'
+  templateUrl: './global-alert.html'
 })
 export class GlobalAlertComponent {
   private readonly uiService = inject(UiErrorService);

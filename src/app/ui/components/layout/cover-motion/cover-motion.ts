@@ -11,8 +11,8 @@ import { PageType } from '../../../../domain/models/page-type.enum';
   standalone: true,
   imports: [Cover],
   templateUrl: './cover-motion.html',
-  styleUrl: './cover-motion.scss',
   host: {
+    class: 'cover-motion',
     'aria-hidden': 'true',
     '[class.cover-motion--home]': 'isHome()',
     '[class.cover-motion--open]': 'coverMotion.isOpen()'

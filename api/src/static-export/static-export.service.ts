@@ -6,6 +6,8 @@ import { DRIZZLE_DB, type DatabaseClient } from '../database/database.provider';
 import { media, pages, urls } from '../database/schema';
 import { FILE_SYSTEM, type FileSystemPort } from '../storage/file-system.service';
 import { sanitizePageHtml } from './html-sanitizer.util';
+import { loadImageDimensions } from './image-dimensions.util';
+import { enrichPageImages } from './image-figure.util';
 import type {
   StaticExportResult,
   StaticMediaEntry,
@@ -35,7 +37,16 @@ export class StaticExportService {
       this.db.select().from(media),
     ]);
 
-    const exportPages = pageRows.map((row) => toPreparedPage(row, this.config.staticPagesDir));
+    const sanitizedPages = pageRows.map((row) => toPreparedPage(row, this.config.staticPagesDir));
+    const imageDimensions = await loadImageDimensions(
+      this.fs,
+      this.config.mediaDir,
+      sanitizedPages.map((page) => page.sanitizedHtml),
+    );
+    const exportPages = sanitizedPages.map((page) => ({
+      ...page,
+      sanitizedHtml: enrichPageImages(page.sanitizedHtml, imageDimensions),
+    }));
     const manifest: StaticRoutesManifest = {
       version: 1,
       pages: exportPages.map((entry) => entry.meta),

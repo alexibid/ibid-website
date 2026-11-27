@@ -1,6 +1,3 @@
-@use 'styles/abstracts/variables';
-@use 'styles/abstracts/mixins';
-@use 'styles/abstracts/page-layout';
-@use 'styles/base/reset';
-@use 'styles/base/typography';
-
+@use 'styles/layout';
+@use 'app/ui/pages/home/home';
+@use 'app/ui/pages/exit/exit';
