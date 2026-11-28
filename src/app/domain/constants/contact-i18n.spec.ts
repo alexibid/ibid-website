@@ -78,7 +78,8 @@ describe('CONTACT_I18N', () => {
       expect(CONTACT_I18N[lang].submit).toBe(sample.submit);
       expect(CONTACT_I18N[lang].retry).toBe(sample.retry);
       expect(CONTACT_I18N[lang].errors.name.required).toBe(sample.nameRequired);
-      expect(CONTACT_I18N[lang]['privacy-notice']).toContain('reCAPTCHA');
+      expect(CONTACT_I18N[lang]['recaptcha-notice'].before).toContain('reCAPTCHA');
+      expect(CONTACT_I18N[lang]['privacy-notice']).not.toContain('reCAPTCHA');
       expect(CONTACT_I18N[lang]['privacy-notice'].length).toBeLessThanOrEqual(160);
     }
   });
