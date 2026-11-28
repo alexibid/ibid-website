@@ -87,6 +87,7 @@ function findFirstOverrideInvalidField(errors: ContactFormErrors): ContactFieldN
 }
 
 export function createMockContactFacade(i18n: I18nService): MockContactFacade {
+  i18n.registerNamespace('contacts', CONTACT_I18N);
   let browserFlag = true;
   let sectionsOverridden = false;
   let submitHandler: MockContactSubmitHandler | null = null;

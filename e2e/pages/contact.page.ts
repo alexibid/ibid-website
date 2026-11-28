@@ -1,15 +1,10 @@
 import type { Locator, Page } from '@playwright/test';
 import { CONTACT_I18N, type ContactTranslations } from '../../src/app/domain/constants/contact-i18n';
 import type { SupportedLanguage } from '../../src/app/domain/constants/languages';
+import { PUBLIC_SITE_FIXTURES, type PublicSiteLanguage } from '../../src/mocks/public-site.mock';
 import { offsetHostScrollWithProbe, readScrollState, type ContactScrollState } from './contact-scroll';
 
-export const CONTACT_ROUTES: Readonly<Record<SupportedLanguage, string>> = {
-  pt: '/pt/contactos',
-  en: '/en/contacts',
-  es: '/es/contacto',
-  fr: '/fr/coordonnees',
-  de: '/de/kontakt'
-};
+export const CONTACT_ROUTES: Readonly<Record<PublicSiteLanguage, string>> = PUBLIC_SITE_FIXTURES.contactRoutes;
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -150,13 +145,13 @@ export class ContactPage {
     return this.form.getByText(this.translations['privacy-notice'], { exact: true });
   }
 
-  async goto(lang: SupportedLanguage = 'pt'): Promise<void> {
+  async goto(lang: PublicSiteLanguage = 'pt'): Promise<void> {
     this.currentLang = lang;
     await this.page.goto(CONTACT_ROUTES[lang]);
     await this.form.waitFor({ state: 'visible' });
   }
 
-  async switchLanguage(lang: SupportedLanguage): Promise<void> {
+  async switchLanguage(lang: PublicSiteLanguage): Promise<void> {
     await this.languageTrigger.click();
     const option = this.languageOption(lang);
     await option.waitFor({ state: 'visible' });

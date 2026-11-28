@@ -187,13 +187,20 @@ describe('StateService', () => {
     });
     const deps = createBookPaginationDeps(true);
     const estimator = vi.fn<ChapterEstimator>(() => 5);
+    const getPage = vi.spyOn(deps.contentRepo, 'getPage');
 
     deps.bookService.setPageCount('pt/first', 8);
     stateService.recordMeasuredChapterPage(host, deps, { slug: 'pt/first', totalCols: 8 });
 
     const syncPromise = stateService.syncAllChapterPageCounts(host, deps, estimator);
+    expect(getPage).not.toHaveBeenCalled();
     await vi.advanceTimersByTimeAsync(CHAPTER_PAGINATION_FIXTURES.syncTimerMs);
     await syncPromise;
+
+    expect(getPage.mock.calls).toEqual([
+      ['pt/first', { priority: 'low' }],
+      ['pt/second', { priority: 'low' }]
+    ]);
 
     expect(estimator).toHaveBeenCalledTimes(2);
     expect(deps.bookService.getChapterPages('pt/first')).toBe(8);

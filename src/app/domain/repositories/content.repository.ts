@@ -1,11 +1,17 @@
 import type { CmsPage, CmsUrl } from '../models/cms.interface';
 import type { PageType } from '../models/page-type.enum';
 
+export type ContentRequestPriority = 'auto' | 'high' | 'low';
+
+export interface ContentRequestOptions {
+  readonly priority: ContentRequestPriority;
+}
+
 export interface ContentReadRepository {
   loadSections(type: PageType, lang: string): Promise<CmsPage[]>;
   getUrls(): Promise<CmsUrl[]>;
   getPages(query?: { type?: string; lang?: string }): Promise<CmsPage[]>;
-  getPage(id: string): Promise<CmsPage>;
+  getPage(id: string, options?: ContentRequestOptions): Promise<CmsPage>;
 }
 
 export interface AdminContentRepository extends ContentReadRepository {

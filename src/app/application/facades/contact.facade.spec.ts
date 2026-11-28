@@ -8,6 +8,8 @@ import { UiErrorService } from '../../infrastructure/services/ui-error.service';
 import { CONTACT_ENDPOINT, ANTI_SPAM_TOKEN_PORT } from '../../infrastructure/tokens/contact.tokens';
 import { CONTENT_READ_REPOSITORY } from '../../infrastructure/tokens/content-repository.token';
 import { ContactStore } from '../state/contact.store';
+import { I18nService } from '../../infrastructure/services/i18n.service';
+import { CONTACT_I18N } from '../../domain/constants/contact-i18n';
 import { ContactFacade } from './contact.facade';
 import { CONTACT_FORM_FIXTURES, createMockContentReadRepository, STATIC_HTML_FIXTURES } from '../../../mocks/static-html.mock';
 import { CONTACT_HTTP_FIXTURES, CONTACT_VALIDATION_FIXTURES } from '../../../mocks/contact-form.mock';
@@ -48,6 +50,14 @@ describe('ContactFacade', () => {
     httpMock.verify();
     vi.restoreAllMocks();
     TestBed.resetTestingModule();
+  });
+
+  it('should register the contact translations only when the contact facade is created', () => {
+    const i18n = TestBed.inject(I18nService);
+    i18n.setLanguage('fr');
+    const ui = i18n.ui();
+
+    expect(typeof ui === 'object' && ui !== null && 'contacts' in ui && ui.contacts).toBe(CONTACT_I18N.fr);
   });
 
   it('should load exit sections through CONTENT_READ_REPOSITORY', async () => {

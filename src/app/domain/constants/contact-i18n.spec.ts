@@ -31,7 +31,7 @@ describe('CONTACT_I18N', () => {
       const uiEntry = UI_I18N[lang];
       expect(isRecord(uiEntry)).toBe(true);
       if (isRecord(uiEntry)) {
-        expect(uiEntry['contacts']).toBe(contactDict);
+        expect(uiEntry).not.toHaveProperty('contacts');
       }
 
       for (const key of CONTACT_I18N_FIXTURES.topLevelKeys) {
@@ -43,14 +43,14 @@ describe('CONTACT_I18N', () => {
 
       for (const fieldErrorMap of Object.values(CONTACT_FIELD_ERROR_KEYS)) {
         for (const errorPath of Object.values(fieldErrorMap)) {
-          const resolved = resolveTranslationPath(uiEntry, errorPath);
+          const resolved = resolveTranslationPath({ contacts: contactDict }, errorPath);
           expect(typeof resolved).toBe('string');
           expect(typeof resolved === 'string' && resolved.trim().length > 0).toBe(true);
         }
       }
 
       for (const submissionPath of Object.values(CONTACT_SUBMISSION_ERROR_KEYS)) {
-        const resolved = resolveTranslationPath(uiEntry, submissionPath);
+        const resolved = resolveTranslationPath({ contacts: contactDict }, submissionPath);
         expect(typeof resolved).toBe('string');
         expect(typeof resolved === 'string' && resolved.trim().length > 0).toBe(true);
       }

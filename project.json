@@ -9,20 +9,29 @@
     "build": {
       "executor": "nx:run-commands",
       "dependsOn": ["build-app"],
-      "inputs": ["production", "{projectRoot}/tools/static-css/**/*"],
+      "inputs": ["production", "{projectRoot}/tools/static-css/**/*", "{projectRoot}/tools/crawler-files/**/*"],
       "outputs": ["{workspaceRoot}/dist/ibid-website"],
       "cache": true,
       "options": {
         "commands": [
+          "node apps/ibid-website/tools/crawler-files/build-crawler-files.mjs dist/ibid-website/browser",
           "node apps/ibid-website/tools/static-css/build-static-css.mjs dist/ibid-website/browser",
           "node apps/ibid-website/tools/static-css/check-size.mjs dist/ibid-website"
         ],
         "parallel": false
       }
     },
+    "resolve-content": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node apps/ibid-website/tools/content-source/resolve-content.mjs"
+      }
+    },
     "build-app": {
       "executor": "@angular/build:application",
       "defaultConfiguration": "production",
+      "dependsOn": ["^build", "resolve-content"],
       "inputs": [
         "production",
         "^production",
@@ -38,13 +47,17 @@
           {
             "glob": "**/*",
             "input": "apps/ibid-website/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/ibid-website/tmp/content/public"
           }
         ],
         "styles": ["apps/ibid-website/src/styles.scss"],
         "server": "apps/ibid-website/src/main.server.ts",
         "outputMode": "static",
         "prerender": {
-          "routesFile": "apps/ibid-website/src/prerender-routes.txt",
+          "routesFile": "apps/ibid-website/tmp/content/prerender-routes.txt",
           "discoverRoutes": false
         },
         "allowedCommonJsDependencies": ["quill", "quill-delta"]
@@ -118,6 +131,17 @@
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true,
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/ibid-website/public",
+              "ignore": ["pages/**", "images/**", "content-media/**"]
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/ibid-website/src/mocks/content/public"
+            }
+          ],
           "fileReplacements": [
             {
               "replace": "apps/ibid-website/src/environments/environment.ts",

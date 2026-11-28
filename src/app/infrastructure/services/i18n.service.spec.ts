@@ -105,4 +105,19 @@ describe('I18nService', () => {
     service.setLanguage('de');
     expect(service.currentLangCode()).toBe('de');
   });
+
+  it('should merge a registered namespace for the current language without touching the base tables', () => {
+    const service = createService('browser', 'pt', 'pt-PT');
+    const tables = { pt: { greeting: 'Fake pt' }, en: { greeting: 'Fake en' } };
+
+    service.registerNamespace('fake', tables);
+    const ptUi = service.ui();
+    expect(isRecord(ptUi) && ptUi['fake']).toEqual(tables.pt);
+    expect(isRecord(ptUi) && ptUi['return']).toBe('Voltar');
+    expect(UI_I18N['pt']).not.toHaveProperty('fake');
+
+    service.setLanguage('de');
+    const deUi = service.ui();
+    expect(isRecord(deUi) && deUi['fake']).toEqual(tables.en);
+  });
 });

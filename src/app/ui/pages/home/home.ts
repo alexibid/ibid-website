@@ -49,8 +49,11 @@ export class Home {
   public readonly sections = this.facade.sections;
   protected readonly needsBlankPage = this.nav.needsBlankPage.asReadonly();
   protected readonly isIndexPage = computed(() => this.location() === INDEX_LOCATION);
+  protected readonly coverUrl = computed(() => `/${this.i18n.currentLangCode()}`);
 
-  public previousUrl(): void {
+  public previousUrl(event: MouseEvent): void {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
     this.nav.handleNavigation(-1);
   }
 

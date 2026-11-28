@@ -2,6 +2,9 @@ import { Injectable, InjectionToken, signal, computed, PLATFORM_ID, inject } fro
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { UI_I18N } from '../../domain/constants/ui-i18n';
 import { SUPPORTED_LANGUAGE_CODES, normalizeLanguageCode } from '../../domain/constants/languages';
+import { isRecord } from '../../domain/models/static-routes.model';
+
+export type TranslationTables = Readonly<Record<string, unknown>>;
 
 export const SUPPORTED_LANGUAGES = new InjectionToken<string[]>('SUPPORTED_LANGUAGES', {
   factory: () => [...SUPPORTED_LANGUAGE_CODES],
@@ -16,10 +19,16 @@ export class I18nService {
   public readonly supportedLanguages = inject(SUPPORTED_LANGUAGES);
 
   currentLangCode = signal<string>('pt');
-  ui = computed(() => UI_I18N[this.currentLangCode()] || UI_I18N['en']);
+  private readonly namespaces = signal<Readonly<Record<string, TranslationTables>>>({});
+  ui = computed(() => this.withNamespaces(UI_I18N[this.currentLangCode()] || UI_I18N['en']));
 
   constructor() {
     this.detectLanguage();
+  }
+
+  registerNamespace(name: string, tables: TranslationTables): void {
+    if (this.namespaces()[name] === tables) return;
+    this.namespaces.update((current) => ({ ...current, [name]: tables }));
   }
 
   setLanguage(lang: string): void {
@@ -33,6 +42,16 @@ export class I18nService {
       const maxAge = 365 * 24 * 60 * 60;
       this.document.cookie = `ibid-lang=${normalized}; path=/; max-age=${maxAge}; samesite=lax`;
     }
+  }
+
+  private withNamespaces(base: unknown): unknown {
+    const entries = Object.entries(this.namespaces());
+    if (entries.length === 0 || !isRecord(base)) return base;
+    const lang = this.currentLangCode();
+    return entries.reduce<Record<string, unknown>>(
+      (merged, [name, tables]) => ({ ...merged, [name]: tables[lang] ?? tables['en'] }),
+      { ...base }
+    );
   }
 
   private detectLanguage(): void {

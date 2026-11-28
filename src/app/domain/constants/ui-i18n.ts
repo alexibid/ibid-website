@@ -1,5 +1,3 @@
-import { CONTACT_I18N } from './contact-i18n';
-
 export const UI_I18N: Record<string, unknown> = {
   pt: {
     'not-found': { title: '404 - Página não encontrada', message: 'O conteúdo que procura não existe ou foi movido.', back: 'Voltar ao início' },
@@ -8,8 +6,7 @@ export const UI_I18N: Record<string, unknown> = {
     'error-generic': { title: 'Erro Inesperado', message: 'Algo correu mal. Por favor, recarregue a página.' },
     'close': 'Fechar',
     'chapter': 'Capítulo',
-    'return': 'Voltar',
-    'contacts': CONTACT_I18N.pt
+    'return': 'Voltar'
   },
   en: {
     'not-found': { title: '404 - Page Not Found', message: 'The content you are looking for does not exist or has been moved.', back: 'Back to home' },
@@ -18,8 +15,7 @@ export const UI_I18N: Record<string, unknown> = {
     'error-generic': { title: 'Unexpected Error', message: 'Something went wrong. Please reload the page.' },
     'close': 'Close',
     'chapter': 'Chapter',
-    'return': 'Return',
-    'contacts': CONTACT_I18N.en
+    'return': 'Return'
   },
   es: {
     'not-found': { title: '404 - Página no encontrada', message: 'El contenido que busca no existe o ha sido movido.', back: 'Volver al inicio' },
@@ -28,8 +24,7 @@ export const UI_I18N: Record<string, unknown> = {
     'error-generic': { title: 'Error Inesperado', message: 'Algo salió mal. Por favor, recargue la página.' },
     'close': 'Cerrar',
     'chapter': 'Capítulo',
-    'return': 'Voltar',
-    'contacts': CONTACT_I18N.es
+    'return': 'Voltar'
   },
   fr: {
     'not-found': { title: '404 - Page non trouvée', message: 'Le contenu que vous recherchez n\'existe pas ou a été déplacé.', back: 'Retour à l\'accueil' },
@@ -38,8 +33,7 @@ export const UI_I18N: Record<string, unknown> = {
     'error-generic': { title: 'Erreur Inattendue', message: 'Une erreur s\'est produite. Veuillez recharger la page.' },
     'close': 'Fermer',
     'chapter': 'Chapitre',
-    'return': 'Retour',
-    'contacts': CONTACT_I18N.fr
+    'return': 'Retour'
   },
   de: {
     'not-found': {
@@ -61,7 +55,6 @@ export const UI_I18N: Record<string, unknown> = {
     },
     'close': 'Schließen',
     'chapter': 'Kapitel',
-    'return': 'Zurück',
-    'contacts': CONTACT_I18N.de
+    'return': 'Zurück'
   }
 };

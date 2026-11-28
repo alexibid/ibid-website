@@ -9,7 +9,10 @@ import {
   isStaticRoutesManifest,
   toCmsPageFromMetadata
 } from '../../domain/models/static-routes.model';
-import type { ContentReadRepository } from '../../domain/repositories/content.repository';
+import type {
+  ContentReadRepository,
+  ContentRequestOptions
+} from '../../domain/repositories/content.repository';
 
 const SAFE_PATH_SEGMENT = /^[a-zA-Z0-9._-]+$/;
 const ROUTES_MANIFEST_KEY = makeStateKey<StaticRoutesManifest>('static-routes-manifest');
@@ -19,6 +22,7 @@ const EMPTY_MANIFEST: StaticRoutesManifest = {
   urls: [],
   media: []
 };
+const DEFAULT_REQUEST: ContentRequestOptions = { priority: 'auto' };
 
 function makeHtmlStateKey(lang: string, pageId: string): StateKey<string> {
   return makeStateKey<string>(`static-page-html:${lang}:${pageId}`);
@@ -60,7 +64,7 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
     }
     return Promise.all(
       matching.map(async (meta) => {
-        const content = await this.fetchPageHtml(meta.lang, meta.id);
+        const content = await this.fetchPageHtml(meta.lang, meta.id, DEFAULT_REQUEST);
         return toCmsPageFromMetadata(meta, content);
       })
     );
@@ -96,14 +100,14 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
       .map((page) => toCmsPageFromMetadata(page, ''));
   }
 
-  async getPage(id: string): Promise<CmsPage> {
+  async getPage(id: string, options = DEFAULT_REQUEST): Promise<CmsPage> {
     const safeId = assertSafePathSegment(id, 'pageId');
     const manifest = await this.loadManifest();
     const meta = manifest.pages.find((page) => page.id === safeId);
     if (!meta) {
       throw new Error(`Page not found in static manifest: ${safeId}`);
     }
-    const content = await this.fetchPageHtml(meta.lang, meta.id);
+    const content = await this.fetchPageHtml(meta.lang, meta.id, options);
     return toCmsPageFromMetadata(meta, content);
   }
 
@@ -141,7 +145,11 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
     }
   }
 
-  private async fetchPageHtml(lang: string, pageId: string): Promise<string> {
+  private async fetchPageHtml(
+    lang: string,
+    pageId: string,
+    options: ContentRequestOptions
+  ): Promise<string> {
     const safeLang = assertSafePathSegment(lang, 'lang');
     const safeId = assertSafePathSegment(pageId, 'pageId');
     const cacheKey = `${safeLang}/${safeId}`;
@@ -155,14 +163,21 @@ export class StaticHtmlContentRepository implements ContentReadRepository {
       this.htmlCache.set(cacheKey, transferred);
       return transferred;
     }
-    const pending = this.pendingHtml.get(cacheKey) ?? this.requestPageHtml(cacheKey, stateKey);
+    const pending =
+      this.pendingHtml.get(cacheKey) ?? this.requestPageHtml(cacheKey, stateKey, options);
     this.pendingHtml.set(cacheKey, pending);
     return pending;
   }
 
-  private async requestPageHtml(cacheKey: string, stateKey: StateKey<string>): Promise<string> {
+  private async requestPageHtml(
+    cacheKey: string,
+    stateKey: StateKey<string>,
+    options: ContentRequestOptions
+  ): Promise<string> {
     try {
-      const html = await firstValueFrom(this.http.get(`/pages/${cacheKey}.html`, { responseType: 'text' }));
+      const html = await firstValueFrom(
+        this.http.get(`/pages/${cacheKey}.html`, { responseType: 'text', priority: options.priority })
+      );
       this.htmlCache.set(cacheKey, html);
       if (isPlatformServer(this.platformId)) {
         this.transferState.set(stateKey, html);

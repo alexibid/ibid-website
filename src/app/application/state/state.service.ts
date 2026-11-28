@@ -10,8 +10,11 @@ import { I18nService } from '../../infrastructure/services/i18n.service';
 import { RoutingService } from '../../infrastructure/services/routing.service';
 import { PageType } from '../../domain/models/page-type.enum';
 import { CmsPage, type CmsRouteData } from '../../domain/models/cms.interface';
-import type { ContentReadRepository } from '../../domain/repositories/content.repository';
+import type {
+  ContentReadRepository, ContentRequestOptions
+} from '../../domain/repositories/content.repository';
 import { isPageType } from '../../domain/models/static-routes.model';
+import { afterPageLoadIdle } from './page-idle';
 
 export type BookPaginationDeps = {
   readonly bookService: BookService; readonly routingService: RoutingService;
@@ -23,6 +26,7 @@ export type ChapterEstimator = (host: HTMLElement, page: CmsRouteData, options: 
 const chapterCountCache = new Map<string, Map<string, number>>();
 const domMeasuredKeys = new Set<string>();
 let syncEpoch = 0;
+const BACKGROUND_REQUEST: ContentRequestOptions = { priority: 'low' };
 
 function listChapterSlugs(deps: BookPaginationDeps): readonly string[] {
   return deps.bookService.dynamicRouteOrder().filter(slug => deps.routingService.hasPage(slug, PageType.Chapter));
@@ -36,17 +40,12 @@ function buildChapterViewportKey(host: HTMLElement, deps: BookPaginationDeps, sl
   return buildPaginationViewportKey(host, { isDesktop: deps.isDesktop, signature });
 }
 
-function afterWindowLoad(): Promise<void> {
-  if (typeof window === 'undefined' || document.readyState === 'complete') return Promise.resolve();
-  return new Promise(resolve => window.addEventListener('load', () => resolve(), { once: true }));
-}
-
 async function loadChapterPages(slugs: readonly string[], deps: BookPaginationDeps): Promise<readonly { readonly slug: string; readonly page: CmsRouteData }[]> {
-  await afterWindowLoad();
+  await afterPageLoadIdle();
   return Promise.all(slugs.map(async slug => {
     const basePage = deps.routingService.getPage(slug);
     if (basePage.content !== '') return { slug, page: basePage };
-    const fullPage = await deps.contentRepo.getPage(basePage.pageId);
+    const fullPage = await deps.contentRepo.getPage(basePage.pageId, BACKGROUND_REQUEST);
     return { slug, page: { ...basePage, title: fullPage.title || basePage.title, content: fullPage.content } };
   }));
 }

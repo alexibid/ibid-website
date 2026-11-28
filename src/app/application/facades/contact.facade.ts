@@ -16,7 +16,7 @@ import type {
   ContactApiResponse, ContactFieldErrorCode, ContactFieldName,
   ContactSubmissionErrorCode, ContactSubmissionPayload
 } from '../../domain/models/contact.model';
-import { CONTACT_FIELD_ERROR_KEYS } from '../../domain/constants/contact-i18n';
+import { CONTACT_FIELD_ERROR_KEYS, CONTACT_I18N } from '../../domain/constants/contact-i18n';
 import {
   CONTACT_FIELD_ORDER,
   normalizeMultiline,
@@ -97,6 +97,7 @@ export class ContactFacade {
   private activeSubmission: ActiveContactSubmission | undefined;
 
   constructor() {
+    this.i18n.registerNamespace('contacts', CONTACT_I18N);
     this.destroyRef.onDestroy(() => this.cancelPendingSubmission());
   }
 

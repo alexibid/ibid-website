@@ -10,7 +10,7 @@
   @if (section.metadata?.location === 'index') {
   <nav id="menu" class="index-section">
     <header class="page-header">
-      <a class="page-subheader" (click)="previousUrl()">
+      <a class="page-subheader" [href]="coverUrl()" (click)="previousUrl($event)">
         < {{ 'return' | translate }}</a>
           @if (isIndexPage()) {
           <h1 class="page-title">{{ section.title }}</h1>

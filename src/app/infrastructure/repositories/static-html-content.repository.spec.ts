@@ -65,6 +65,7 @@ describe('StaticHtmlContentRepository', () => {
     const htmlReq = httpMock.expectOne(STATIC_HTML_FIXTURES.chapterHtmlUrl);
     expect(htmlReq.request.method).toBe('GET');
     expect(htmlReq.request.responseType).toBe('text');
+    expect(htmlReq.request.priority).toBe('auto');
     htmlReq.flush(STATIC_HTML_FIXTURES.chapterPage.content);
 
     const page = await pagePromise;
@@ -73,6 +74,20 @@ describe('StaticHtmlContentRepository', () => {
     expect(page.type).toBe(STATIC_HTML_FIXTURES.chapterPage.type);
     expect(page.lang).toBe(STATIC_HTML_FIXTURES.chapterPage.lang);
     expect(page.content).toBe(STATIC_HTML_FIXTURES.chapterPage.content);
+  });
+
+  it('should fetch page HTML at the requested low priority for background loads', async () => {
+    const pagePromise = repo.getPage(STATIC_HTML_FIXTURES.chapterPage.id, { priority: 'low' });
+    httpMock.expectOne(STATIC_HTML_FIXTURES.routesJsonUrl).flush(STATIC_HTML_FIXTURES.manifest);
+
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const htmlReq = httpMock.expectOne(STATIC_HTML_FIXTURES.chapterHtmlUrl);
+    expect(htmlReq.request.priority).toBe('low');
+    htmlReq.flush(STATIC_HTML_FIXTURES.chapterPage.content);
+
+    expect((await pagePromise).content).toBe(STATIC_HTML_FIXTURES.chapterPage.content);
   });
 
   it('should write routes and page HTML to TransferState on server miss and reuse on browser hit without HTTP requests', async () => {

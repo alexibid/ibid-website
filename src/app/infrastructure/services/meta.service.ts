@@ -6,6 +6,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { I18nService } from './i18n.service';
 import { RoutingService } from './routing.service';
 import { extractLanguageFromPath } from '../../domain/constants/languages';
+import { SITE_ORIGIN } from '../../domain/constants/site';
 import { isRecord } from '../../domain/models/static-routes.model';
 
 const BRAND = 'ibid.';
@@ -96,7 +97,7 @@ export class MetaService {
   }
 
   private generateMetaTags(location: string): void {
-    const baseOrigin = 'https://ibid.pt';
+    const baseOrigin = SITE_ORIGIN;
     const currentPath = this.router.url.split('?')[0];
     this.createLinkElement('canonical', `${baseOrigin}${currentPath}`);
     if (!location) {

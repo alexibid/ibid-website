@@ -6,6 +6,7 @@ import { CONTENT_READ_REPOSITORY } from '../tokens/content-repository.token';
 import { I18nService } from './i18n.service';
 import { MetaService } from './meta.service';
 import { RoutingService } from './routing.service';
+import { SITE_ORIGIN } from '../../domain/constants/site';
 import {
   ALL_SUPPORTED_LANGUAGE_CODES,
   createMockContentReadRepository
@@ -17,6 +18,24 @@ import {
   template: ''
 })
 class MetaRouteStubComponent {}
+
+const FAKE_DESCRIPTIONS = {
+  pt: 'Fake pt summary',
+  en: 'Fake en summary',
+  es: 'Fake es summary',
+  fr: 'Fake fr summary',
+  de: 'Fake de summary'
+} as const;
+
+const DESCRIBED_ROUTES = Object.entries(FAKE_DESCRIPTIONS).map(([lang, seoDescription]) => ({
+  path: `${lang}/described`,
+  component: MetaRouteStubComponent,
+  data: { title: 'Described', lang, metadata: { location: 'index', seoDescription: `  ${seoDescription} ` } }
+}));
+
+function readDescription(doc: Document): string | null {
+  return doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? null;
+}
 
 describe('MetaService', () => {
   let router: Router;
@@ -39,6 +58,7 @@ describe('MetaService', () => {
           { path: 'es/prefacio', component: MetaRouteStubComponent, data: { title: 'Prefacio', lang: 'es', location: 'preface' } },
           { path: 'fr/preface', component: MetaRouteStubComponent, data: { title: 'Préface', lang: 'fr', location: 'preface' } },
           { path: 'de/vorwort', component: MetaRouteStubComponent, data: { title: 'Vorwort', lang: 'de', location: 'preface' } },
+          ...DESCRIBED_ROUTES,
           { path: 'not-found', component: MetaRouteStubComponent }
         ])
       ]
@@ -55,7 +75,7 @@ describe('MetaService', () => {
   });
 
   afterEach(() => {
-    doc.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
+    doc.querySelectorAll('link[rel="alternate"], meta[name="description"]').forEach((node) => node.remove());
     document.documentElement.lang = originalHtmlLang;
     document.cookie = 'ibid-lang=; path=/; max-age=0';
     window.history.replaceState(null, '', '/');
@@ -84,11 +104,31 @@ describe('MetaService', () => {
     }
   });
 
+  it('should point the canonical and alternate links at the public site origin', async () => {
+    await router.navigateByUrl('/fr/preface');
+
+    const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href');
+    const alternates = Array.from(doc.querySelectorAll('link[rel="alternate"]'));
+
+    expect(canonical).toBe(`${SITE_ORIGIN}/fr/preface`);
+    expect(alternates.every((node) => node.getAttribute('href')?.startsWith(`${SITE_ORIGIN}/`))).toBe(true);
+  });
+
   it('should handle routes without language metadata without throwing or clearing valid HTML lang', async () => {
     await router.navigateByUrl('/fr/preface');
     expect(doc.documentElement.lang).toBe('fr');
 
     await router.navigateByUrl('/not-found');
     expect(ALL_SUPPORTED_LANGUAGE_CODES).toContain(doc.documentElement.lang);
+  });
+
+  it('should emit the trimmed seoDescription as meta description in every language and drop it when empty', async () => {
+    for (const [lang, description] of Object.entries(FAKE_DESCRIPTIONS)) {
+      await router.navigateByUrl(`/${lang}/described`);
+      expect(readDescription(doc)).toBe(description);
+    }
+
+    await router.navigateByUrl('/pt/prefacio');
+    expect(readDescription(doc)).toBeNull();
   });
 });

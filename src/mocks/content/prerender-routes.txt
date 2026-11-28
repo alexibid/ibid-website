@@ -1,0 +1,9 @@
+/
+/en
+/en/mock-chapter
+/en/mock-contacts
+/en/mock-index
+/pt
+/pt/mock-capitulo
+/pt/mock-contactos
+/pt/mock-indice

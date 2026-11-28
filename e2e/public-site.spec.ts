@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { PUBLIC_SITE_FIXTURES } from '../src/mocks/public-site.mock';
 
 test.describe('Public site journey', () => {
   test('opens cover, navigates chapters, switches language, and renders 404', async ({ page }) => {
-    await page.goto('/pt');
+    const { coverRoute, chapter, missingRoute } = PUBLIC_SITE_FIXTURES;
+    await page.goto(coverRoute);
     await expect(page.locator('website-cover#cover')).toBeVisible();
 
-    await page.goto('/pt/percurso-frontend');
+    await page.goto(chapter.route);
     await expect(page.locator('.page-body')).toBeVisible();
 
     await page.goBack();
@@ -15,12 +17,12 @@ test.describe('Public site journey', () => {
     await page.locator('.lang-dropdown button', { hasText: 'EN' }).click();
     await expect(page).toHaveURL(/.*\/en/);
 
-    await page.goto('/pt/oh-save-me');
-    await expect(page.locator('h1', { hasText: 'Oh Save Me!' })).toBeVisible();
-    await expect(page.locator('h2', { hasText: 'Privacidade local-first' })).toBeVisible();
-    await expect(page.locator('h3', { hasText: 'Os dados ficam no dispositivo' })).toBeVisible();
+    await page.goto(chapter.route);
+    await expect(page.locator('h1', { hasText: chapter.title })).toBeVisible();
+    await expect(page.locator('h2', { hasText: chapter.section })).toBeVisible();
+    await expect(page.locator('h3', { hasText: chapter.subsection })).toBeVisible();
 
-    await page.goto('/pt/non-existent-route-404');
+    await page.goto(missingRoute);
     await expect(page.locator('.not-found-container')).toBeVisible();
   });
 });

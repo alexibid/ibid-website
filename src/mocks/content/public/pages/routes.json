@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "contentSource": "mock",
+  "pages": [
+    {
+      "id": "mock-pt-home-front-cover",
+      "title": "Capa de teste",
+      "type": "home",
+      "lang": "pt",
+      "location": "front-cover",
+      "metadata": {
+        "location": "front-cover",
+        "seoDescription": "Descrição fictícia da capa de teste."
+      }
+    },
+    {
+      "id": "mock-pt-home-index",
+      "title": "Índice de teste",
+      "type": "home",
+      "lang": "pt",
+      "location": "index",
+      "metadata": {
+        "location": "index",
+        "seoDescription": "Descrição fictícia do índice de teste."
+      }
+    },
+    {
+      "id": "mock-pt-home-preface",
+      "title": "Prefácio de teste",
+      "type": "home",
+      "lang": "pt",
+      "location": "preface",
+      "metadata": {
+        "location": "preface"
+      }
+    },
+    {
+      "id": "mock-pt-chapter-i",
+      "title": "Capítulo de teste",
+      "type": "chapter",
+      "lang": "pt",
+      "location": "I",
+      "metadata": {
+        "location": "I",
+        "seoDescription": "Descrição fictícia do capítulo de teste."
+      }
+    },
+    {
+      "id": "mock-pt-exit-contact-form",
+      "title": "Contacto de teste",
+      "type": "exit",
+      "lang": "pt",
+      "location": "contact-form",
+      "metadata": {
+        "location": "contact-form",
+        "seoDescription": "Descrição fictícia do contacto de teste."
+      }
+    },
+    {
+      "id": "mock-pt-exit-about",
+      "title": "Sobre o teste",
+      "type": "exit",
+      "lang": "pt",
+      "location": "about",
+      "metadata": {
+        "location": "about"
+      }
+    },
+    {
+      "id": "mock-pt-exit-back-cover",
+      "title": "Contracapa de teste",
+      "type": "exit",
+      "lang": "pt",
+      "location": "back-cover",
+      "metadata": {
+        "location": "back-cover"
+      }
+    },
+    {
+      "id": "mock-en-home-front-cover",
+      "title": "Test cover",
+      "type": "home",
+      "lang": "en",
+      "location": "front-cover",
+      "metadata": {
+        "location": "front-cover",
+        "seoDescription": "Placeholder description of the test cover."
+      }
+    },
+    {
+      "id": "mock-en-home-index",
+      "title": "Test index",
+      "type": "home",
+      "lang": "en",
+      "location": "index",
+      "metadata": {
+        "location": "index",
+        "seoDescription": "Placeholder description of the test index."
+      }
+    },
+    {
+      "id": "mock-en-home-preface",
+      "title": "Test preface",
+      "type": "home",
+      "lang": "en",
+      "location": "preface",
+      "metadata": {
+        "location": "preface"
+      }
+    },
+    {
+      "id": "mock-en-chapter-i",
+      "title": "Test chapter",
+      "type": "chapter",
+      "lang": "en",
+      "location": "I",
+      "metadata": {
+        "location": "I",
+        "seoDescription": "Placeholder description of the test chapter."
+      }
+    },
+    {
+      "id": "mock-en-exit-contact-form",
+      "title": "Test contact",
+      "type": "exit",
+      "lang": "en",
+      "location": "contact-form",
+      "metadata": {
+        "location": "contact-form",
+        "seoDescription": "Placeholder description of the test contact."
+      }
+    },
+    {
+      "id": "mock-en-exit-about",
+      "title": "About the test",
+      "type": "exit",
+      "lang": "en",
+      "location": "about",
+      "metadata": {
+        "location": "about"
+      }
+    },
+    {
+      "id": "mock-en-exit-back-cover",
+      "title": "Test back cover",
+      "type": "exit",
+      "lang": "en",
+      "location": "back-cover",
+      "metadata": {
+        "location": "back-cover"
+      }
+    }
+  ],
+  "urls": [
+    {
+      "id": "mock-pt-home-front-cover-url",
+      "url": "",
+      "lang": "pt",
+      "pageId": "mock-pt-home-front-cover"
+    },
+    {
+      "id": "mock-pt-home-index-url",
+      "url": "mock-indice",
+      "lang": "pt",
+      "pageId": "mock-pt-home-index"
+    },
+    {
+      "id": "mock-pt-home-preface-url",
+      "url": "",
+      "lang": "pt",
+      "pageId": "mock-pt-home-preface"
+    },
+    {
+      "id": "mock-pt-chapter-i-url",
+      "url": "mock-capitulo",
+      "lang": "pt",
+      "pageId": "mock-pt-chapter-i"
+    },
+    {
+      "id": "mock-pt-exit-contact-form-url",
+      "url": "mock-contactos",
+      "lang": "pt",
+      "pageId": "mock-pt-exit-contact-form"
+    },
+    {
+      "id": "mock-pt-exit-about-url",
+      "url": "mock-contactos",
+      "lang": "pt",
+      "pageId": "mock-pt-exit-about"
+    },
+    {
+      "id": "mock-pt-exit-back-cover-url",
+      "url": "mock-contactos",
+      "lang": "pt",
+      "pageId": "mock-pt-exit-back-cover"
+    },
+    {
+      "id": "mock-en-home-front-cover-url",
+      "url": "",
+      "lang": "en",
+      "pageId": "mock-en-home-front-cover"
+    },
+    {
+      "id": "mock-en-home-index-url",
+      "url": "mock-index",
+      "lang": "en",
+      "pageId": "mock-en-home-index"
+    },
+    {
+      "id": "mock-en-home-preface-url",
+      "url": "",
+      "lang": "en",
+      "pageId": "mock-en-home-preface"
+    },
+    {
+      "id": "mock-en-chapter-i-url",
+      "url": "mock-chapter",
+      "lang": "en",
+      "pageId": "mock-en-chapter-i"
+    },
+    {
+      "id": "mock-en-exit-contact-form-url",
+      "url": "mock-contacts",
+      "lang": "en",
+      "pageId": "mock-en-exit-contact-form"
+    },
+    {
+      "id": "mock-en-exit-about-url",
+      "url": "mock-contacts",
+      "lang": "en",
+      "pageId": "mock-en-exit-about"
+    },
+    {
+      "id": "mock-en-exit-back-cover-url",
+      "url": "mock-contacts",
+      "lang": "en",
+      "pageId": "mock-en-exit-back-cover"
+    }
+  ],
+  "media": []
+}

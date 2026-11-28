@@ -154,6 +154,7 @@
 }
 .form-textarea {
   @extend %contact-field;
+  height: var(--contact-textarea-height);
   min-height: var(--contact-textarea-min-height);
   max-width: 100%;
   overflow-y: auto;
